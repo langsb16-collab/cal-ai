@@ -1,6 +1,5 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
-import { serveStatic } from 'hono/cloudflare-workers'
 
 type Bindings = {
   DB: D1Database;
@@ -10,12 +9,6 @@ const app = new Hono<{ Bindings: Bindings }>()
 
 // CORS 설정
 app.use('/api/*', cors())
-
-// 정적 파일 제공 - /static/* 경로
-app.use('/static/*', serveStatic({ root: './public' }))
-
-// FAQ 및 기타 정적 파일 제공
-app.use('/*', serveStatic({ root: './' }))
 
 // ============================================
 // API Routes
