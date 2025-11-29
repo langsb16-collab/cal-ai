@@ -902,14 +902,25 @@ app.get('/', (c) => {
         <!-- Top Navigation -->
         <div class="max-w-6xl mx-auto mb-3 sm:mb-4">
             <div class="flex justify-between items-center gap-2 flex-wrap">
-                <!-- Language Selector -->
-                <div class="flex gap-2 flex-wrap justify-end">
-                    <button class="lang-btn active" data-lang="ko" onclick="setLanguage('ko')">한국어</button>
-                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">English</button>
-                    <button class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
-                    <button class="lang-btn" data-lang="ja" onclick="setLanguage('ja')">日本語</button>
-                    <button class="lang-btn" data-lang="vi" onclick="setLanguage('vi')">Tiếng Việt</button>
-                    <button class="lang-btn" data-lang="ar" onclick="setLanguage('ar')">العربية</button>
+                <!-- Info Buttons & Language Selector -->
+                <div class="flex gap-2 flex-wrap justify-end items-center">
+                    <!-- Info Buttons -->
+                    <button onclick="showHealthInfoModal()" class="px-3 py-1.5 bg-white bg-opacity-30 hover:bg-opacity-40 text-white rounded-lg text-sm font-semibold transition">
+                        <i class="fas fa-heartbeat mr-1"></i><span data-i18n="healthInfo">건강정보</span>
+                    </button>
+                    <button onclick="showNutritionInfoModal()" class="px-3 py-1.5 bg-white bg-opacity-30 hover:bg-opacity-40 text-white rounded-lg text-sm font-semibold transition">
+                        <i class="fas fa-leaf mr-1"></i><span data-i18n="nutritionInfo">영양성분</span>
+                    </button>
+                    
+                    <!-- Language Selector -->
+                    <div class="flex gap-2">
+                        <button class="lang-btn active" data-lang="ko" onclick="setLanguage('ko')">한국어</button>
+                        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">English</button>
+                        <button class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+                        <button class="lang-btn" data-lang="ja" onclick="setLanguage('ja')">日本語</button>
+                        <button class="lang-btn" data-lang="vi" onclick="setLanguage('vi')">Tiếng Việt</button>
+                        <button class="lang-btn" data-lang="ar" onclick="setLanguage('ar')">العربية</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1251,6 +1262,133 @@ app.get('/', (c) => {
                     </button>
                 </div>
             </div>
+            
+            <!-- 건강정보 모달 -->
+            <div id="health-info-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onclick="if(event.target === this) hideHealthInfoModal()">
+                <div class="bg-white rounded-xl shadow-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
+                    <button onclick="hideHealthInfoModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                    
+                    <div class="text-center mb-6">
+                        <i class="fas fa-heartbeat text-6xl text-red-500 mb-4"></i>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">건강정보 안내</h2>
+                        <p class="text-gray-600">공개 식품/영양 데이터베이스 목록</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-blue-800 mb-2">🇰🇷 MFDS 식품영양성분 데이터베이스</h3>
+                            <p class="text-sm text-gray-700 mb-2">식품의약품안전처 공식 영양성분 DB (한국 1순위)</p>
+                            <a href="https://www.foodsafetykorea.go.kr" target="_blank" class="text-blue-600 text-sm hover:underline">www.foodsafetykorea.go.kr</a>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-green-800 mb-2">🇰🇷 농촌진흥청 국가표준식품성분표</h3>
+                            <p class="text-sm text-gray-700 mb-2">3,300종 이상의 식품 영양정보</p>
+                            <a href="https://www.foodsafetykorea.go.kr/portal/healthyfoodlife/foodnutrient/simple.do" target="_blank" class="text-green-600 text-sm hover:underline">국가표준식품성분표</a>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-purple-800 mb-2">🇺🇸 USDA FoodData Central</h3>
+                            <p class="text-sm text-gray-700 mb-2">미국 농무부 글로벌 식품 데이터베이스</p>
+                            <a href="https://fdc.nal.usda.gov" target="_blank" class="text-purple-600 text-sm hover:underline">fdc.nal.usda.gov</a>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-yellow-800 mb-2">🇨🇦 FooDB</h3>
+                            <p class="text-sm text-gray-700 mb-2">28,000+ 화학성분 데이터</p>
+                            <a href="https://foodb.ca" target="_blank" class="text-yellow-600 text-sm hover:underline">foodb.ca</a>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-orange-800 mb-2">🌍 Open Food Facts</h3>
+                            <p class="text-sm text-gray-700 mb-2">수백만 제품 바코드 DB</p>
+                            <a href="https://world.openfoodfacts.org" target="_blank" class="text-orange-600 text-sm hover:underline">world.openfoodfacts.org</a>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h3 class="font-bold text-gray-800 mb-3">질병 위험도 분석 시스템</h3>
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <p>✅ <strong>비만 위험도</strong>: BMI 기반 분석</p>
+                                <p>✅ <strong>당뇨 위험도</strong>: 당류/탄수화물 분석</p>
+                                <p>✅ <strong>고혈압 위험도</strong>: 나트륨/지방 분석</p>
+                                <p>✅ <strong>고지혈증 위험도</strong>: 지방/콜레스테롤 분석</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 영양성분 모달 -->
+            <div id="nutrition-info-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onclick="if(event.target === this) hideNutritionInfoModal()">
+                <div class="bg-white rounded-xl shadow-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
+                    <button onclick="hideNutritionInfoModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                    
+                    <div class="text-center mb-6">
+                        <i class="fas fa-leaf text-6xl text-green-500 mb-4"></i>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">영양성분 정보</h2>
+                        <p class="text-gray-600">칼로리 기반 분석 및 한계</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-blue-800 mb-3">📊 칼로리로 확인 가능한 정보</h3>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li>✅ 총 열량 (kcal per serving, 100g, 실제 섭취량)</li>
+                                <li>✅ 1일 권장 섭취량 대비 비율</li>
+                                <li>✅ 다이어트/감량 목표와의 차이</li>
+                                <li>✅ 칼로리 소모 운동량 환산</li>
+                                <li>✅ 다른 음식과 칼로리 비교</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-green-800 mb-3">🧮 칼로리로 계산 가능한 정보</h3>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li>✅ 체중 변화 예측 (7,700kcal = 1kg 지방)</li>
+                                <li>✅ 기초대사량(BMR) 대비 비교</li>
+                                <li>✅ 총 에너지 소비량(TDEE) 균형</li>
+                                <li>✅ 식습관 패턴 분석</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-yellow-800 mb-3">⚠️ 칼로리 데이터로 가능한 위험 신호</h3>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li>🔴 비만 위험도</li>
+                                <li>🔴 지방간 위험</li>
+                                <li>🔴 심혈관 질환 위험</li>
+                                <li>🔴 당뇨 위험 (간접적)</li>
+                                <li>🔴 야식/폭식 패턴</li>
+                                <li>🔴 급격한 체중 증가 건강 위험</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-red-800 mb-3">❌ 칼로리만으로는 불가능한 정보</h3>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li>❌ 정확한 당뇨/고혈압 위험도</li>
+                                <li>❌ 영양 불균형 분석</li>
+                                <li>❌ 알레르기 정보</li>
+                                <li>❌ 특정 지방 위험</li>
+                                <li>❌ 비타민/미네랄 결핍</li>
+                                <li>❌ 식이섬유/콜레스테롤 정보</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200">
+                            <h3 class="font-bold text-purple-800 mb-2">💡 결론: 통합 시스템의 필요성</h3>
+                            <p class="text-sm text-gray-700">
+                                <strong>CALCARE AI</strong>는 칼로리 + 영양성분 + 개인 건강정보 + AI 음식 인식을 통합하여 
+                                정확한 건강 분석과 질병 위험도 예측을 제공합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- 챗봇 팝업 -->
             <div id="chatbot-popup" style="
@@ -1590,7 +1728,9 @@ app.get('/', (c) => {
                 password: '비밀번호',
                 name: '이름',
                 noAccount: '계정이 없으신가요?',
-                haveAccount: '이미 계정이 있으신가요?'
+                haveAccount: '이미 계정이 있으신가요?',
+                healthInfo: '건강정보',
+                nutritionInfo: '영양성분'
             },
             en: {
                 photoAnalysis: 'Food Photo Analysis',
@@ -1622,7 +1762,9 @@ app.get('/', (c) => {
                 password: 'Password',
                 name: 'Name',
                 noAccount: 'Don\\'t have an account?',
-                haveAccount: 'Already have an account?'
+                haveAccount: 'Already have an account?',
+                healthInfo: 'Health Info',
+                nutritionInfo: 'Nutrition Info'
             },
             zh: {
                 photoAnalysis: '食物照片分析',
@@ -1654,7 +1796,9 @@ app.get('/', (c) => {
                 password: '密码',
                 name: '姓名',
                 noAccount: '没有账户？',
-                haveAccount: '已有账户？'
+                haveAccount: '已有账户？',
+                healthInfo: '健康信息',
+                nutritionInfo: '营养成分'
             },
             ja: {
                 photoAnalysis: '食品写真分析',
@@ -1686,7 +1830,9 @@ app.get('/', (c) => {
                 password: 'パスワード',
                 name: '名前',
                 noAccount: 'アカウントをお持ちでないですか？',
-                haveAccount: 'すでにアカウントをお持ちですか？'
+                haveAccount: 'すでにアカウントをお持ちですか？',
+                healthInfo: '健康情報',
+                nutritionInfo: '栄養成分'
             },
             vi: {
                 photoAnalysis: 'Phân tích ảnh thức ăn',
@@ -1718,7 +1864,9 @@ app.get('/', (c) => {
                 password: 'Mật khẩu',
                 name: 'Tên',
                 noAccount: 'Chưa có tài khoản?',
-                haveAccount: 'Đã có tài khoản?'
+                haveAccount: 'Đã có tài khoản?',
+                healthInfo: 'Thông tin sức khỏe',
+                nutritionInfo: 'Thông tin dinh dưỡng'
             },
             ar: {
                 photoAnalysis: 'تحليل صور الطعام',
@@ -1750,7 +1898,9 @@ app.get('/', (c) => {
                 password: 'كلمة المرور',
                 name: 'الاسم',
                 noAccount: 'ليس لديك حساب؟',
-                haveAccount: 'هل لديك حساب بالفعل؟'
+                haveAccount: 'هل لديك حساب بالفعل؟',
+                healthInfo: 'معلومات صحية',
+                nutritionInfo: 'معلومات غذائية'
             }
         };
         
@@ -2156,6 +2306,24 @@ app.get('/', (c) => {
             document.getElementById('register-modal').classList.add('hidden');
             document.getElementById('register-error').classList.add('hidden');
             document.getElementById('register-success').classList.add('hidden');
+        }
+        
+        // 건강정보 모달 표시/숨김
+        function showHealthInfoModal() {
+            document.getElementById('health-info-modal').classList.remove('hidden');
+        }
+        
+        function hideHealthInfoModal() {
+            document.getElementById('health-info-modal').classList.add('hidden');
+        }
+        
+        // 영양성분 모달 표시/숨김
+        function showNutritionInfoModal() {
+            document.getElementById('nutrition-info-modal').classList.remove('hidden');
+        }
+        
+        function hideNutritionInfoModal() {
+            document.getElementById('nutrition-info-modal').classList.add('hidden');
         }
         
         // 로그인 처리
