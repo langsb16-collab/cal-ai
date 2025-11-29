@@ -20,9 +20,9 @@
 - **로컬 개발**: http://localhost:3000
 - **API Base**: `/api/*`
 
-### 프로덕션 (배포 후)
-- **Production**: https://webapp.pages.dev (배포 후 업데이트 예정)
-- **GitHub**: (추후 설정)
+### 프로덕션
+- **도메인**: puke365.biz (배포 예정)
+- **GitHub**: https://github.com/langsb16-collab/cal-ai
 
 ## ✨ 주요 기능
 
@@ -74,6 +74,16 @@
 - [x] 실시간 언어 전환
 - [x] localStorage 기반 언어 설정 저장
 - [x] 모든 UI 텍스트 및 메시지 번역
+
+#### 9. 반응형 디자인 📱💻
+- [x] 모바일 최적화 (320px~768px)
+- [x] 태블릿 지원 (768px~1024px)
+- [x] PC 데스크톱 (1024px+)
+- [x] 터치 친화적 버튼 크기 (최소 44px)
+- [x] iOS zoom 방지 (input font-size 16px)
+- [x] 커스텀 스크롤바
+- [x] 모바일 헤더 최적화
+- [x] 검색 결과 터치 피드백
 
 ### 🔄 기능별 URI 요약
 
@@ -284,7 +294,10 @@ npm run db:migrate:prod
 
 ### 배포 상태
 - **플랫폼**: Cloudflare Pages
-- **상태**: ✅ 개발 중 (Sandbox 환경)
+- **프로젝트명**: puke365-biz
+- **도메인**: puke365.biz (설정 예정)
+- **GitHub**: https://github.com/langsb16-collab/cal-ai
+- **상태**: ✅ 개발 완료 (배포 대기)
 - **마지막 업데이트**: 2025-11-29
 
 ## 🎨 디자인 시스템
