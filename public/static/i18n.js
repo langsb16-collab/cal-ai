@@ -1,0 +1,415 @@
+// 다국어 번역 데이터
+const translations = {
+  ko: {
+    // Header
+    appTitle: 'CALCARE AI',
+    appSubtitle: '사진으로 음식을 인식하고 칼로리를 자동 계산',
+    membershipFree: 'Free',
+    membershipPremium: 'Premium',
+    freeTrialRemaining: '무료 체험',
+    trialRemaining: '남음',
+    
+    // Menu
+    menuHome: '홈',
+    menuAnalysis: '분석',
+    menuStats: '통계',
+    menuSettings: '설정',
+    
+    // Main Sections
+    photoAnalysis: '음식 사진 분석',
+    analysisResult: '분석 결과',
+    dailyNutrition: '오늘의 영양 섭취',
+    
+    // Upload
+    uploadPrompt: '사진을 클릭하거나 드래그하여 업로드',
+    startAnalysis: 'AI 분석 시작',
+    
+    // Search
+    foodSearch: '음식 검색',
+    searchPlaceholder: '음식 이름을 입력하세요...',
+    noResults: '검색 결과가 없습니다',
+    
+    // Results Placeholder
+    resultsPlaceholder: '음식 사진을 업로드하면',
+    resultsPlaceholder2: '영양 분석 결과가 표시됩니다',
+    
+    // Nutrition
+    calories: '칼로리',
+    protein: '단백질',
+    carbs: '탄수화물',
+    fat: '지방',
+    sugar: '당류',
+    sodium: '나트륨',
+    fiber: '식이섬유',
+    cholesterol: '콜레스테롤',
+    
+    // Units
+    kcal: 'kcal',
+    grams: 'g',
+    milligrams: 'mg',
+    
+    // Health Risks
+    healthRisks: '질병 위험도',
+    obesity: '비만',
+    diabetes: '당뇨',
+    hypertension: '고혈압',
+    hyperlipidemia: '고지혈증',
+    
+    riskLow: '낮음',
+    riskMedium: '보통',
+    riskHigh: '높음',
+    
+    // Actions
+    saveIntake: '섭취 기록 저장',
+    upgrade: '지금 업그레이드',
+    later: '나중에',
+    
+    // Daily Stats
+    totalCalories: '총 칼로리',
+    totalProtein: '단백질',
+    totalCarbs: '탄수화물',
+    totalFat: '지방',
+    recommended: '권장',
+    noIntakeToday: '오늘 섭취한 음식이 없습니다',
+    
+    // Premium Modal
+    premiumTitle: '프리미엄으로 업그레이드',
+    premiumDescription: '무료 체험 횟수가 모두 소진되었습니다.',
+    premiumDescription2: '프리미엄으로 업그레이드하면 무제한으로 이용할 수 있습니다!',
+    premiumPrice: '연간',
+    premiumFeatures: '무제한 분석 + 고급 통계 + AI 코칭',
+    
+    // Messages
+    intakeSaved: '섭취 기록이 저장되었습니다!',
+    upgradeSuccess: '프리미엄으로 업그레이드되었습니다!',
+    error: '오류가 발생했습니다.',
+    loading: '로딩 중...',
+    
+    // Meal Types
+    breakfast: '아침',
+    lunch: '점심',
+    dinner: '저녁',
+    snack: '간식'
+  },
+  
+  en: {
+    // Header
+    appTitle: 'CALCARE AI',
+    appSubtitle: 'Recognize food and calculate calories automatically from photos',
+    membershipFree: 'Free',
+    membershipPremium: 'Premium',
+    freeTrialRemaining: 'Free Trial',
+    trialRemaining: 'remaining',
+    
+    // Menu
+    menuHome: 'Home',
+    menuAnalysis: 'Analysis',
+    menuStats: 'Statistics',
+    menuSettings: 'Settings',
+    
+    // Main Sections
+    photoAnalysis: 'Food Photo Analysis',
+    analysisResult: 'Analysis Results',
+    dailyNutrition: 'Today\'s Nutrition Intake',
+    
+    // Upload
+    uploadPrompt: 'Click or drag to upload photo',
+    startAnalysis: 'Start AI Analysis',
+    
+    // Search
+    foodSearch: 'Food Search',
+    searchPlaceholder: 'Enter food name...',
+    noResults: 'No results found',
+    
+    // Results Placeholder
+    resultsPlaceholder: 'Upload a food photo',
+    resultsPlaceholder2: 'to see nutrition analysis',
+    
+    // Nutrition
+    calories: 'Calories',
+    protein: 'Protein',
+    carbs: 'Carbs',
+    fat: 'Fat',
+    sugar: 'Sugar',
+    sodium: 'Sodium',
+    fiber: 'Fiber',
+    cholesterol: 'Cholesterol',
+    
+    // Units
+    kcal: 'kcal',
+    grams: 'g',
+    milligrams: 'mg',
+    
+    // Health Risks
+    healthRisks: 'Health Risks',
+    obesity: 'Obesity',
+    diabetes: 'Diabetes',
+    hypertension: 'Hypertension',
+    hyperlipidemia: 'Hyperlipidemia',
+    
+    riskLow: 'Low',
+    riskMedium: 'Medium',
+    riskHigh: 'High',
+    
+    // Actions
+    saveIntake: 'Save Intake Record',
+    upgrade: 'Upgrade Now',
+    later: 'Later',
+    
+    // Daily Stats
+    totalCalories: 'Total Calories',
+    totalProtein: 'Protein',
+    totalCarbs: 'Carbs',
+    totalFat: 'Fat',
+    recommended: 'Recommended',
+    noIntakeToday: 'No food intake today',
+    
+    // Premium Modal
+    premiumTitle: 'Upgrade to Premium',
+    premiumDescription: 'Your free trial has expired.',
+    premiumDescription2: 'Upgrade to Premium for unlimited access!',
+    premiumPrice: '/year',
+    premiumFeatures: 'Unlimited Analysis + Advanced Stats + AI Coaching',
+    
+    // Messages
+    intakeSaved: 'Intake record saved!',
+    upgradeSuccess: 'Upgraded to Premium!',
+    error: 'An error occurred.',
+    loading: 'Loading...',
+    
+    // Meal Types
+    breakfast: 'Breakfast',
+    lunch: 'Lunch',
+    dinner: 'Dinner',
+    snack: 'Snack'
+  },
+  
+  zh: {
+    // Header
+    appTitle: 'CALCARE AI',
+    appSubtitle: '通过照片识别食物并自动计算卡路里',
+    membershipFree: '免费',
+    membershipPremium: '高级会员',
+    freeTrialRemaining: '免费试用',
+    trialRemaining: '剩余',
+    
+    // Menu
+    menuHome: '首页',
+    menuAnalysis: '分析',
+    menuStats: '统计',
+    menuSettings: '设置',
+    
+    // Main Sections
+    photoAnalysis: '食物照片分析',
+    analysisResult: '分析结果',
+    dailyNutrition: '今日营养摄入',
+    
+    // Upload
+    uploadPrompt: '点击或拖动上传照片',
+    startAnalysis: '开始AI分析',
+    
+    // Search
+    foodSearch: '食物搜索',
+    searchPlaceholder: '请输入食物名称...',
+    noResults: '未找到结果',
+    
+    // Results Placeholder
+    resultsPlaceholder: '上传食物照片后',
+    resultsPlaceholder2: '将显示营养分析结果',
+    
+    // Nutrition
+    calories: '卡路里',
+    protein: '蛋白质',
+    carbs: '碳水化合物',
+    fat: '脂肪',
+    sugar: '糖',
+    sodium: '钠',
+    fiber: '膳食纤维',
+    cholesterol: '胆固醇',
+    
+    // Units
+    kcal: '千卡',
+    grams: '克',
+    milligrams: '毫克',
+    
+    // Health Risks
+    healthRisks: '疾病风险',
+    obesity: '肥胖',
+    diabetes: '糖尿病',
+    hypertension: '高血压',
+    hyperlipidemia: '高脂血症',
+    
+    riskLow: '低',
+    riskMedium: '中',
+    riskHigh: '高',
+    
+    // Actions
+    saveIntake: '保存摄入记录',
+    upgrade: '立即升级',
+    later: '稍后',
+    
+    // Daily Stats
+    totalCalories: '总卡路里',
+    totalProtein: '蛋白质',
+    totalCarbs: '碳水化合物',
+    totalFat: '脂肪',
+    recommended: '推荐',
+    noIntakeToday: '今天没有食物摄入记录',
+    
+    // Premium Modal
+    premiumTitle: '升级至高级会员',
+    premiumDescription: '您的免费试用次数已用完。',
+    premiumDescription2: '升级至高级会员即可无限使用！',
+    premiumPrice: '/年',
+    premiumFeatures: '无限分析 + 高级统计 + AI指导',
+    
+    // Messages
+    intakeSaved: '摄入记录已保存！',
+    upgradeSuccess: '已升级至高级会员！',
+    error: '发生错误。',
+    loading: '加载中...',
+    
+    // Meal Types
+    breakfast: '早餐',
+    lunch: '午餐',
+    dinner: '晚餐',
+    snack: '小吃'
+  },
+  
+  ja: {
+    // Header
+    appTitle: 'CALCARE AI',
+    appSubtitle: '写真から食べ物を認識し、カロリーを自動計算',
+    membershipFree: '無料',
+    membershipPremium: 'プレミアム',
+    freeTrialRemaining: '無料体験',
+    trialRemaining: '残り',
+    
+    // Menu
+    menuHome: 'ホーム',
+    menuAnalysis: '分析',
+    menuStats: '統計',
+    menuSettings: '設定',
+    
+    // Main Sections
+    photoAnalysis: '食品写真分析',
+    analysisResult: '分析結果',
+    dailyNutrition: '今日の栄養摂取',
+    
+    // Upload
+    uploadPrompt: 'クリックまたはドラッグして写真をアップロード',
+    startAnalysis: 'AI分析を開始',
+    
+    // Search
+    foodSearch: '食品検索',
+    searchPlaceholder: '食品名を入力してください...',
+    noResults: '結果が見つかりません',
+    
+    // Results Placeholder
+    resultsPlaceholder: '食品写真をアップロードすると',
+    resultsPlaceholder2: '栄養分析結果が表示されます',
+    
+    // Nutrition
+    calories: 'カロリー',
+    protein: 'タンパク質',
+    carbs: '炭水化物',
+    fat: '脂質',
+    sugar: '糖質',
+    sodium: 'ナトリウム',
+    fiber: '食物繊維',
+    cholesterol: 'コレステロール',
+    
+    // Units
+    kcal: 'kcal',
+    grams: 'g',
+    milligrams: 'mg',
+    
+    // Health Risks
+    healthRisks: '疾病リスク',
+    obesity: '肥満',
+    diabetes: '糖尿病',
+    hypertension: '高血圧',
+    hyperlipidemia: '高脂血症',
+    
+    riskLow: '低',
+    riskMedium: '中',
+    riskHigh: '高',
+    
+    // Actions
+    saveIntake: '摂取記録を保存',
+    upgrade: '今すぐアップグレード',
+    later: '後で',
+    
+    // Daily Stats
+    totalCalories: '総カロリー',
+    totalProtein: 'タンパク質',
+    totalCarbs: '炭水化物',
+    totalFat: '脂質',
+    recommended: '推奨',
+    noIntakeToday: '今日の食事記録はありません',
+    
+    // Premium Modal
+    premiumTitle: 'プレミアムにアップグレード',
+    premiumDescription: '無料体験回数が終了しました。',
+    premiumDescription2: 'プレミアムにアップグレードすると無制限でご利用いただけます！',
+    premiumPrice: '/年',
+    premiumFeatures: '無制限分析 + 高度な統計 + AIコーチング',
+    
+    // Messages
+    intakeSaved: '摂取記録が保存されました！',
+    upgradeSuccess: 'プレミアムにアップグレードしました！',
+    error: 'エラーが発生しました。',
+    loading: '読み込み中...',
+    
+    // Meal Types
+    breakfast: '朝食',
+    lunch: '昼食',
+    dinner: '夕食',
+    snack: 'おやつ'
+  }
+};
+
+// 현재 언어 (기본값: 한국어)
+let currentLang = localStorage.getItem('lang') || 'ko';
+
+// 번역 함수
+function t(key) {
+  return translations[currentLang][key] || translations['ko'][key] || key;
+}
+
+// 언어 변경 함수
+function setLanguage(lang) {
+  if (translations[lang]) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    updatePageLanguage();
+  }
+}
+
+// 페이지 언어 업데이트
+function updatePageLanguage() {
+  // data-i18n 속성을 가진 모든 요소 업데이트
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const key = element.getAttribute('data-i18n');
+    element.textContent = t(key);
+  });
+  
+  // data-i18n-placeholder 속성을 가진 모든 요소 업데이트
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+    const key = element.getAttribute('data-i18n-placeholder');
+    element.placeholder = t(key);
+  });
+  
+  // 언어 선택 버튼 활성화 표시
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.getAttribute('data-lang') === currentLang) {
+      btn.classList.add('active');
+    }
+  });
+}
+
+// 초기화
+document.addEventListener('DOMContentLoaded', () => {
+  updatePageLanguage();
+});

@@ -250,7 +250,7 @@ app.get('/', (c) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CALCARE AI - AI 칼로리 분석</title>
+        <title>CALCARE AI - AI Calorie Analysis</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <style>
@@ -289,30 +289,56 @@ app.get('/', (c) => {
             .risk-medium { background: #FFF3CD; color: #856404; }
             .risk-high { background: #F8D7DA; color: #721C24; }
             
-            /* Chart container */
             .chart-container {
                 position: relative;
                 height: 250px;
                 margin: 20px 0;
             }
+            
+            .lang-btn {
+                padding: 8px 16px;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s;
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                font-weight: 600;
+            }
+            .lang-btn:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
+            .lang-btn.active {
+                background: white;
+                color: #A8C4A4;
+            }
         </style>
     </head>
     <body class="p-4 md:p-8">
+        <!-- Language Selector -->
+        <div class="max-w-6xl mx-auto mb-4">
+            <div class="flex justify-end gap-2">
+                <button class="lang-btn active" data-lang="ko" onclick="setLanguage('ko')">한국어</button>
+                <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+                <button class="lang-btn" data-lang="ja" onclick="setLanguage('ja')">日本語</button>
+            </div>
+        </div>
+
         <!-- Header -->
         <div class="max-w-6xl mx-auto mb-8">
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
-                        <i class="fas fa-camera-retro mr-3"></i>CALCARE AI
+                        <i class="fas fa-camera-retro mr-3"></i><span data-i18n="appTitle">CALCARE AI</span>
                     </h1>
-                    <p class="text-white text-sm md:text-base opacity-90">사진으로 음식을 인식하고 칼로리를 자동 계산</p>
+                    <p class="text-white text-sm md:text-base opacity-90" data-i18n="appSubtitle">사진으로 음식을 인식하고 칼로리를 자동 계산</p>
                 </div>
                 <div class="text-right">
                     <div id="membershipBadge" class="inline-block px-4 py-2 bg-white rounded-full text-sm font-semibold">
-                        <i class="fas fa-user mr-2"></i><span id="membershipType">Free</span>
+                        <i class="fas fa-user mr-2"></i><span id="membershipType" data-i18n="membershipFree">Free</span>
                     </div>
                     <div id="trialCount" class="text-white text-xs mt-2">
-                        무료 체험: <span id="remainingTrials">2</span>/2 남음
+                        <span data-i18n="freeTrialRemaining">무료 체험</span>: <span id="remainingTrials">2</span>/2 <span data-i18n="trialRemaining">남음</span>
                     </div>
                 </div>
             </div>
@@ -323,7 +349,7 @@ app.get('/', (c) => {
             <!-- Left: Camera Upload -->
             <div class="card p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    <i class="fas fa-utensils mr-2 text-green-600"></i>음식 사진 분석
+                    <i class="fas fa-utensils mr-2 text-green-600"></i><span data-i18n="photoAnalysis">음식 사진 분석</span>
                 </h2>
                 
                 <div class="text-center mb-6">
@@ -331,24 +357,25 @@ app.get('/', (c) => {
                         <i class="fas fa-camera text-4xl text-gray-400"></i>
                     </div>
                     <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
-                    <p class="text-gray-600 text-sm">사진을 클릭하거나 드래그하여 업로드</p>
+                    <p class="text-gray-600 text-sm" data-i18n="uploadPrompt">사진을 클릭하거나 드래그하여 업로드</p>
                 </div>
 
                 <div id="imagePreview" class="hidden mb-6">
                     <img id="previewImg" src="" class="w-full rounded-lg mb-4">
                     <button onclick="analyzeFood()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
-                        <i class="fas fa-brain mr-2"></i>AI 분석 시작
+                        <i class="fas fa-brain mr-2"></i><span data-i18n="startAnalysis">AI 분석 시작</span>
                     </button>
                 </div>
 
                 <!-- Food Search -->
                 <div class="mt-6">
                     <h3 class="text-lg font-semibold mb-3 text-gray-700">
-                        <i class="fas fa-search mr-2"></i>음식 검색
+                        <i class="fas fa-search mr-2"></i><span data-i18n="foodSearch">음식 검색</span>
                     </h3>
                     <input 
                         type="text" 
                         id="foodSearch" 
+                        data-i18n-placeholder="searchPlaceholder"
                         placeholder="음식 이름을 입력하세요..."
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
                         oninput="searchFood(this.value)"
@@ -360,12 +387,12 @@ app.get('/', (c) => {
             <!-- Right: Analysis Results -->
             <div class="card p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    <i class="fas fa-chart-line mr-2 text-blue-600"></i>분석 결과
+                    <i class="fas fa-chart-line mr-2 text-blue-600"></i><span data-i18n="analysisResult">분석 결과</span>
                 </h2>
 
                 <div id="resultsPlaceholder" class="text-center py-12 text-gray-400">
                     <i class="fas fa-cookie-bite text-6xl mb-4"></i>
-                    <p>음식 사진을 업로드하면<br>영양 분석 결과가 표시됩니다</p>
+                    <p><span data-i18n="resultsPlaceholder">음식 사진을 업로드하면</span><br><span data-i18n="resultsPlaceholder2">영양 분석 결과가 표시됩니다</span></p>
                 </div>
 
                 <div id="analysisResults" class="hidden">
@@ -374,24 +401,24 @@ app.get('/', (c) => {
                         <h3 class="font-semibold text-lg mb-3" id="foodName">비빔밥</h3>
                         <div class="grid grid-cols-2 gap-3">
                             <div class="bg-orange-50 p-3 rounded-lg">
-                                <div class="text-orange-600 text-sm font-semibold">칼로리</div>
+                                <div class="text-orange-600 text-sm font-semibold" data-i18n="calories">칼로리</div>
                                 <div class="text-2xl font-bold text-orange-700" id="calories">250</div>
-                                <div class="text-xs text-gray-600">kcal</div>
+                                <div class="text-xs text-gray-600" data-i18n="kcal">kcal</div>
                             </div>
                             <div class="bg-blue-50 p-3 rounded-lg">
-                                <div class="text-blue-600 text-sm font-semibold">단백질</div>
+                                <div class="text-blue-600 text-sm font-semibold" data-i18n="protein">단백질</div>
                                 <div class="text-2xl font-bold text-blue-700" id="protein">25</div>
-                                <div class="text-xs text-gray-600">g</div>
+                                <div class="text-xs text-gray-600" data-i18n="grams">g</div>
                             </div>
                             <div class="bg-green-50 p-3 rounded-lg">
-                                <div class="text-green-600 text-sm font-semibold">탄수화물</div>
+                                <div class="text-green-600 text-sm font-semibold" data-i18n="carbs">탄수화물</div>
                                 <div class="text-2xl font-bold text-green-700" id="carbs">78</div>
-                                <div class="text-xs text-gray-600">g</div>
+                                <div class="text-xs text-gray-600" data-i18n="grams">g</div>
                             </div>
                             <div class="bg-yellow-50 p-3 rounded-lg">
-                                <div class="text-yellow-600 text-sm font-semibold">지방</div>
+                                <div class="text-yellow-600 text-sm font-semibold" data-i18n="fat">지방</div>
                                 <div class="text-2xl font-bold text-yellow-700" id="fat">15</div>
-                                <div class="text-xs text-gray-600">g</div>
+                                <div class="text-xs text-gray-600" data-i18n="grams">g</div>
                             </div>
                         </div>
                     </div>
@@ -399,23 +426,23 @@ app.get('/', (c) => {
                     <!-- Health Risks -->
                     <div class="mb-6">
                         <h3 class="font-semibold text-lg mb-3">
-                            <i class="fas fa-heartbeat mr-2 text-red-600"></i>질병 위험도
+                            <i class="fas fa-heartbeat mr-2 text-red-600"></i><span data-i18n="healthRisks">질병 위험도</span>
                         </h3>
                         <div class="space-y-2">
                             <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-700">비만</span>
+                                <span class="text-sm text-gray-700" data-i18n="obesity">비만</span>
                                 <span class="risk-badge risk-low" id="obesityRisk">낮음 (25%)</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-700">당뇨</span>
+                                <span class="text-sm text-gray-700" data-i18n="diabetes">당뇨</span>
                                 <span class="risk-badge risk-medium" id="diabetesRisk">보통 (45%)</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-700">고혈압</span>
+                                <span class="text-sm text-gray-700" data-i18n="hypertension">고혈압</span>
                                 <span class="risk-badge risk-high" id="hypertensionRisk">높음 (68%)</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-700">고지혈증</span>
+                                <span class="text-sm text-gray-700" data-i18n="hyperlipidemia">고지혈증</span>
                                 <span class="risk-badge risk-low" id="hyperlipidemiaRisk">낮음 (32%)</span>
                             </div>
                         </div>
@@ -423,7 +450,7 @@ app.get('/', (c) => {
 
                     <!-- Record Button -->
                     <button onclick="recordIntake()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-                        <i class="fas fa-save mr-2"></i>섭취 기록 저장
+                        <i class="fas fa-save mr-2"></i><span data-i18n="saveIntake">섭취 기록 저장</span>
                     </button>
                 </div>
             </div>
@@ -433,34 +460,34 @@ app.get('/', (c) => {
         <div class="max-w-6xl mx-auto mt-6">
             <div class="card p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    <i class="fas fa-calendar-day mr-2 text-purple-600"></i>오늘의 영양 섭취
+                    <i class="fas fa-calendar-day mr-2 text-purple-600"></i><span data-i18n="dailyNutrition">오늘의 영양 섭취</span>
                 </h2>
                 
                 <div id="dailyStatsPlaceholder" class="text-center py-8 text-gray-400">
-                    <p>오늘 섭취한 음식이 없습니다</p>
+                    <p data-i18n="noIntakeToday">오늘 섭취한 음식이 없습니다</p>
                 </div>
 
                 <div id="dailyStats" class="hidden">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                         <div class="bg-gradient-to-br from-orange-400 to-orange-600 p-4 rounded-lg text-white">
-                            <div class="text-sm opacity-90">총 칼로리</div>
+                            <div class="text-sm opacity-90" data-i18n="totalCalories">총 칼로리</div>
                             <div class="text-3xl font-bold" id="totalCalories">0</div>
-                            <div class="text-xs opacity-75">/ <span id="recommendedCalories">2000</span> kcal</div>
+                            <div class="text-xs opacity-75">/ <span id="recommendedCalories">2000</span> <span data-i18n="kcal">kcal</span></div>
                         </div>
                         <div class="bg-gradient-to-br from-blue-400 to-blue-600 p-4 rounded-lg text-white">
-                            <div class="text-sm opacity-90">단백질</div>
+                            <div class="text-sm opacity-90" data-i18n="totalProtein">단백질</div>
                             <div class="text-3xl font-bold" id="totalProtein">0</div>
-                            <div class="text-xs opacity-75">g</div>
+                            <div class="text-xs opacity-75" data-i18n="grams">g</div>
                         </div>
                         <div class="bg-gradient-to-br from-green-400 to-green-600 p-4 rounded-lg text-white">
-                            <div class="text-sm opacity-90">탄수화물</div>
+                            <div class="text-sm opacity-90" data-i18n="totalCarbs">탄수화물</div>
                             <div class="text-3xl font-bold" id="totalCarbs">0</div>
-                            <div class="text-xs opacity-75">g</div>
+                            <div class="text-xs opacity-75" data-i18n="grams">g</div>
                         </div>
                         <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 p-4 rounded-lg text-white">
-                            <div class="text-sm opacity-90">지방</div>
+                            <div class="text-sm opacity-90" data-i18n="totalFat">지방</div>
                             <div class="text-3xl font-bold" id="totalFat">0</div>
-                            <div class="text-xs opacity-75">g</div>
+                            <div class="text-xs opacity-75" data-i18n="grams">g</div>
                         </div>
                     </div>
 
@@ -477,19 +504,22 @@ app.get('/', (c) => {
             <div class="card p-8 max-w-md w-full">
                 <div class="text-center">
                     <i class="fas fa-crown text-6xl text-yellow-500 mb-4"></i>
-                    <h2 class="text-2xl font-bold mb-4">프리미엄으로 업그레이드</h2>
-                    <p class="text-gray-600 mb-6">무료 체험 횟수가 모두 소진되었습니다.<br>프리미엄으로 업그레이드하면 무제한으로 이용할 수 있습니다!</p>
+                    <h2 class="text-2xl font-bold mb-4" data-i18n="premiumTitle">프리미엄으로 업그레이드</h2>
+                    <p class="text-gray-600 mb-6">
+                        <span data-i18n="premiumDescription">무료 체험 횟수가 모두 소진되었습니다.</span><br>
+                        <span data-i18n="premiumDescription2">프리미엄으로 업그레이드하면 무제한으로 이용할 수 있습니다!</span>
+                    </p>
                     
                     <div class="bg-gradient-to-r from-yellow-400 to-orange-500 p-6 rounded-lg text-white mb-6">
-                        <div class="text-4xl font-bold mb-2">$9.99<span class="text-xl">/년</span></div>
-                        <div class="text-sm opacity-90">무제한 분석 + 고급 통계 + AI 코칭</div>
+                        <div class="text-4xl font-bold mb-2">$9.99<span class="text-xl" data-i18n="premiumPrice">/년</span></div>
+                        <div class="text-sm opacity-90" data-i18n="premiumFeatures">무제한 분석 + 고급 통계 + AI 코칭</div>
                     </div>
 
                     <button onclick="upgradeToPremium()" class="w-full bg-yellow-500 text-white py-3 rounded-lg font-semibold hover:bg-yellow-600 transition mb-3">
-                        <i class="fas fa-star mr-2"></i>지금 업그레이드
+                        <i class="fas fa-star mr-2"></i><span data-i18n="upgrade">지금 업그레이드</span>
                     </button>
                     <button onclick="closePremiumModal()" class="w-full bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-400 transition">
-                        나중에
+                        <span data-i18n="later">나중에</span>
                     </button>
                 </div>
             </div>
@@ -497,6 +527,7 @@ app.get('/', (c) => {
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/i18n.js"></script>
         <script src="/static/app.js"></script>
     </body>
     </html>

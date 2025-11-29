@@ -58,12 +58,12 @@ function updateUserUI() {
     const membershipBadge = document.getElementById('membershipBadge');
     
     if (currentUser.membership_type === 'premium') {
-        membershipType.textContent = 'Premium';
+        membershipType.textContent = t('membershipPremium');
         membershipBadge.classList.add('bg-gradient-to-r', 'from-yellow-400', 'to-orange-500', 'text-white');
         membershipBadge.classList.remove('bg-white');
         trialCount.classList.add('hidden');
     } else {
-        membershipType.textContent = 'Free';
+        membershipType.textContent = t('membershipFree');
         const remaining = Math.max(0, 2 - currentUser.free_trial_count);
         remainingTrials.textContent = remaining;
         
@@ -92,7 +92,7 @@ function handleImageUpload(event) {
 // Analyze food (Mock AI - 실제 환경에서는 Vision API 사용)
 async function analyzeFood() {
     if (!currentUser) {
-        alert('사용자 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+        alert(t('loading'));
         return;
     }
     
@@ -151,13 +151,13 @@ function updateRiskBadge(elementId, risk, name) {
     
     if (risk < 30) {
         element.classList.add('risk-low');
-        element.textContent = `낮음 (${riskValue}%)`;
+        element.textContent = `${t('riskLow')} (${riskValue}%)`;
     } else if (risk < 60) {
         element.classList.add('risk-medium');
-        element.textContent = `보통 (${riskValue}%)`;
+        element.textContent = `${t('riskMedium')} (${riskValue}%)`;
     } else {
         element.classList.add('risk-high');
-        element.textContent = `높음 (${riskValue}%)`;
+        element.textContent = `${t('riskHigh')} (${riskValue}%)`;
     }
 }
 
@@ -188,7 +188,7 @@ async function recordIntake() {
         });
         
         if (response.data.success) {
-            alert('섭취 기록이 저장되었습니다!');
+            alert(t('intakeSaved'));
             
             // Update user trial count
             if (response.data.remaining_trials !== null) {
@@ -209,7 +209,7 @@ async function recordIntake() {
         }
     } catch (error) {
         console.error('Error recording intake:', error);
-        alert('섭취 기록 저장 중 오류가 발생했습니다.');
+        alert(t('error'));
     }
 }
 
@@ -282,7 +282,7 @@ function updateNutritionChart(summary, recommendedCalories) {
     nutritionChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['단백질', '탄수화물', '지방'],
+            labels: [t('protein'), t('carbs'), t('fat')],
             datasets: [{
                 data: [
                     summary.total_protein * 4,  // 단백질 칼로리
@@ -315,7 +315,7 @@ function updateNutritionChart(summary, recommendedCalories) {
                         label: function(context) {
                             const label = context.label || '';
                             const value = Math.round(context.parsed);
-                            return `${label}: ${value} kcal`;
+                            return `${label}: ${value} ${t('kcal')}`;
                         }
                     }
                 }
@@ -351,7 +351,7 @@ function displaySearchResults(foods) {
     const container = document.getElementById('searchResults');
     
     if (foods.length === 0) {
-        container.innerHTML = '<p class="text-gray-500 text-sm p-2">검색 결과가 없습니다</p>';
+        container.innerHTML = `<p class="text-gray-500 text-sm p-2">${t('noResults')}</p>`;
         return;
     }
     
@@ -359,10 +359,10 @@ function displaySearchResults(foods) {
         <div class="p-3 hover:bg-gray-50 rounded cursor-pointer border-b" onclick='selectFood(${JSON.stringify(food)})'>
             <div class="font-semibold text-sm">${food.name_ko || food.name}</div>
             <div class="text-xs text-gray-600">
-                ${Math.round(food.calories)} kcal | 
-                단백질 ${food.protein}g | 
-                탄수화물 ${food.carbs}g | 
-                지방 ${food.fat}g
+                ${Math.round(food.calories)} ${t('kcal')} | 
+                ${t('protein')} ${food.protein}${t('grams')} | 
+                ${t('carbs')} ${food.carbs}${t('grams')} | 
+                ${t('fat')} ${food.fat}${t('grams')}
             </div>
         </div>
     `).join('');
@@ -395,13 +395,13 @@ async function upgradeToPremium() {
         });
         
         if (response.data.success) {
-            alert('프리미엄으로 업그레이드되었습니다!');
+            alert(t('upgradeSuccess'));
             currentUser.membership_type = 'premium';
             updateUserUI();
             closePremiumModal();
         }
     } catch (error) {
         console.error('Error upgrading:', error);
-        alert('업그레이드 중 오류가 발생했습니다.');
+        alert(t('error'));
     }
 }
