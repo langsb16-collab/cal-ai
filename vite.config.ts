@@ -11,9 +11,10 @@ export default defineConfig({
       entry: 'src/index.tsx'
     })
   ],
-  publicDir: 'public',
+  publicDir: false, // public 폴더를 자동 복사하지 않음 (build 스크립트에서 수동으로 복사)
   build: {
-    copyPublicDir: true
+    copyPublicDir: false,
+    emptyOutDir: true
   },
   server: {
     port: 3000,
