@@ -171,29 +171,54 @@ function getChatbotLanguage() {
 // 챗봇 UI 업데이트
 function updateChatbotLanguage() {
   const lang = getChatbotLanguage();
-  const t = chatbotTranslations[lang];
+  const t = chatbotTranslations[lang] || chatbotTranslations['ko'];
   
-  // 헤더 업데이트
-  document.querySelector('#chatbot-popup .chatbot-title').textContent = t.title;
-  document.querySelector('#chatbot-popup .chatbot-subtitle').textContent = t.subtitle;
+  console.log('Updating chatbot language to:', lang);
   
-  // 카테고리 및 질문 업데이트
-  document.querySelector('#category-1-title').textContent = t.categories.general;
-  document.querySelector('#category-2-title').textContent = t.categories.analysis;
-  document.querySelector('#category-3-title').textContent = t.categories.nutrition;
-  document.querySelector('#category-4-title').textContent = t.categories.disease;
-  
-  // 질문 업데이트
-  for (let i = 1; i <= 12; i++) {
-    const q = t.questions[`q${i}`];
-    const elem = document.querySelector(`#chatbot-q${i}`);
-    if (elem && q) {
-      elem.querySelector('.chatbot-q-text').textContent = q.q;
-      elem.setAttribute('data-answer', q.a);
+  try {
+    // 헤더 업데이트
+    const titleElem = document.querySelector('.chatbot-title');
+    const subtitleElem = document.querySelector('.chatbot-subtitle');
+    if (titleElem) titleElem.innerHTML = '<i class="fas fa-robot" style="margin-right: 8px;"></i>' + t.title;
+    if (subtitleElem) subtitleElem.textContent = t.subtitle;
+    
+    // 카테고리 업데이트
+    const cat1 = document.querySelector('#category-1-title');
+    const cat2 = document.querySelector('#category-2-title');
+    const cat3 = document.querySelector('#category-3-title');
+    const cat4 = document.querySelector('#category-4-title');
+    
+    if (cat1) cat1.textContent = t.categories.general;
+    if (cat2) cat2.textContent = t.categories.analysis;
+    if (cat3) cat3.textContent = t.categories.nutrition;
+    if (cat4) cat4.textContent = t.categories.disease;
+    
+    // 질문 업데이트
+    for (let i = 1; i <= 12; i++) {
+      const q = t.questions[`q${i}`];
+      const elem = document.querySelector(`#chatbot-q${i}`);
+      if (elem && q) {
+        const textElem = elem.querySelector('.chatbot-q-text');
+        if (textElem) {
+          textElem.textContent = q.q;
+        }
+        elem.setAttribute('data-answer', q.a);
+      }
     }
+    
+    // 버튼 텍스트 업데이트
+    const backBtn = document.querySelector('#chatbot-back-btn');
+    const viewAllBtn = document.querySelector('#chatbot-view-all');
+    
+    if (backBtn) {
+      backBtn.innerHTML = '<i class="fas fa-arrow-left" style="margin-right: 8px;"></i>' + t.backToList;
+    }
+    if (viewAllBtn) {
+      viewAllBtn.innerHTML = '<i class="fas fa-list-ul" style="margin-right: 8px;"></i>' + t.viewAllFAQ;
+    }
+    
+    console.log('Chatbot language updated successfully');
+  } catch (error) {
+    console.error('Error updating chatbot language:', error);
   }
-  
-  // 버튼 텍스트 업데이트
-  document.querySelector('#chatbot-back-btn').textContent = t.backToList;
-  document.querySelector('#chatbot-view-all').textContent = t.viewAllFAQ;
 }
