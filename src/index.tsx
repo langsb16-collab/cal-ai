@@ -1,12 +1,506 @@
 import { Hono } from 'hono'
-import { renderer } from './renderer'
+import { cors } from 'hono/cors'
+import { serveStatic } from 'hono/cloudflare-workers'
 
-const app = new Hono()
+type Bindings = {
+  DB: D1Database;
+}
 
-app.use(renderer)
+const app = new Hono<{ Bindings: Bindings }>()
+
+// CORS 설정
+app.use('/api/*', cors())
+
+// 정적 파일 제공
+app.use('/static/*', serveStatic({ root: './public' }))
+
+// ============================================
+// API Routes
+// ============================================
+
+// 회원 정보 조회
+app.get('/api/user/:email', async (c) => {
+  const { DB } = c.env;
+  const email = c.req.param('email');
+  
+  try {
+    const result = await DB.prepare(`
+      SELECT * FROM users WHERE email = ?
+    `).bind(email).first();
+    
+    return c.json({ success: true, user: result });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 회원 생성/업데이트
+app.post('/api/user', async (c) => {
+  const { DB } = c.env;
+  const body = await c.req.json();
+  
+  try {
+    const { email, name, age, gender, height, weight, activity_level, goal } = body;
+    
+    const result = await DB.prepare(`
+      INSERT INTO users (email, name, age, gender, height, weight, activity_level, goal, membership_type, free_trial_count)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'free', 0)
+      ON CONFLICT(email) DO UPDATE SET
+        name = excluded.name,
+        age = excluded.age,
+        gender = excluded.gender,
+        height = excluded.height,
+        weight = excluded.weight,
+        activity_level = excluded.activity_level,
+        goal = excluded.goal,
+        updated_at = CURRENT_TIMESTAMP
+    `).bind(email, name, age, gender, height, weight, activity_level, goal).run();
+    
+    return c.json({ success: true, result });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 음식 검색
+app.get('/api/foods/search', async (c) => {
+  const { DB } = c.env;
+  const query = c.req.query('q') || '';
+  
+  try {
+    const results = await DB.prepare(`
+      SELECT * FROM foods 
+      WHERE name LIKE ? OR name_ko LIKE ?
+      LIMIT 20
+    `).bind(`%${query}%`, `%${query}%`).all();
+    
+    return c.json({ success: true, foods: results.results });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 카테고리별 음식 조회
+app.get('/api/foods/category/:category', async (c) => {
+  const { DB } = c.env;
+  const category = c.req.param('category');
+  
+  try {
+    const results = await DB.prepare(`
+      SELECT * FROM foods WHERE category = ? LIMIT 50
+    `).bind(category).all();
+    
+    return c.json({ success: true, foods: results.results });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 음식 섭취 기록
+app.post('/api/intake', async (c) => {
+  const { DB } = c.env;
+  const body = await c.req.json();
+  
+  try {
+    const { user_id, food_name, serving_size, calories, protein, carbs, fat, sugar, sodium, meal_type } = body;
+    
+    // 무료 회원 체험 횟수 확인
+    const user = await DB.prepare(`SELECT * FROM users WHERE id = ?`).bind(user_id).first() as any;
+    
+    if (user.membership_type === 'free' && user.free_trial_count >= 2) {
+      return c.json({ 
+        success: false, 
+        error: 'free_trial_exceeded',
+        message: '무료 체험 횟수가 초과되었습니다. 프리미엄으로 업그레이드하세요.' 
+      }, 403);
+    }
+    
+    const today = new Date().toISOString().split('T')[0];
+    
+    // 섭취 기록 추가
+    const intakeResult = await DB.prepare(`
+      INSERT INTO food_intakes 
+      (user_id, food_name, serving_size, calories, protein, carbs, fat, sugar, sodium, meal_type, intake_date)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(user_id, food_name, serving_size, calories, protein, carbs, fat, sugar, sodium, meal_type, today).run();
+    
+    const intake_id = intakeResult.meta.last_row_id;
+    
+    // 질병 위험도 계산 (간단한 알고리즘)
+    const bmi = user.weight / ((user.height / 100) ** 2);
+    const obesity_risk = Math.min(100, Math.max(0, (bmi - 18.5) * 10 + (calories > 700 ? 20 : 0)));
+    const diabetes_risk = Math.min(100, Math.max(0, (sugar || 0) * 2 + (carbs > 50 ? 15 : 0)));
+    const hypertension_risk = Math.min(100, Math.max(0, (sodium || 0) / 20 + (fat > 20 ? 15 : 0)));
+    const hyperlipidemia_risk = Math.min(100, Math.max(0, fat * 2.5 + (cholesterol || 0) / 5));
+    
+    // 질병 위험도 저장
+    await DB.prepare(`
+      INSERT INTO health_risks 
+      (user_id, intake_id, obesity_risk, diabetes_risk, hypertension_risk, hyperlipidemia_risk)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).bind(user_id, intake_id, obesity_risk, diabetes_risk, hypertension_risk, hyperlipidemia_risk).run();
+    
+    // 일일 요약 업데이트
+    await DB.prepare(`
+      INSERT INTO daily_summaries (user_id, summary_date, total_calories, total_protein, total_carbs, total_fat, total_sugar, total_sodium)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(user_id, summary_date) DO UPDATE SET
+        total_calories = total_calories + excluded.total_calories,
+        total_protein = total_protein + excluded.total_protein,
+        total_carbs = total_carbs + excluded.total_carbs,
+        total_fat = total_fat + excluded.total_fat,
+        total_sugar = total_sugar + excluded.total_sugar,
+        total_sodium = total_sodium + excluded.total_sodium
+    `).bind(user_id, today, calories, protein, carbs, fat, sugar || 0, sodium || 0).run();
+    
+    // 무료 회원 카운트 증가
+    if (user.membership_type === 'free') {
+      await DB.prepare(`
+        UPDATE users SET free_trial_count = free_trial_count + 1 WHERE id = ?
+      `).bind(user_id).run();
+    }
+    
+    return c.json({ 
+      success: true, 
+      intake_id,
+      health_risks: {
+        obesity_risk: obesity_risk.toFixed(1),
+        diabetes_risk: diabetes_risk.toFixed(1),
+        hypertension_risk: hypertension_risk.toFixed(1),
+        hyperlipidemia_risk: hyperlipidemia_risk.toFixed(1)
+      },
+      remaining_trials: user.membership_type === 'free' ? Math.max(0, 2 - (user.free_trial_count + 1)) : null
+    });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 일일 통계 조회
+app.get('/api/stats/:user_id/:date', async (c) => {
+  const { DB } = c.env;
+  const user_id = c.req.param('user_id');
+  const date = c.req.param('date');
+  
+  try {
+    const summary = await DB.prepare(`
+      SELECT * FROM daily_summaries WHERE user_id = ? AND summary_date = ?
+    `).bind(user_id, date).first();
+    
+    const intakes = await DB.prepare(`
+      SELECT * FROM food_intakes WHERE user_id = ? AND intake_date = ?
+    `).bind(user_id, date).all();
+    
+    return c.json({ success: true, summary, intakes: intakes.results });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 주간 통계
+app.get('/api/stats/weekly/:user_id', async (c) => {
+  const { DB } = c.env;
+  const user_id = c.req.param('user_id');
+  
+  try {
+    const results = await DB.prepare(`
+      SELECT * FROM daily_summaries 
+      WHERE user_id = ? 
+      AND summary_date >= date('now', '-7 days')
+      ORDER BY summary_date DESC
+    `).bind(user_id).all();
+    
+    return c.json({ success: true, weekly: results.results });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 프리미엄 업그레이드
+app.post('/api/upgrade', async (c) => {
+  const { DB } = c.env;
+  const body = await c.req.json();
+  
+  try {
+    const { user_id } = body;
+    const expires_at = new Date();
+    expires_at.setFullYear(expires_at.getFullYear() + 1);
+    
+    await DB.prepare(`
+      UPDATE users 
+      SET membership_type = 'premium',
+          subscription_expires_at = ?
+      WHERE id = ?
+    `).bind(expires_at.toISOString(), user_id).run();
+    
+    return c.json({ success: true, message: '프리미엄으로 업그레이드되었습니다!' });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// ============================================
+// Main Page
+// ============================================
 
 app.get('/', (c) => {
-  return c.render(<h1>Hello!</h1>)
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CALCARE AI - AI 칼로리 분석</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <style>
+            body {
+                background: linear-gradient(135deg, #A8C4A4 0%, #C8DCC5 100%);
+                min-height: 100vh;
+            }
+            .card {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-radius: 24px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+            .camera-icon {
+                width: 120px;
+                height: 120px;
+                background: #f5f5f5;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            .camera-icon:hover {
+                background: #e8e8e8;
+                transform: scale(1.05);
+            }
+            .risk-badge {
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 0.875rem;
+                font-weight: 600;
+            }
+            .risk-low { background: #D4EDDA; color: #155724; }
+            .risk-medium { background: #FFF3CD; color: #856404; }
+            .risk-high { background: #F8D7DA; color: #721C24; }
+            
+            /* Chart container */
+            .chart-container {
+                position: relative;
+                height: 250px;
+                margin: 20px 0;
+            }
+        </style>
+    </head>
+    <body class="p-4 md:p-8">
+        <!-- Header -->
+        <div class="max-w-6xl mx-auto mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
+                        <i class="fas fa-camera-retro mr-3"></i>CALCARE AI
+                    </h1>
+                    <p class="text-white text-sm md:text-base opacity-90">사진으로 음식을 인식하고 칼로리를 자동 계산</p>
+                </div>
+                <div class="text-right">
+                    <div id="membershipBadge" class="inline-block px-4 py-2 bg-white rounded-full text-sm font-semibold">
+                        <i class="fas fa-user mr-2"></i><span id="membershipType">Free</span>
+                    </div>
+                    <div id="trialCount" class="text-white text-xs mt-2">
+                        무료 체험: <span id="remainingTrials">2</span>/2 남음
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-6">
+            <!-- Left: Camera Upload -->
+            <div class="card p-8">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-utensils mr-2 text-green-600"></i>음식 사진 분석
+                </h2>
+                
+                <div class="text-center mb-6">
+                    <div class="camera-icon mx-auto mb-4" onclick="document.getElementById('imageInput').click()">
+                        <i class="fas fa-camera text-4xl text-gray-400"></i>
+                    </div>
+                    <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                    <p class="text-gray-600 text-sm">사진을 클릭하거나 드래그하여 업로드</p>
+                </div>
+
+                <div id="imagePreview" class="hidden mb-6">
+                    <img id="previewImg" src="" class="w-full rounded-lg mb-4">
+                    <button onclick="analyzeFood()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                        <i class="fas fa-brain mr-2"></i>AI 분석 시작
+                    </button>
+                </div>
+
+                <!-- Food Search -->
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">
+                        <i class="fas fa-search mr-2"></i>음식 검색
+                    </h3>
+                    <input 
+                        type="text" 
+                        id="foodSearch" 
+                        placeholder="음식 이름을 입력하세요..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                        oninput="searchFood(this.value)"
+                    >
+                    <div id="searchResults" class="mt-3 max-h-60 overflow-y-auto"></div>
+                </div>
+            </div>
+
+            <!-- Right: Analysis Results -->
+            <div class="card p-8">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-chart-line mr-2 text-blue-600"></i>분석 결과
+                </h2>
+
+                <div id="resultsPlaceholder" class="text-center py-12 text-gray-400">
+                    <i class="fas fa-cookie-bite text-6xl mb-4"></i>
+                    <p>음식 사진을 업로드하면<br>영양 분석 결과가 표시됩니다</p>
+                </div>
+
+                <div id="analysisResults" class="hidden">
+                    <!-- Nutrition Info -->
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-lg mb-3" id="foodName">비빔밥</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-orange-50 p-3 rounded-lg">
+                                <div class="text-orange-600 text-sm font-semibold">칼로리</div>
+                                <div class="text-2xl font-bold text-orange-700" id="calories">250</div>
+                                <div class="text-xs text-gray-600">kcal</div>
+                            </div>
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <div class="text-blue-600 text-sm font-semibold">단백질</div>
+                                <div class="text-2xl font-bold text-blue-700" id="protein">25</div>
+                                <div class="text-xs text-gray-600">g</div>
+                            </div>
+                            <div class="bg-green-50 p-3 rounded-lg">
+                                <div class="text-green-600 text-sm font-semibold">탄수화물</div>
+                                <div class="text-2xl font-bold text-green-700" id="carbs">78</div>
+                                <div class="text-xs text-gray-600">g</div>
+                            </div>
+                            <div class="bg-yellow-50 p-3 rounded-lg">
+                                <div class="text-yellow-600 text-sm font-semibold">지방</div>
+                                <div class="text-2xl font-bold text-yellow-700" id="fat">15</div>
+                                <div class="text-xs text-gray-600">g</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Health Risks -->
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-lg mb-3">
+                            <i class="fas fa-heartbeat mr-2 text-red-600"></i>질병 위험도
+                        </h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-700">비만</span>
+                                <span class="risk-badge risk-low" id="obesityRisk">낮음 (25%)</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-700">당뇨</span>
+                                <span class="risk-badge risk-medium" id="diabetesRisk">보통 (45%)</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-700">고혈압</span>
+                                <span class="risk-badge risk-high" id="hypertensionRisk">높음 (68%)</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-700">고지혈증</span>
+                                <span class="risk-badge risk-low" id="hyperlipidemiaRisk">낮음 (32%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Record Button -->
+                    <button onclick="recordIntake()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                        <i class="fas fa-save mr-2"></i>섭취 기록 저장
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Stats -->
+        <div class="max-w-6xl mx-auto mt-6">
+            <div class="card p-8">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-calendar-day mr-2 text-purple-600"></i>오늘의 영양 섭취
+                </h2>
+                
+                <div id="dailyStatsPlaceholder" class="text-center py-8 text-gray-400">
+                    <p>오늘 섭취한 음식이 없습니다</p>
+                </div>
+
+                <div id="dailyStats" class="hidden">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-gradient-to-br from-orange-400 to-orange-600 p-4 rounded-lg text-white">
+                            <div class="text-sm opacity-90">총 칼로리</div>
+                            <div class="text-3xl font-bold" id="totalCalories">0</div>
+                            <div class="text-xs opacity-75">/ <span id="recommendedCalories">2000</span> kcal</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-400 to-blue-600 p-4 rounded-lg text-white">
+                            <div class="text-sm opacity-90">단백질</div>
+                            <div class="text-3xl font-bold" id="totalProtein">0</div>
+                            <div class="text-xs opacity-75">g</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-400 to-green-600 p-4 rounded-lg text-white">
+                            <div class="text-sm opacity-90">탄수화물</div>
+                            <div class="text-3xl font-bold" id="totalCarbs">0</div>
+                            <div class="text-xs opacity-75">g</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 p-4 rounded-lg text-white">
+                            <div class="text-sm opacity-90">지방</div>
+                            <div class="text-3xl font-bold" id="totalFat">0</div>
+                            <div class="text-xs opacity-75">g</div>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="chart-container">
+                        <canvas id="nutritionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Modal -->
+        <div id="premiumModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="card p-8 max-w-md w-full">
+                <div class="text-center">
+                    <i class="fas fa-crown text-6xl text-yellow-500 mb-4"></i>
+                    <h2 class="text-2xl font-bold mb-4">프리미엄으로 업그레이드</h2>
+                    <p class="text-gray-600 mb-6">무료 체험 횟수가 모두 소진되었습니다.<br>프리미엄으로 업그레이드하면 무제한으로 이용할 수 있습니다!</p>
+                    
+                    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 p-6 rounded-lg text-white mb-6">
+                        <div class="text-4xl font-bold mb-2">$9.99<span class="text-xl">/년</span></div>
+                        <div class="text-sm opacity-90">무제한 분석 + 고급 통계 + AI 코칭</div>
+                    </div>
+
+                    <button onclick="upgradeToPremium()" class="w-full bg-yellow-500 text-white py-3 rounded-lg font-semibold hover:bg-yellow-600 transition mb-3">
+                        <i class="fas fa-star mr-2"></i>지금 업그레이드
+                    </button>
+                    <button onclick="closePremiumModal()" class="w-full bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-400 transition">
+                        나중에
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/app.js"></script>
+    </body>
+    </html>
+  `)
 })
 
 export default app
