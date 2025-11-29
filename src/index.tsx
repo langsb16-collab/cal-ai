@@ -254,69 +254,217 @@ app.get('/', (c) => {
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <style>
+            * {
+                -webkit-tap-highlight-color: transparent;
+            }
+            
             body {
                 background: linear-gradient(135deg, #A8C4A4 0%, #C8DCC5 100%);
                 min-height: 100vh;
+                overflow-x: hidden;
             }
+            
             .card {
                 background: rgba(255, 255, 255, 0.95);
                 backdrop-filter: blur(10px);
-                border-radius: 24px;
+                border-radius: 20px;
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             }
+            
+            /* 모바일 최적화 */
+            @media (max-width: 768px) {
+                .card {
+                    border-radius: 16px;
+                }
+            }
+            
             .camera-icon {
-                width: 120px;
-                height: 120px;
+                width: 140px;
+                height: 140px;
                 background: #f5f5f5;
-                border-radius: 16px;
+                border-radius: 20px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
                 transition: all 0.3s;
+                touch-action: manipulation;
             }
-            .camera-icon:hover {
+            
+            @media (max-width: 768px) {
+                .camera-icon {
+                    width: 120px;
+                    height: 120px;
+                }
+            }
+            
+            .camera-icon:hover, .camera-icon:active {
                 background: #e8e8e8;
                 transform: scale(1.05);
             }
+            
             .risk-badge {
-                padding: 6px 12px;
+                padding: 8px 14px;
                 border-radius: 20px;
                 font-size: 0.875rem;
                 font-weight: 600;
+                white-space: nowrap;
             }
+            
+            @media (max-width: 768px) {
+                .risk-badge {
+                    padding: 6px 10px;
+                    font-size: 0.8rem;
+                }
+            }
+            
             .risk-low { background: #D4EDDA; color: #155724; }
             .risk-medium { background: #FFF3CD; color: #856404; }
             .risk-high { background: #F8D7DA; color: #721C24; }
             
             .chart-container {
                 position: relative;
-                height: 250px;
+                height: 280px;
                 margin: 20px 0;
             }
             
+            @media (max-width: 768px) {
+                .chart-container {
+                    height: 240px;
+                    margin: 15px 0;
+                }
+            }
+            
+            /* 언어 버튼 */
             .lang-btn {
-                padding: 8px 16px;
-                border-radius: 8px;
+                padding: 10px 18px;
+                border-radius: 10px;
                 cursor: pointer;
                 transition: all 0.3s;
                 background: rgba(255, 255, 255, 0.2);
                 color: white;
                 font-weight: 600;
+                font-size: 0.9rem;
+                border: 2px solid transparent;
+                touch-action: manipulation;
+                min-width: 70px;
             }
-            .lang-btn:hover {
+            
+            @media (max-width: 768px) {
+                .lang-btn {
+                    padding: 8px 12px;
+                    font-size: 0.8rem;
+                    min-width: 60px;
+                }
+            }
+            
+            .lang-btn:hover, .lang-btn:active {
                 background: rgba(255, 255, 255, 0.3);
             }
+            
             .lang-btn.active {
                 background: white;
                 color: #A8C4A4;
+                border-color: #A8C4A4;
+            }
+            
+            /* 버튼 공통 스타일 */
+            button {
+                touch-action: manipulation;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+            
+            .btn-primary {
+                padding: 14px 24px;
+                font-size: 1rem;
+                border-radius: 12px;
+                font-weight: 600;
+                transition: all 0.3s;
+            }
+            
+            @media (max-width: 768px) {
+                .btn-primary {
+                    padding: 12px 20px;
+                    font-size: 0.95rem;
+                }
+            }
+            
+            /* 입력 필드 */
+            input[type="text"] {
+                font-size: 16px; /* iOS zoom 방지 */
+            }
+            
+            /* 검색 결과 */
+            .search-result-item {
+                padding: 14px;
+                cursor: pointer;
+                touch-action: manipulation;
+                transition: background 0.2s;
+            }
+            
+            @media (max-width: 768px) {
+                .search-result-item {
+                    padding: 12px;
+                }
+            }
+            
+            .search-result-item:hover, .search-result-item:active {
+                background: #f5f5f5;
+            }
+            
+            /* 영양소 카드 */
+            .nutrition-card {
+                padding: 16px;
+                border-radius: 12px;
+                transition: transform 0.2s;
+            }
+            
+            @media (max-width: 768px) {
+                .nutrition-card {
+                    padding: 12px;
+                }
+            }
+            
+            /* 스크롤바 스타일 */
+            ::-webkit-scrollbar {
+                width: 8px;
+                height: 8px;
+            }
+            
+            ::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.05);
+                border-radius: 10px;
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                background: rgba(168, 196, 164, 0.5);
+                border-radius: 10px;
+            }
+            
+            ::-webkit-scrollbar-thumb:hover {
+                background: rgba(168, 196, 164, 0.7);
+            }
+            
+            /* 모바일 헤더 최적화 */
+            @media (max-width: 640px) {
+                .mobile-header {
+                    flex-direction: column;
+                    gap: 1rem;
+                    text-align: center;
+                }
+                
+                .mobile-header > div {
+                    width: 100%;
+                    text-align: center !important;
+                }
             }
         </style>
     </head>
-    <body class="p-4 md:p-8">
+    <body class="p-3 sm:p-4 md:p-6 lg:p-8">
         <!-- Language Selector -->
-        <div class="max-w-6xl mx-auto mb-4">
-            <div class="flex justify-end gap-2">
+        <div class="max-w-6xl mx-auto mb-3 sm:mb-4">
+            <div class="flex justify-center sm:justify-end gap-2 flex-wrap">
                 <button class="lang-btn active" data-lang="ko" onclick="setLanguage('ko')">한국어</button>
                 <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">English</button>
                 <button class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
@@ -325,19 +473,19 @@ app.get('/', (c) => {
         </div>
 
         <!-- Header -->
-        <div class="max-w-6xl mx-auto mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
-                        <i class="fas fa-camera-retro mr-3"></i><span data-i18n="appTitle">CALCARE AI</span>
+        <div class="max-w-6xl mx-auto mb-4 sm:mb-6 md:mb-8">
+            <div class="flex items-center justify-between mobile-header">
+                <div class="flex-1">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">
+                        <i class="fas fa-camera-retro mr-2 sm:mr-3"></i><span data-i18n="appTitle">CALCARE AI</span>
                     </h1>
-                    <p class="text-white text-sm md:text-base opacity-90" data-i18n="appSubtitle">사진으로 음식을 인식하고 칼로리를 자동 계산</p>
+                    <p class="text-white text-xs sm:text-sm md:text-base opacity-90" data-i18n="appSubtitle">사진으로 음식을 인식하고 칼로리를 자동 계산</p>
                 </div>
-                <div class="text-right">
-                    <div id="membershipBadge" class="inline-block px-4 py-2 bg-white rounded-full text-sm font-semibold">
-                        <i class="fas fa-user mr-2"></i><span id="membershipType" data-i18n="membershipFree">Free</span>
+                <div class="text-right flex-shrink-0">
+                    <div id="membershipBadge" class="inline-block px-3 sm:px-4 py-2 bg-white rounded-full text-xs sm:text-sm font-semibold">
+                        <i class="fas fa-user mr-1 sm:mr-2"></i><span id="membershipType" data-i18n="membershipFree">Free</span>
                     </div>
-                    <div id="trialCount" class="text-white text-xs mt-2">
+                    <div id="trialCount" class="text-white text-xs mt-1 sm:mt-2 whitespace-nowrap">
                         <span data-i18n="freeTrialRemaining">무료 체험</span>: <span id="remainingTrials">2</span>/2 <span data-i18n="trialRemaining">남음</span>
                     </div>
                 </div>
@@ -345,31 +493,31 @@ app.get('/', (c) => {
         </div>
 
         <!-- Main Content -->
-        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-6">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-4 sm:gap-6">
             <!-- Left: Camera Upload -->
-            <div class="card p-8">
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+            <div class="card p-4 sm:p-6 md:p-8">
+                <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800">
                     <i class="fas fa-utensils mr-2 text-green-600"></i><span data-i18n="photoAnalysis">음식 사진 분석</span>
                 </h2>
                 
-                <div class="text-center mb-6">
-                    <div class="camera-icon mx-auto mb-4" onclick="document.getElementById('imageInput').click()">
-                        <i class="fas fa-camera text-4xl text-gray-400"></i>
+                <div class="text-center mb-4 sm:mb-6">
+                    <div class="camera-icon mx-auto mb-3 sm:mb-4" onclick="document.getElementById('imageInput').click()">
+                        <i class="fas fa-camera text-3xl sm:text-4xl text-gray-400"></i>
                     </div>
                     <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
-                    <p class="text-gray-600 text-sm" data-i18n="uploadPrompt">사진을 클릭하거나 드래그하여 업로드</p>
+                    <p class="text-gray-600 text-sm sm:text-base" data-i18n="uploadPrompt">사진을 클릭하거나 드래그하여 업로드</p>
                 </div>
 
-                <div id="imagePreview" class="hidden mb-6">
-                    <img id="previewImg" src="" class="w-full rounded-lg mb-4">
-                    <button onclick="analyzeFood()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                <div id="imagePreview" class="hidden mb-4 sm:mb-6">
+                    <img id="previewImg" src="" class="w-full rounded-lg mb-3 sm:mb-4 shadow-md">
+                    <button onclick="analyzeFood()" class="btn-primary w-full bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 active:bg-green-800 transition shadow-lg">
                         <i class="fas fa-brain mr-2"></i><span data-i18n="startAnalysis">AI 분석 시작</span>
                     </button>
                 </div>
 
                 <!-- Food Search -->
-                <div class="mt-6">
-                    <h3 class="text-lg font-semibold mb-3 text-gray-700">
+                <div class="mt-4 sm:mt-6">
+                    <h3 class="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-gray-700">
                         <i class="fas fa-search mr-2"></i><span data-i18n="foodSearch">음식 검색</span>
                     </h3>
                     <input 
@@ -377,79 +525,79 @@ app.get('/', (c) => {
                         id="foodSearch" 
                         data-i18n-placeholder="searchPlaceholder"
                         placeholder="음식 이름을 입력하세요..."
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-base"
                         oninput="searchFood(this.value)"
                     >
-                    <div id="searchResults" class="mt-3 max-h-60 overflow-y-auto"></div>
+                    <div id="searchResults" class="mt-3 max-h-60 overflow-y-auto rounded-lg"></div>
                 </div>
             </div>
 
             <!-- Right: Analysis Results -->
-            <div class="card p-8">
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+            <div class="card p-4 sm:p-6 md:p-8">
+                <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800">
                     <i class="fas fa-chart-line mr-2 text-blue-600"></i><span data-i18n="analysisResult">분석 결과</span>
                 </h2>
 
-                <div id="resultsPlaceholder" class="text-center py-12 text-gray-400">
-                    <i class="fas fa-cookie-bite text-6xl mb-4"></i>
-                    <p><span data-i18n="resultsPlaceholder">음식 사진을 업로드하면</span><br><span data-i18n="resultsPlaceholder2">영양 분석 결과가 표시됩니다</span></p>
+                <div id="resultsPlaceholder" class="text-center py-8 sm:py-12 text-gray-400">
+                    <i class="fas fa-cookie-bite text-5xl sm:text-6xl mb-3 sm:mb-4"></i>
+                    <p class="text-sm sm:text-base"><span data-i18n="resultsPlaceholder">음식 사진을 업로드하면</span><br><span data-i18n="resultsPlaceholder2">영양 분석 결과가 표시됩니다</span></p>
                 </div>
 
                 <div id="analysisResults" class="hidden">
                     <!-- Nutrition Info -->
-                    <div class="mb-6">
-                        <h3 class="font-semibold text-lg mb-3" id="foodName">비빔밥</h3>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="bg-orange-50 p-3 rounded-lg">
-                                <div class="text-orange-600 text-sm font-semibold" data-i18n="calories">칼로리</div>
-                                <div class="text-2xl font-bold text-orange-700" id="calories">250</div>
+                    <div class="mb-4 sm:mb-6">
+                        <h3 class="font-semibold text-base sm:text-lg mb-2 sm:mb-3" id="foodName">비빔밥</h3>
+                        <div class="grid grid-cols-2 gap-2 sm:gap-3">
+                            <div class="nutrition-card bg-orange-50 rounded-lg">
+                                <div class="text-orange-600 text-xs sm:text-sm font-semibold" data-i18n="calories">칼로리</div>
+                                <div class="text-xl sm:text-2xl font-bold text-orange-700" id="calories">250</div>
                                 <div class="text-xs text-gray-600" data-i18n="kcal">kcal</div>
                             </div>
-                            <div class="bg-blue-50 p-3 rounded-lg">
-                                <div class="text-blue-600 text-sm font-semibold" data-i18n="protein">단백질</div>
-                                <div class="text-2xl font-bold text-blue-700" id="protein">25</div>
+                            <div class="nutrition-card bg-blue-50 rounded-lg">
+                                <div class="text-blue-600 text-xs sm:text-sm font-semibold" data-i18n="protein">단백질</div>
+                                <div class="text-xl sm:text-2xl font-bold text-blue-700" id="protein">25</div>
                                 <div class="text-xs text-gray-600" data-i18n="grams">g</div>
                             </div>
-                            <div class="bg-green-50 p-3 rounded-lg">
-                                <div class="text-green-600 text-sm font-semibold" data-i18n="carbs">탄수화물</div>
-                                <div class="text-2xl font-bold text-green-700" id="carbs">78</div>
+                            <div class="nutrition-card bg-green-50 rounded-lg">
+                                <div class="text-green-600 text-xs sm:text-sm font-semibold" data-i18n="carbs">탄수화물</div>
+                                <div class="text-xl sm:text-2xl font-bold text-green-700" id="carbs">78</div>
                                 <div class="text-xs text-gray-600" data-i18n="grams">g</div>
                             </div>
-                            <div class="bg-yellow-50 p-3 rounded-lg">
-                                <div class="text-yellow-600 text-sm font-semibold" data-i18n="fat">지방</div>
-                                <div class="text-2xl font-bold text-yellow-700" id="fat">15</div>
+                            <div class="nutrition-card bg-yellow-50 rounded-lg">
+                                <div class="text-yellow-600 text-xs sm:text-sm font-semibold" data-i18n="fat">지방</div>
+                                <div class="text-xl sm:text-2xl font-bold text-yellow-700" id="fat">15</div>
                                 <div class="text-xs text-gray-600" data-i18n="grams">g</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Health Risks -->
-                    <div class="mb-6">
-                        <h3 class="font-semibold text-lg mb-3">
+                    <div class="mb-4 sm:mb-6">
+                        <h3 class="font-semibold text-base sm:text-lg mb-2 sm:mb-3">
                             <i class="fas fa-heartbeat mr-2 text-red-600"></i><span data-i18n="healthRisks">질병 위험도</span>
                         </h3>
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-700" data-i18n="obesity">비만</span>
+                        <div class="space-y-2 sm:space-y-3">
+                            <div class="flex items-center justify-between py-1">
+                                <span class="text-xs sm:text-sm text-gray-700 font-medium" data-i18n="obesity">비만</span>
                                 <span class="risk-badge risk-low" id="obesityRisk">낮음 (25%)</span>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-700" data-i18n="diabetes">당뇨</span>
+                            <div class="flex items-center justify-between py-1">
+                                <span class="text-xs sm:text-sm text-gray-700 font-medium" data-i18n="diabetes">당뇨</span>
                                 <span class="risk-badge risk-medium" id="diabetesRisk">보통 (45%)</span>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-700" data-i18n="hypertension">고혈압</span>
+                            <div class="flex items-center justify-between py-1">
+                                <span class="text-xs sm:text-sm text-gray-700 font-medium" data-i18n="hypertension">고혈압</span>
                                 <span class="risk-badge risk-high" id="hypertensionRisk">높음 (68%)</span>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-700" data-i18n="hyperlipidemia">고지혈증</span>
+                            <div class="flex items-center justify-between py-1">
+                                <span class="text-xs sm:text-sm text-gray-700 font-medium" data-i18n="hyperlipidemia">고지혈증</span>
                                 <span class="risk-badge risk-low" id="hyperlipidemiaRisk">낮음 (32%)</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Record Button -->
-                    <button onclick="recordIntake()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                    <button onclick="recordIntake()" class="btn-primary w-full bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 active:bg-blue-800 transition shadow-lg">
                         <i class="fas fa-save mr-2"></i><span data-i18n="saveIntake">섭취 기록 저장</span>
                     </button>
                 </div>
@@ -457,36 +605,36 @@ app.get('/', (c) => {
         </div>
 
         <!-- Daily Stats -->
-        <div class="max-w-6xl mx-auto mt-6">
-            <div class="card p-8">
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+        <div class="max-w-6xl mx-auto mt-4 sm:mt-6">
+            <div class="card p-4 sm:p-6 md:p-8">
+                <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800">
                     <i class="fas fa-calendar-day mr-2 text-purple-600"></i><span data-i18n="dailyNutrition">오늘의 영양 섭취</span>
                 </h2>
                 
-                <div id="dailyStatsPlaceholder" class="text-center py-8 text-gray-400">
-                    <p data-i18n="noIntakeToday">오늘 섭취한 음식이 없습니다</p>
+                <div id="dailyStatsPlaceholder" class="text-center py-6 sm:py-8 text-gray-400">
+                    <p class="text-sm sm:text-base" data-i18n="noIntakeToday">오늘 섭취한 음식이 없습니다</p>
                 </div>
 
                 <div id="dailyStats" class="hidden">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-gradient-to-br from-orange-400 to-orange-600 p-4 rounded-lg text-white">
-                            <div class="text-sm opacity-90" data-i18n="totalCalories">총 칼로리</div>
-                            <div class="text-3xl font-bold" id="totalCalories">0</div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                        <div class="bg-gradient-to-br from-orange-400 to-orange-600 p-3 sm:p-4 rounded-xl text-white shadow-lg">
+                            <div class="text-xs sm:text-sm opacity-90" data-i18n="totalCalories">총 칼로리</div>
+                            <div class="text-2xl sm:text-3xl font-bold" id="totalCalories">0</div>
                             <div class="text-xs opacity-75">/ <span id="recommendedCalories">2000</span> <span data-i18n="kcal">kcal</span></div>
                         </div>
-                        <div class="bg-gradient-to-br from-blue-400 to-blue-600 p-4 rounded-lg text-white">
-                            <div class="text-sm opacity-90" data-i18n="totalProtein">단백질</div>
-                            <div class="text-3xl font-bold" id="totalProtein">0</div>
+                        <div class="bg-gradient-to-br from-blue-400 to-blue-600 p-3 sm:p-4 rounded-xl text-white shadow-lg">
+                            <div class="text-xs sm:text-sm opacity-90" data-i18n="totalProtein">단백질</div>
+                            <div class="text-2xl sm:text-3xl font-bold" id="totalProtein">0</div>
                             <div class="text-xs opacity-75" data-i18n="grams">g</div>
                         </div>
-                        <div class="bg-gradient-to-br from-green-400 to-green-600 p-4 rounded-lg text-white">
-                            <div class="text-sm opacity-90" data-i18n="totalCarbs">탄수화물</div>
-                            <div class="text-3xl font-bold" id="totalCarbs">0</div>
+                        <div class="bg-gradient-to-br from-green-400 to-green-600 p-3 sm:p-4 rounded-xl text-white shadow-lg">
+                            <div class="text-xs sm:text-sm opacity-90" data-i18n="totalCarbs">탄수화물</div>
+                            <div class="text-2xl sm:text-3xl font-bold" id="totalCarbs">0</div>
                             <div class="text-xs opacity-75" data-i18n="grams">g</div>
                         </div>
-                        <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 p-4 rounded-lg text-white">
-                            <div class="text-sm opacity-90" data-i18n="totalFat">지방</div>
-                            <div class="text-3xl font-bold" id="totalFat">0</div>
+                        <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 p-3 sm:p-4 rounded-xl text-white shadow-lg">
+                            <div class="text-xs sm:text-sm opacity-90" data-i18n="totalFat">지방</div>
+                            <div class="text-2xl sm:text-3xl font-bold" id="totalFat">0</div>
                             <div class="text-xs opacity-75" data-i18n="grams">g</div>
                         </div>
                     </div>
@@ -501,24 +649,24 @@ app.get('/', (c) => {
 
         <!-- Premium Modal -->
         <div id="premiumModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div class="card p-8 max-w-md w-full">
+            <div class="card p-6 sm:p-8 max-w-md w-full max-h-screen overflow-y-auto">
                 <div class="text-center">
-                    <i class="fas fa-crown text-6xl text-yellow-500 mb-4"></i>
-                    <h2 class="text-2xl font-bold mb-4" data-i18n="premiumTitle">프리미엄으로 업그레이드</h2>
-                    <p class="text-gray-600 mb-6">
+                    <i class="fas fa-crown text-5xl sm:text-6xl text-yellow-500 mb-3 sm:mb-4"></i>
+                    <h2 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" data-i18n="premiumTitle">프리미엄으로 업그레이드</h2>
+                    <p class="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
                         <span data-i18n="premiumDescription">무료 체험 횟수가 모두 소진되었습니다.</span><br>
                         <span data-i18n="premiumDescription2">프리미엄으로 업그레이드하면 무제한으로 이용할 수 있습니다!</span>
                     </p>
                     
-                    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 p-6 rounded-lg text-white mb-6">
-                        <div class="text-4xl font-bold mb-2">$9.99<span class="text-xl" data-i18n="premiumPrice">/년</span></div>
-                        <div class="text-sm opacity-90" data-i18n="premiumFeatures">무제한 분석 + 고급 통계 + AI 코칭</div>
+                    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 p-5 sm:p-6 rounded-xl text-white mb-4 sm:mb-6 shadow-lg">
+                        <div class="text-3xl sm:text-4xl font-bold mb-2">$9.99<span class="text-lg sm:text-xl" data-i18n="premiumPrice">/년</span></div>
+                        <div class="text-xs sm:text-sm opacity-90" data-i18n="premiumFeatures">무제한 분석 + 고급 통계 + AI 코칭</div>
                     </div>
 
-                    <button onclick="upgradeToPremium()" class="w-full bg-yellow-500 text-white py-3 rounded-lg font-semibold hover:bg-yellow-600 transition mb-3">
+                    <button onclick="upgradeToPremium()" class="btn-primary w-full bg-yellow-500 text-white rounded-lg font-semibold hover:bg-yellow-600 active:bg-yellow-700 transition shadow-lg mb-3">
                         <i class="fas fa-star mr-2"></i><span data-i18n="upgrade">지금 업그레이드</span>
                     </button>
-                    <button onclick="closePremiumModal()" class="w-full bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-400 transition">
+                    <button onclick="closePremiumModal()" class="btn-primary w-full bg-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-400 active:bg-gray-500 transition">
                         <span data-i18n="later">나중에</span>
                     </button>
                 </div>

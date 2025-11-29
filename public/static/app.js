@@ -351,18 +351,21 @@ function displaySearchResults(foods) {
     const container = document.getElementById('searchResults');
     
     if (foods.length === 0) {
-        container.innerHTML = `<p class="text-gray-500 text-sm p-2">${t('noResults')}</p>`;
+        container.innerHTML = `<p class="text-gray-500 text-sm p-3">${t('noResults')}</p>`;
         return;
     }
     
     container.innerHTML = foods.map(food => `
-        <div class="p-3 hover:bg-gray-50 rounded cursor-pointer border-b" onclick='selectFood(${JSON.stringify(food)})'>
-            <div class="font-semibold text-sm">${food.name_ko || food.name}</div>
-            <div class="text-xs text-gray-600">
-                ${Math.round(food.calories)} ${t('kcal')} | 
-                ${t('protein')} ${food.protein}${t('grams')} | 
-                ${t('carbs')} ${food.carbs}${t('grams')} | 
-                ${t('fat')} ${food.fat}${t('grams')}
+        <div class="search-result-item hover:bg-gray-50 active:bg-gray-100 rounded-lg cursor-pointer border-b last:border-b-0" onclick='selectFood(${JSON.stringify(food)})'>
+            <div class="font-semibold text-sm sm:text-base mb-1">${food.name_ko || food.name}</div>
+            <div class="text-xs sm:text-sm text-gray-600 flex flex-wrap gap-2">
+                <span class="whitespace-nowrap">${Math.round(food.calories)} ${t('kcal')}</span>
+                <span class="text-gray-400">|</span>
+                <span class="whitespace-nowrap">${t('protein')} ${food.protein}${t('grams')}</span>
+                <span class="text-gray-400">|</span>
+                <span class="whitespace-nowrap">${t('carbs')} ${food.carbs}${t('grams')}</span>
+                <span class="text-gray-400">|</span>
+                <span class="whitespace-nowrap">${t('fat')} ${food.fat}${t('grams')}</span>
             </div>
         </div>
     `).join('');
