@@ -6,8 +6,11 @@
   ],
   "exclude": [
     "/faq.html",
-    "/health-info.html",
+    "/faq",
+    "/health-info.html", 
+    "/health-info",
     "/nutrition-info.html",
+    "/nutrition-info",
     "/static/*"
   ]
 }
