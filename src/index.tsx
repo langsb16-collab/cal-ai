@@ -35,7 +35,125 @@ app.get('/api/user/:email', async (c) => {
   }
 });
 
-// 회원 생성/업데이트
+// 회원가입
+app.post('/api/auth/register', async (c) => {
+  const { DB } = c.env;
+  const body = await c.req.json();
+  
+  try {
+    const { email, password, name } = body;
+    
+    if (!email || !password || !name) {
+      return c.json({ success: false, error: 'Email, password, and name are required' }, 400);
+    }
+    
+    // 이메일 중복 체크
+    const existing = await DB.prepare(`SELECT id FROM users WHERE email = ?`).bind(email).first();
+    if (existing) {
+      return c.json({ success: false, error: 'Email already exists' }, 409);
+    }
+    
+    // 회원 생성
+    const result = await DB.prepare(`
+      INSERT INTO users (email, password, name, membership_type, free_trial_count)
+      VALUES (?, ?, ?, 'free', 0)
+    `).bind(email, password, name).run();
+    
+    const user = await DB.prepare(`SELECT id, email, name, membership_type, free_trial_count FROM users WHERE id = ?`)
+      .bind(result.meta.last_row_id).first();
+    
+    return c.json({ success: true, user });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 로그인
+app.post('/api/auth/login', async (c) => {
+  const { DB } = c.env;
+  const body = await c.req.json();
+  
+  try {
+    const { email, password } = body;
+    
+    if (!email || !password) {
+      return c.json({ success: false, error: 'Email and password are required' }, 400);
+    }
+    
+    const user = await DB.prepare(`
+      SELECT id, email, name, age, gender, height, weight, activity_level, goal, membership_type, free_trial_count, subscription_expires_at
+      FROM users WHERE email = ? AND password = ?
+    `).bind(email, password).first() as any;
+    
+    if (!user) {
+      return c.json({ success: false, error: 'Invalid email or password' }, 401);
+    }
+    
+    return c.json({ success: true, user });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 회원 프로필 업데이트
+app.put('/api/user/:id', async (c) => {
+  const { DB } = c.env;
+  const userId = c.req.param('id');
+  const body = await c.req.json();
+  
+  try {
+    const { name, age, gender, height, weight, activity_level, goal } = body;
+    
+    await DB.prepare(`
+      UPDATE users SET
+        name = COALESCE(?, name),
+        age = COALESCE(?, age),
+        gender = COALESCE(?, gender),
+        height = COALESCE(?, height),
+        weight = COALESCE(?, weight),
+        activity_level = COALESCE(?, activity_level),
+        goal = COALESCE(?, goal),
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).bind(name, age, gender, height, weight, activity_level, goal, userId).run();
+    
+    const user = await DB.prepare(`
+      SELECT id, email, name, age, gender, height, weight, activity_level, goal, membership_type, free_trial_count
+      FROM users WHERE id = ?
+    `).bind(userId).first();
+    
+    return c.json({ success: true, user });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 프리미엄 업그레이드
+app.post('/api/user/:id/upgrade', async (c) => {
+  const { DB } = c.env;
+  const userId = c.req.param('id');
+  
+  try {
+    await DB.prepare(`
+      UPDATE users SET
+        membership_type = 'premium',
+        subscription_expires_at = datetime('now', '+1 year'),
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).bind(userId).run();
+    
+    const user = await DB.prepare(`
+      SELECT id, email, name, membership_type, subscription_expires_at
+      FROM users WHERE id = ?
+    `).bind(userId).first();
+    
+    return c.json({ success: true, user });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 회원 생성/업데이트 (레거시 - 하위 호환성)
 app.post('/api/user', async (c) => {
   const { DB } = c.env;
   const body = await c.req.json();
@@ -235,6 +353,299 @@ app.post('/api/upgrade', async (c) => {
     `).bind(expires_at.toISOString(), user_id).run();
     
     return c.json({ success: true, message: '프리미엄으로 업그레이드되었습니다!' });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// ============================================
+// Admin Page
+// ============================================
+
+app.get('/admin', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>관리자 페이지 - CALCARE AI</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body class="bg-gray-100">
+        <!-- 로그인 화면 -->
+        <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl shadow-lg p-8 max-w-md w-full">
+                <div class="text-center mb-8">
+                    <i class="fas fa-shield-alt text-6xl text-blue-600 mb-4"></i>
+                    <h1 class="text-3xl font-bold text-gray-800">관리자 로그인</h1>
+                    <p class="text-gray-600 mt-2">CALCARE AI Admin Panel</p>
+                </div>
+                
+                <form id="admin-login-form" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">아이디</label>
+                        <input type="text" id="admin-id" value="admin" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">비밀번호</label>
+                        <input type="password" id="admin-password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        로그인
+                    </button>
+                    
+                    <div id="login-error" class="hidden text-red-600 text-sm text-center mt-2"></div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 관리자 대시보드 -->
+        <div id="admin-dashboard" class="hidden min-h-screen p-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- 헤더 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-800">관리자 대시보드</h1>
+                            <p class="text-gray-600">CALCARE AI Admin Panel</p>
+                        </div>
+                        <button onclick="logout()" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">
+                            <i class="fas fa-sign-out-alt mr-2"></i>로그아웃
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 통계 카드 -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">전체 회원</p>
+                                <p id="total-users" class="text-3xl font-bold text-gray-800">0</p>
+                            </div>
+                            <i class="fas fa-users text-4xl text-blue-500"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">무료 회원</p>
+                                <p id="free-users" class="text-3xl font-bold text-gray-800">0</p>
+                            </div>
+                            <i class="fas fa-user text-4xl text-green-500"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">프리미엄 회원</p>
+                                <p id="premium-users" class="text-3xl font-bold text-gray-800">0</p>
+                            </div>
+                            <i class="fas fa-crown text-4xl text-yellow-500"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">오늘 분석</p>
+                                <p id="today-analysis" class="text-3xl font-bold text-gray-800">0</p>
+                            </div>
+                            <i class="fas fa-chart-line text-4xl text-purple-500"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 회원 목록 -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">회원 목록</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b">
+                                    <th class="text-left py-3 px-4">이메일</th>
+                                    <th class="text-left py-3 px-4">이름</th>
+                                    <th class="text-left py-3 px-4">멤버십</th>
+                                    <th class="text-left py-3 px-4">무료 사용</th>
+                                    <th class="text-left py-3 px-4">가입일</th>
+                                    <th class="text-left py-3 px-4">액션</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!-- 동적으로 추가됨 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            let adminUser = null;
+            
+            // 관리자 로그인
+            document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const adminId = document.getElementById('admin-id').value;
+                const password = document.getElementById('admin-password').value;
+                
+                try {
+                    const response = await axios.post('/api/auth/login', {
+                        email: adminId + '@calcare.ai',
+                        password: password
+                    });
+                    
+                    if (response.data.success && response.data.user.email === 'admin@calcare.ai') {
+                        adminUser = response.data.user;
+                        localStorage.setItem('adminUser', JSON.stringify(adminUser));
+                        showDashboard();
+                    } else {
+                        showError('관리자 권한이 없습니다.');
+                    }
+                } catch (error) {
+                    showError('로그인 실패: 아이디 또는 비밀번호를 확인하세요.');
+                }
+            });
+            
+            function showError(message) {
+                const errorDiv = document.getElementById('login-error');
+                errorDiv.textContent = message;
+                errorDiv.classList.remove('hidden');
+            }
+            
+            function showDashboard() {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                loadDashboardData();
+            }
+            
+            function logout() {
+                localStorage.removeItem('adminUser');
+                adminUser = null;
+                document.getElementById('admin-dashboard').classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('hidden');
+            }
+            
+            async function loadDashboardData() {
+                try {
+                    // 통계 데이터 로드
+                    const statsResponse = await axios.get('/api/admin/stats');
+                    if (statsResponse.data.success) {
+                        document.getElementById('total-users').textContent = statsResponse.data.stats.total_users;
+                        document.getElementById('free-users').textContent = statsResponse.data.stats.free_users;
+                        document.getElementById('premium-users').textContent = statsResponse.data.stats.premium_users;
+                        document.getElementById('today-analysis').textContent = statsResponse.data.stats.today_analysis;
+                    }
+                    
+                    // 회원 목록 로드
+                    const usersResponse = await axios.get('/api/admin/users');
+                    if (usersResponse.data.success) {
+                        renderUsersTable(usersResponse.data.users);
+                    }
+                } catch (error) {
+                    console.error('Failed to load dashboard data:', error);
+                }
+            }
+            
+            function renderUsersTable(users) {
+                const tbody = document.getElementById('users-table-body');
+                tbody.innerHTML = users.map(user => \`
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="py-3 px-4">\${user.email}</td>
+                        <td class="py-3 px-4">\${user.name}</td>
+                        <td class="py-3 px-4">
+                            <span class="px-3 py-1 rounded-full text-sm \${user.membership_type === 'premium' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}">
+                                \${user.membership_type === 'premium' ? '프리미엄' : '무료'}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4">\${user.free_trial_count} / 2</td>
+                        <td class="py-3 px-4">\${new Date(user.created_at).toLocaleDateString()}</td>
+                        <td class="py-3 px-4">
+                            \${user.membership_type === 'free' ? \`
+                                <button onclick="upgradeUser(\${user.id})" class="bg-blue-600 text-white px-4 py-1 rounded text-sm hover:bg-blue-700">
+                                    업그레이드
+                                </button>
+                            \` : ''}
+                        </td>
+                    </tr>
+                \`).join('');
+            }
+            
+            async function upgradeUser(userId) {
+                if (confirm('이 회원을 프리미엄으로 업그레이드하시겠습니까?')) {
+                    try {
+                        await axios.post(\`/api/user/\${userId}/upgrade\`);
+                        alert('업그레이드 완료!');
+                        loadDashboardData();
+                    } catch (error) {
+                        alert('업그레이드 실패');
+                    }
+                }
+            }
+            
+            // 페이지 로드 시 자동 로그인 체크
+            window.addEventListener('load', () => {
+                const savedAdmin = localStorage.getItem('adminUser');
+                if (savedAdmin) {
+                    adminUser = JSON.parse(savedAdmin);
+                    showDashboard();
+                }
+            });
+        </script>
+    </body>
+    </html>
+  `)
+});
+
+// 관리자 통계 API
+app.get('/api/admin/stats', async (c) => {
+  const { DB } = c.env;
+  
+  try {
+    const totalUsers = await DB.prepare(`SELECT COUNT(*) as count FROM users`).first() as any;
+    const freeUsers = await DB.prepare(`SELECT COUNT(*) as count FROM users WHERE membership_type = 'free'`).first() as any;
+    const premiumUsers = await DB.prepare(`SELECT COUNT(*) as count FROM users WHERE membership_type = 'premium'`).first() as any;
+    
+    const today = new Date().toISOString().split('T')[0];
+    const todayAnalysis = await DB.prepare(`
+      SELECT COUNT(*) as count FROM food_intakes WHERE DATE(intake_date) = ?
+    `).bind(today).first() as any;
+    
+    return c.json({
+      success: true,
+      stats: {
+        total_users: totalUsers.count,
+        free_users: freeUsers.count,
+        premium_users: premiumUsers.count,
+        today_analysis: todayAnalysis.count
+      }
+    });
+  } catch (error) {
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// 관리자 회원 목록 API
+app.get('/api/admin/users', async (c) => {
+  const { DB } = c.env;
+  
+  try {
+    const users = await DB.prepare(`
+      SELECT id, email, name, membership_type, free_trial_count, created_at
+      FROM users
+      ORDER BY created_at DESC
+    `).all();
+    
+    return c.json({ success: true, users: users.results });
   } catch (error) {
     return c.json({ success: false, error: String(error) }, 500);
   }
@@ -526,11 +937,31 @@ app.get('/', (c) => {
                     <p class="text-white text-xs sm:text-sm md:text-base opacity-90" data-i18n="appSubtitle">사진으로 음식을 인식하고 칼로리를 자동 계산</p>
                 </div>
                 <div class="text-right flex-shrink-0">
-                    <div id="membershipBadge" class="inline-block px-3 sm:px-4 py-2 bg-white rounded-full text-xs sm:text-sm font-semibold">
-                        <i class="fas fa-user mr-1 sm:mr-2"></i><span id="membershipType" data-i18n="membershipFree">Free</span>
+                    <!-- 로그인 전 -->
+                    <div id="auth-buttons" class="space-y-2">
+                        <button onclick="showLoginModal()" class="block bg-white text-green-600 px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-100 transition">
+                            <i class="fas fa-sign-in-alt mr-2"></i><span data-i18n="login">로그인</span>
+                        </button>
+                        <button onclick="showRegisterModal()" class="block bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-green-700 transition">
+                            <i class="fas fa-user-plus mr-2"></i><span data-i18n="register">회원가입</span>
+                        </button>
                     </div>
-                    <div id="trialCount" class="text-white text-xs mt-1 sm:mt-2 whitespace-nowrap">
-                        <span data-i18n="freeTrialRemaining">무료 체험</span>: <span id="remainingTrials">2</span>/2 <span data-i18n="trialRemaining">남음</span>
+                    
+                    <!-- 로그인 후 -->
+                    <div id="user-info" class="hidden">
+                        <div class="text-white mb-2">
+                            <i class="fas fa-user-circle mr-1"></i>
+                            <span id="user-name">사용자</span>
+                        </div>
+                        <div id="membershipBadge" class="inline-block px-3 sm:px-4 py-2 bg-white rounded-full text-xs sm:text-sm font-semibold mb-2">
+                            <i class="fas fa-user mr-1 sm:mr-2"></i><span id="membershipType" data-i18n="membershipFree">Free</span>
+                        </div>
+                        <div id="trialCount" class="text-white text-xs mt-1 whitespace-nowrap">
+                            <span data-i18n="freeTrialRemaining">무료 체험</span>: <span id="remainingTrials">2</span>/2 <span data-i18n="trialRemaining">남음</span>
+                        </div>
+                        <button onclick="logout()" class="mt-2 text-white text-xs opacity-75 hover:opacity-100">
+                            <i class="fas fa-sign-out-alt mr-1"></i><span data-i18n="logout">로그아웃</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -753,6 +1184,86 @@ app.get('/', (c) => {
                     ">AI</div>
                 </div>
             </button>
+            
+            <!-- 로그인 모달 -->
+            <div id="login-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onclick="if(event.target === this) hideLoginModal()">
+                <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full m-4">
+                    <div class="text-center mb-6">
+                        <i class="fas fa-user-circle text-6xl text-green-600 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-gray-800" data-i18n="login">로그인</h2>
+                    </div>
+                    
+                    <form id="login-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="email">이메일</label>
+                            <input type="email" id="login-email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="password">비밀번호</label>
+                            <input type="password" id="login-password" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                            <i class="fas fa-sign-in-alt mr-2"></i><span data-i18n="login">로그인</span>
+                        </button>
+                        
+                        <div id="login-error" class="hidden text-red-600 text-sm text-center"></div>
+                        
+                        <p class="text-center text-sm text-gray-600">
+                            <span data-i18n="noAccount">계정이 없으신가요?</span>
+                            <button type="button" onclick="hideLoginModal(); showRegisterModal()" class="text-green-600 font-semibold hover:underline ml-1" data-i18n="register">회원가입</button>
+                        </p>
+                    </form>
+                    
+                    <button onclick="hideLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 회원가입 모달 -->
+            <div id="register-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onclick="if(event.target === this) hideRegisterModal()">
+                <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full m-4">
+                    <div class="text-center mb-6">
+                        <i class="fas fa-user-plus text-6xl text-green-600 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-gray-800" data-i18n="register">회원가입</h2>
+                    </div>
+                    
+                    <form id="register-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="name">이름</label>
+                            <input type="text" id="register-name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="email">이메일</label>
+                            <input type="email" id="register-email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="password">비밀번호</label>
+                            <input type="password" id="register-password" required minlength="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                            <i class="fas fa-user-plus mr-2"></i><span data-i18n="register">회원가입</span>
+                        </button>
+                        
+                        <div id="register-error" class="hidden text-red-600 text-sm text-center"></div>
+                        <div id="register-success" class="hidden text-green-600 text-sm text-center"></div>
+                        
+                        <p class="text-center text-sm text-gray-600">
+                            <span data-i18n="haveAccount">이미 계정이 있으신가요?</span>
+                            <button type="button" onclick="hideRegisterModal(); showLoginModal()" class="text-green-600 font-semibold hover:underline ml-1" data-i18n="login">로그인</button>
+                        </p>
+                    </form>
+                    
+                    <button onclick="hideRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+            </div>
 
             <!-- 챗봇 팝업 -->
             <div id="chatbot-popup" style="
@@ -1402,6 +1913,162 @@ app.get('/', (c) => {
             console.error('Error updating chatbot language:', error);
           }
         }
+        </script>
+        
+        <script>
+        // ============================================
+        // 인증 관련 함수
+        // ============================================
+        let currentUser = null;
+        
+        // 로그인 모달 표시/숨김
+        function showLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+        
+        function hideLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+            document.getElementById('login-error').classList.add('hidden');
+        }
+        
+        // 회원가입 모달 표시/숨김
+        function showRegisterModal() {
+            document.getElementById('register-modal').classList.remove('hidden');
+        }
+        
+        function hideRegisterModal() {
+            document.getElementById('register-modal').classList.add('hidden');
+            document.getElementById('register-error').classList.add('hidden');
+            document.getElementById('register-success').classList.add('hidden');
+        }
+        
+        // 로그인 처리
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errorDiv = document.getElementById('login-error');
+            
+            try {
+                const response = await axios.post('/api/auth/login', { email, password });
+                
+                if (response.data.success) {
+                    currentUser = response.data.user;
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    updateUIForLoggedInUser();
+                    hideLoginModal();
+                } else {
+                    errorDiv.textContent = response.data.error || '로그인 실패';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorDiv.textContent = '이메일 또는 비밀번호가 잘못되었습니다.';
+                errorDiv.classList.remove('hidden');
+            }
+        });
+        
+        // 회원가입 처리
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const errorDiv = document.getElementById('register-error');
+            const successDiv = document.getElementById('register-success');
+            
+            try {
+                const response = await axios.post('/api/auth/register', { email, password, name });
+                
+                if (response.data.success) {
+                    successDiv.textContent = '회원가입 성공! 로그인 페이지로 이동합니다...';
+                    successDiv.classList.remove('hidden');
+                    errorDiv.classList.add('hidden');
+                    
+                    setTimeout(() => {
+                        hideRegisterModal();
+                        showLoginModal();
+                    }, 1500);
+                } else {
+                    errorDiv.textContent = response.data.error === 'Email already exists' ? '이미 존재하는 이메일입니다.' : response.data.error;
+                    errorDiv.classList.remove('hidden');
+                    successDiv.classList.add('hidden');
+                }
+            } catch (error) {
+                errorDiv.textContent = '회원가입 중 오류가 발생했습니다.';
+                errorDiv.classList.remove('hidden');
+                successDiv.classList.add('hidden');
+            }
+        });
+        
+        // 로그아웃
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('user');
+            updateUIForLoggedOutUser();
+        }
+        
+        // 로그인 상태에 따른 UI 업데이트
+        function updateUIForLoggedInUser() {
+            document.getElementById('auth-buttons').classList.add('hidden');
+            document.getElementById('user-info').classList.remove('hidden');
+            document.getElementById('user-name').textContent = currentUser.name;
+            
+            if (currentUser.membership_type === 'premium') {
+                document.getElementById('membershipType').textContent = 'Premium';
+                document.getElementById('membershipBadge').classList.add('bg-yellow-100', 'text-yellow-800');
+                document.getElementById('trialCount').classList.add('hidden');
+            } else {
+                document.getElementById('membershipType').textContent = 'Free';
+                const remaining = Math.max(0, 2 - (currentUser.free_trial_count || 0));
+                document.getElementById('remainingTrials').textContent = remaining;
+                document.getElementById('trialCount').classList.remove('hidden');
+            }
+        }
+        
+        function updateUIForLoggedOutUser() {
+            document.getElementById('auth-buttons').classList.remove('hidden');
+            document.getElementById('user-info').classList.add('hidden');
+        }
+        
+        // 페이지 로드 시 자동 로그인 체크
+        window.addEventListener('load', () => {
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUIForLoggedInUser();
+            }
+        });
+        
+        // 음식 분석 시 로그인 및 무료 체험 횟수 체크
+        const originalAnalyzeFood = window.analyzeFood;
+        window.analyzeFood = async function() {
+            if (!currentUser) {
+                alert('로그인이 필요합니다.');
+                showLoginModal();
+                return;
+            }
+            
+            if (currentUser.membership_type === 'free' && currentUser.free_trial_count >= 2) {
+                if (confirm('무료 체험 횟수가 초과되었습니다. 프리미엄으로 업그레이드하시겠습니까?')) {
+                    window.location.href = '/pricing'; // 가격 페이지로 이동
+                }
+                return;
+            }
+            
+            // 기존 분석 함수 실행
+            if (originalAnalyzeFood) {
+                await originalAnalyzeFood();
+                
+                // 분석 성공 시 무료 체험 횟수 증가
+                if (currentUser.membership_type === 'free') {
+                    currentUser.free_trial_count = (currentUser.free_trial_count || 0) + 1;
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    updateUIForLoggedInUser();
+                }
+            }
+        };
         </script>
         
         <script>
