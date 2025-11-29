@@ -884,6 +884,10 @@ app.get('/', (c) => {
                 popup.style.display = 'block';
                 questionList.style.display = 'block';
                 answerView.style.display = 'none';
+                // 팝업 열 때 언어 업데이트
+                if (typeof updateChatbotLanguage === 'function') {
+                    updateChatbotLanguage();
+                }
             } else {
                 popup.style.display = 'none';
             }
@@ -942,7 +946,26 @@ app.get('/', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/i18n.js"></script>
+        <script src="/static/chatbot-i18n.js"></script>
         <script src="/static/app.js"></script>
+        <script>
+        // 챗봇 언어 업데이트 함수 (페이지 로드 및 언어 변경 시 호출)
+        window.addEventListener('load', function() {
+            updateChatbotLanguage();
+        });
+        
+        // 기존 setLanguage 함수 확장
+        const originalSetLanguage = window.setLanguage;
+        window.setLanguage = function(lang) {
+            if (originalSetLanguage) {
+                originalSetLanguage(lang);
+            }
+            // 챗봇 언어도 함께 업데이트
+            setTimeout(function() {
+                updateChatbotLanguage();
+            }, 100);
+        };
+        </script>
     </body>
     </html>
   `)
