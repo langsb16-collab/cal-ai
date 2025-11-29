@@ -721,19 +721,6 @@ app.get('/', (c) => {
   `)
 })
 
-// HTML 파일 라우트 추가
-app.get('/faq.html', async (c) => {
-  return c.redirect('/faq')
-})
-
-app.get('/health-info.html', async (c) => {
-  return c.redirect('/health-info')
-})
-
-app.get('/nutrition-info.html', async (c) => {
-  return c.redirect('/nutrition-info')
-})
-
 // 404 페이지
 app.notFound((c) => {
   return c.html(`

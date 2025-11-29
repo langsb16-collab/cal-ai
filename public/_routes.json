@@ -1,9 +1,13 @@
 {
   "version": 1,
   "include": [
-    "/*"
+    "/api/*",
+    "/"
   ],
   "exclude": [
+    "/faq.html",
+    "/health-info.html",
+    "/nutrition-info.html",
     "/static/*"
   ]
 }
