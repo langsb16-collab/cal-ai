@@ -459,6 +459,31 @@ app.get('/', (c) => {
                     text-align: center !important;
                 }
             }
+            
+            /* RTL 지원 (아랍어) */
+            [dir="rtl"] {
+                text-align: right;
+            }
+            
+            [dir="rtl"] .lang-btn {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            
+            [dir="rtl"] .mobile-header {
+                flex-direction: column-reverse;
+            }
+            
+            [dir="rtl"] .flex.justify-between {
+                flex-direction: row-reverse;
+            }
+            
+            [dir="rtl"] .grid {
+                direction: ltr;
+            }
+            
+            [dir="rtl"] .grid > * {
+                direction: rtl;
+            }
         </style>
     </head>
     <body class="p-3 sm:p-4 md:p-6 lg:p-8">
@@ -469,6 +494,8 @@ app.get('/', (c) => {
                 <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">English</button>
                 <button class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
                 <button class="lang-btn" data-lang="ja" onclick="setLanguage('ja')">日本語</button>
+                <button class="lang-btn" data-lang="vi" onclick="setLanguage('vi')">Tiếng Việt</button>
+                <button class="lang-btn" data-lang="ar" onclick="setLanguage('ar')">العربية</button>
             </div>
         </div>
 

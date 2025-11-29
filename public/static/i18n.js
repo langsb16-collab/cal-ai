@@ -366,6 +366,190 @@ const translations = {
     lunch: '昼食',
     dinner: '夕食',
     snack: 'おやつ'
+  },
+  
+  vi: {
+    // Header
+    appTitle: 'CALCARE AI',
+    appSubtitle: 'Nhận diện thức ăn và tự động tính calo từ ảnh',
+    membershipFree: 'Miễn phí',
+    membershipPremium: 'Cao cấp',
+    freeTrialRemaining: 'Dùng thử miễn phí',
+    trialRemaining: 'còn lại',
+    
+    // Menu
+    menuHome: 'Trang chủ',
+    menuAnalysis: 'Phân tích',
+    menuStats: 'Thống kê',
+    menuSettings: 'Cài đặt',
+    
+    // Main Sections
+    photoAnalysis: 'Phân tích ảnh thức ăn',
+    analysisResult: 'Kết quả phân tích',
+    dailyNutrition: 'Dinh dưỡng hôm nay',
+    
+    // Upload
+    uploadPrompt: 'Nhấp hoặc kéo để tải ảnh lên',
+    startAnalysis: 'Bắt đầu phân tích AI',
+    
+    // Search
+    foodSearch: 'Tìm kiếm thức ăn',
+    searchPlaceholder: 'Nhập tên thức ăn...',
+    noResults: 'Không tìm thấy kết quả',
+    
+    // Results Placeholder
+    resultsPlaceholder: 'Tải ảnh thức ăn lên',
+    resultsPlaceholder2: 'để xem phân tích dinh dưỡng',
+    
+    // Nutrition
+    calories: 'Calo',
+    protein: 'Protein',
+    carbs: 'Carbohydrate',
+    fat: 'Chất béo',
+    sugar: 'Đường',
+    sodium: 'Natri',
+    fiber: 'Chất xơ',
+    cholesterol: 'Cholesterol',
+    
+    // Units
+    kcal: 'kcal',
+    grams: 'g',
+    milligrams: 'mg',
+    
+    // Health Risks
+    healthRisks: 'Rủi ro sức khỏe',
+    obesity: 'Béo phì',
+    diabetes: 'Tiểu đường',
+    hypertension: 'Huyết áp cao',
+    hyperlipidemia: 'Mỡ máu cao',
+    
+    riskLow: 'Thấp',
+    riskMedium: 'Trung bình',
+    riskHigh: 'Cao',
+    
+    // Actions
+    saveIntake: 'Lưu bản ghi',
+    upgrade: 'Nâng cấp ngay',
+    later: 'Để sau',
+    
+    // Daily Stats
+    totalCalories: 'Tổng Calo',
+    totalProtein: 'Protein',
+    totalCarbs: 'Carbohydrate',
+    totalFat: 'Chất béo',
+    recommended: 'Khuyến nghị',
+    noIntakeToday: 'Chưa có bản ghi thức ăn hôm nay',
+    
+    // Premium Modal
+    premiumTitle: 'Nâng cấp lên cao cấp',
+    premiumDescription: 'Bạn đã hết lượt dùng thử miễn phí.',
+    premiumDescription2: 'Nâng cấp lên cao cấp để sử dụng không giới hạn!',
+    premiumPrice: '/năm',
+    premiumFeatures: 'Phân tích không giới hạn + Thống kê nâng cao + Huấn luyện AI',
+    
+    // Messages
+    intakeSaved: 'Đã lưu bản ghi!',
+    upgradeSuccess: 'Đã nâng cấp lên cao cấp!',
+    error: 'Đã xảy ra lỗi.',
+    loading: 'Đang tải...',
+    
+    // Meal Types
+    breakfast: 'Bữa sáng',
+    lunch: 'Bữa trưa',
+    dinner: 'Bữa tối',
+    snack: 'Bữa phụ'
+  },
+  
+  ar: {
+    // Header
+    appTitle: 'CALCARE AI',
+    appSubtitle: 'التعرف على الطعام وحساب السعرات الحرارية تلقائياً من الصور',
+    membershipFree: 'مجاني',
+    membershipPremium: 'بريميوم',
+    freeTrialRemaining: 'التجربة المجانية',
+    trialRemaining: 'متبقي',
+    
+    // Menu
+    menuHome: 'الرئيسية',
+    menuAnalysis: 'التحليل',
+    menuStats: 'الإحصائيات',
+    menuSettings: 'الإعدادات',
+    
+    // Main Sections
+    photoAnalysis: 'تحليل صورة الطعام',
+    analysisResult: 'نتائج التحليل',
+    dailyNutrition: 'التغذية اليومية',
+    
+    // Upload
+    uploadPrompt: 'انقر أو اسحب لتحميل الصورة',
+    startAnalysis: 'بدء تحليل الذكاء الاصطناعي',
+    
+    // Search
+    foodSearch: 'البحث عن الطعام',
+    searchPlaceholder: 'أدخل اسم الطعام...',
+    noResults: 'لم يتم العثور على نتائج',
+    
+    // Results Placeholder
+    resultsPlaceholder: 'قم بتحميل صورة الطعام',
+    resultsPlaceholder2: 'لعرض تحليل التغذية',
+    
+    // Nutrition
+    calories: 'السعرات الحرارية',
+    protein: 'البروتين',
+    carbs: 'الكربوهيدرات',
+    fat: 'الدهون',
+    sugar: 'السكر',
+    sodium: 'الصوديوم',
+    fiber: 'الألياف',
+    cholesterol: 'الكوليسترول',
+    
+    // Units
+    kcal: 'سعرة',
+    grams: 'جم',
+    milligrams: 'ملجم',
+    
+    // Health Risks
+    healthRisks: 'المخاطر الصحية',
+    obesity: 'السمنة',
+    diabetes: 'السكري',
+    hypertension: 'ارتفاع ضغط الدم',
+    hyperlipidemia: 'ارتفاع الدهون',
+    
+    riskLow: 'منخفض',
+    riskMedium: 'متوسط',
+    riskHigh: 'مرتفع',
+    
+    // Actions
+    saveIntake: 'حفظ السجل',
+    upgrade: 'الترقية الآن',
+    later: 'لاحقاً',
+    
+    // Daily Stats
+    totalCalories: 'إجمالي السعرات',
+    totalProtein: 'البروتين',
+    totalCarbs: 'الكربوهيدرات',
+    totalFat: 'الدهون',
+    recommended: 'الموصى به',
+    noIntakeToday: 'لا توجد سجلات طعام اليوم',
+    
+    // Premium Modal
+    premiumTitle: 'الترقية إلى بريميوم',
+    premiumDescription: 'لقد انتهت التجربة المجانية.',
+    premiumDescription2: 'قم بالترقية إلى بريميوم للوصول غير المحدود!',
+    premiumPrice: '/سنة',
+    premiumFeatures: 'تحليل غير محدود + إحصائيات متقدمة + تدريب الذكاء الاصطناعي',
+    
+    // Messages
+    intakeSaved: 'تم حفظ السجل!',
+    upgradeSuccess: 'تمت الترقية إلى بريميوم!',
+    error: 'حدث خطأ.',
+    loading: 'جار التحميل...',
+    
+    // Meal Types
+    breakfast: 'الإفطار',
+    lunch: 'الغداء',
+    dinner: 'العشاء',
+    snack: 'وجبة خفيفة'
   }
 };
 
@@ -382,6 +566,16 @@ function setLanguage(lang) {
   if (translations[lang]) {
     currentLang = lang;
     localStorage.setItem('lang', lang);
+    
+    // 아랍어는 RTL 설정
+    if (lang === 'ar') {
+      document.documentElement.setAttribute('dir', 'rtl');
+      document.documentElement.setAttribute('lang', 'ar');
+    } else {
+      document.documentElement.setAttribute('dir', 'ltr');
+      document.documentElement.setAttribute('lang', lang);
+    }
+    
     updatePageLanguage();
   }
 }
@@ -411,5 +605,14 @@ function updatePageLanguage() {
 
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
+  // 저장된 언어가 아랍어인 경우 RTL 설정
+  if (currentLang === 'ar') {
+    document.documentElement.setAttribute('dir', 'rtl');
+    document.documentElement.setAttribute('lang', 'ar');
+  } else {
+    document.documentElement.setAttribute('dir', 'ltr');
+    document.documentElement.setAttribute('lang', currentLang);
+  }
+  
   updatePageLanguage();
 });
