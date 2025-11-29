@@ -712,6 +712,161 @@ app.get('/', (c) => {
             </div>
         </div>
 
+        <!-- 챗봇 UI -->
+        <div id="chatbot-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+            <!-- 챗봇 아이콘 버튼 -->
+            <button id="chatbot-toggle" onclick="toggleChatbot()" style="
+                width: 70px;
+                height: 70px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border: none;
+                cursor: pointer;
+                box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s;
+                touch-action: manipulation;
+            " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position: relative;">
+                    <i class="fas fa-robot" style="color: white; font-size: 32px;"></i>
+                    <div style="
+                        position: absolute;
+                        top: -5px;
+                        right: -5px;
+                        width: 20px;
+                        height: 20px;
+                        background: #ff4757;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 10px;
+                        font-weight: bold;
+                        color: white;
+                    ">AI</div>
+                </div>
+            </button>
+
+            <!-- 챗봇 팝업 -->
+            <div id="chatbot-popup" style="
+                display: none;
+                position: absolute;
+                bottom: 90px;
+                right: 0;
+                width: 350px;
+                max-height: 500px;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+                overflow: hidden;
+            ">
+                <!-- 헤더 -->
+                <div style="
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    padding: 20px;
+                    color: white;
+                ">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">
+                                <i class="fas fa-robot" style="margin-right: 8px;"></i>CALCARE AI 챗봇
+                            </div>
+                            <div style="font-size: 12px; opacity: 0.9;">무엇을 도와드릴까요?</div>
+                        </div>
+                        <button onclick="toggleChatbot()" style="
+                            background: rgba(255,255,255,0.2);
+                            border: none;
+                            color: white;
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50%;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 메뉴 -->
+                <div style="padding: 20px;">
+                    <div style="margin-bottom: 15px;">
+                        <a href="/faq" style="
+                            display: block;
+                            padding: 15px;
+                            background: linear-gradient(135deg, #A8C4A4 0%, #C8DCC5 100%);
+                            border-radius: 12px;
+                            text-decoration: none;
+                            color: white;
+                            font-weight: 600;
+                            margin-bottom: 10px;
+                            transition: all 0.3s;
+                            box-shadow: 0 2px 10px rgba(168, 196, 164, 0.3);
+                        " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 15px rgba(168, 196, 164, 0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 10px rgba(168, 196, 164, 0.3)'">
+                            <i class="fas fa-question-circle" style="margin-right: 10px;"></i>자주 묻는 질문 (FAQ)
+                        </a>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <a href="/health-info" style="
+                            display: block;
+                            padding: 15px;
+                            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                            border-radius: 12px;
+                            text-decoration: none;
+                            color: white;
+                            font-weight: 600;
+                            margin-bottom: 10px;
+                            transition: all 0.3s;
+                            box-shadow: 0 2px 10px rgba(240, 147, 251, 0.3);
+                        " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 15px rgba(240, 147, 251, 0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 10px rgba(240, 147, 251, 0.3)'">
+                            <i class="fas fa-heartbeat" style="margin-right: 10px;"></i>건강정보 가이드
+                        </a>
+                    </div>
+                    <div>
+                        <a href="/nutrition-info" style="
+                            display: block;
+                            padding: 15px;
+                            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                            border-radius: 12px;
+                            text-decoration: none;
+                            color: white;
+                            font-weight: 600;
+                            transition: all 0.3s;
+                            box-shadow: 0 2px 10px rgba(79, 172, 254, 0.3);
+                        " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 15px rgba(79, 172, 254, 0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 10px rgba(79, 172, 254, 0.3)'">
+                            <i class="fas fa-leaf" style="margin-right: 10px;"></i>영양성분 정보
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        function toggleChatbot() {
+            const popup = document.getElementById('chatbot-popup');
+            if (popup.style.display === 'none' || popup.style.display === '') {
+                popup.style.display = 'block';
+            } else {
+                popup.style.display = 'none';
+            }
+        }
+
+        // 모바일 최적화
+        if (window.innerWidth <= 768) {
+            const container = document.getElementById('chatbot-container');
+            container.style.bottom = '15px';
+            container.style.right = '15px';
+            
+            const popup = document.getElementById('chatbot-popup');
+            popup.style.width = 'calc(100vw - 30px)';
+            popup.style.maxWidth = '350px';
+        }
+        </script>
+
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/i18n.js"></script>
@@ -720,6 +875,11 @@ app.get('/', (c) => {
     </html>
   `)
 })
+
+// HTML 파일 라우트 - .html 확장자 없이도 접근 가능
+app.get('/faq', (c) => c.redirect('/faq.html'))
+app.get('/health-info', (c) => c.redirect('/health-info.html'))
+app.get('/nutrition-info', (c) => c.redirect('/nutrition-info.html'))
 
 // 404 페이지
 app.notFound((c) => {
