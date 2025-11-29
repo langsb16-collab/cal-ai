@@ -721,4 +721,66 @@ app.get('/', (c) => {
   `)
 })
 
+// HTML 파일 라우트 추가
+app.get('/faq.html', async (c) => {
+  return c.redirect('/faq')
+})
+
+app.get('/health-info.html', async (c) => {
+  return c.redirect('/health-info')
+})
+
+app.get('/nutrition-info.html', async (c) => {
+  return c.redirect('/nutrition-info')
+})
+
+// 404 페이지
+app.notFound((c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>404 - Page Not Found</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+          background: linear-gradient(135deg, #A8C4A4 0%, #C8DCC5 100%);
+        }
+        .container {
+          text-align: center;
+          background: white;
+          padding: 40px;
+          border-radius: 20px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        h1 { color: #A8C4A4; margin: 0 0 20px 0; }
+        p { color: #666; margin: 0 0 20px 0; }
+        a {
+          display: inline-block;
+          padding: 12px 24px;
+          background: #A8C4A4;
+          color: white;
+          text-decoration: none;
+          border-radius: 8px;
+          transition: all 0.3s;
+        }
+        a:hover { background: #8FB48A; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>404 - Page Not Found</h1>
+        <p>요청하신 페이지를 찾을 수 없습니다.</p>
+        <a href="/">메인으로 돌아가기</a>
+      </div>
+    </body>
+    </html>
+  `, 404)
+})
+
 export default app
