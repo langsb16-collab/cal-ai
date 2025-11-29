@@ -902,19 +902,6 @@ app.get('/', (c) => {
         <!-- Top Navigation -->
         <div class="max-w-6xl mx-auto mb-3 sm:mb-4">
             <div class="flex justify-between items-center gap-2 flex-wrap">
-                <!-- Navigation Buttons -->
-                <div class="flex gap-2">
-                    <a href="/faq.html" class="inline-block px-3 sm:px-4 py-2 bg-white bg-opacity-30 hover:bg-opacity-40 active:bg-opacity-50 text-white rounded-lg font-semibold transition shadow-md text-sm sm:text-base" style="touch-action: manipulation;">
-                        <i class="fas fa-question-circle mr-1 sm:mr-2"></i><span>FAQ</span>
-                    </a>
-                    <a href="/health-info.html" class="inline-block px-3 sm:px-4 py-2 bg-white bg-opacity-30 hover:bg-opacity-40 active:bg-opacity-50 text-white rounded-lg font-semibold transition shadow-md text-sm sm:text-base" style="touch-action: manipulation;">
-                        <i class="fas fa-heartbeat mr-1 sm:mr-2"></i><span>건강정보</span>
-                    </a>
-                    <a href="/nutrition-info.html" class="inline-block px-3 sm:px-4 py-2 bg-white bg-opacity-30 hover:bg-opacity-40 active:bg-opacity-50 text-white rounded-lg font-semibold transition shadow-md text-sm sm:text-base" style="touch-action: manipulation;">
-                        <i class="fas fa-leaf mr-1 sm:mr-2"></i><span>영양성분</span>
-                    </a>
-                </div>
-                
                 <!-- Language Selector -->
                 <div class="flex gap-2 flex-wrap justify-end">
                     <button class="lang-btn active" data-lang="ko" onclick="setLanguage('ko')">한국어</button>
@@ -1595,7 +1582,15 @@ app.get('/', (c) => {
                 hyperlipidemia: '고지혈증',
                 riskLow: '낮음',
                 riskMedium: '보통',
-                riskHigh: '높음'
+                riskHigh: '높음',
+                login: '로그인',
+                register: '회원가입',
+                logout: '로그아웃',
+                email: '이메일',
+                password: '비밀번호',
+                name: '이름',
+                noAccount: '계정이 없으신가요?',
+                haveAccount: '이미 계정이 있으신가요?'
             },
             en: {
                 photoAnalysis: 'Food Photo Analysis',
@@ -1619,7 +1614,15 @@ app.get('/', (c) => {
                 hyperlipidemia: 'Hyperlipidemia',
                 riskLow: 'Low',
                 riskMedium: 'Medium',
-                riskHigh: 'High'
+                riskHigh: 'High',
+                login: 'Login',
+                register: 'Register',
+                logout: 'Logout',
+                email: 'Email',
+                password: 'Password',
+                name: 'Name',
+                noAccount: 'Don\\'t have an account?',
+                haveAccount: 'Already have an account?'
             },
             zh: {
                 photoAnalysis: '食物照片分析',
@@ -1643,7 +1646,15 @@ app.get('/', (c) => {
                 hyperlipidemia: '高脂血症',
                 riskLow: '低',
                 riskMedium: '中',
-                riskHigh: '高'
+                riskHigh: '高',
+                login: '登录',
+                register: '注册',
+                logout: '退出',
+                email: '邮箱',
+                password: '密码',
+                name: '姓名',
+                noAccount: '没有账户？',
+                haveAccount: '已有账户？'
             },
             ja: {
                 photoAnalysis: '食品写真分析',
@@ -1667,7 +1678,15 @@ app.get('/', (c) => {
                 hyperlipidemia: '高脂血症',
                 riskLow: '低',
                 riskMedium: '中',
-                riskHigh: '高'
+                riskHigh: '高',
+                login: 'ログイン',
+                register: '会員登録',
+                logout: 'ログアウト',
+                email: 'メール',
+                password: 'パスワード',
+                name: '名前',
+                noAccount: 'アカウントをお持ちでないですか？',
+                haveAccount: 'すでにアカウントをお持ちですか？'
             },
             vi: {
                 photoAnalysis: 'Phân tích ảnh thức ăn',
@@ -1691,7 +1710,15 @@ app.get('/', (c) => {
                 hyperlipidemia: 'Tăng lipid máu',
                 riskLow: 'Thấp',
                 riskMedium: 'Trung bình',
-                riskHigh: 'Cao'
+                riskHigh: 'Cao',
+                login: 'Đăng nhập',
+                register: 'Đăng ký',
+                logout: 'Đăng xuất',
+                email: 'Email',
+                password: 'Mật khẩu',
+                name: 'Tên',
+                noAccount: 'Chưa có tài khoản?',
+                haveAccount: 'Đã có tài khoản?'
             },
             ar: {
                 photoAnalysis: 'تحليل صور الطعام',
@@ -1715,7 +1742,15 @@ app.get('/', (c) => {
                 hyperlipidemia: 'ارتفاع الدهون',
                 riskLow: 'منخفض',
                 riskMedium: 'متوسط',
-                riskHigh: 'مرتفع'
+                riskHigh: 'مرتفع',
+                login: 'تسجيل الدخول',
+                register: 'التسجيل',
+                logout: 'تسجيل الخروج',
+                email: 'البريد الإلكتروني',
+                password: 'كلمة المرور',
+                name: 'الاسم',
+                noAccount: 'ليس لديك حساب؟',
+                haveAccount: 'هل لديك حساب بالفعل؟'
             }
         };
         
