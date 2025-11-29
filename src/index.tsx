@@ -1,11 +1,16 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { serveStatic } from 'hono/cloudflare-workers'
 
 type Bindings = {
   DB: D1Database;
+  ASSETS: any;
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
+
+// 정적 파일 서빙
+app.use('/static/*', serveStatic())
 
 // CORS 설정
 app.use('/api/*', cors())
@@ -946,9 +951,11 @@ app.get('/', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/i18n.js"></script>
-        <script src="/static/chatbot-i18n.js"></script>
         <script src="/static/app.js"></script>
-        <script>
+        <script type="module">
+        // 챗봇 다국어 데이터 import
+        import { updateChatbotLanguage } from './chatbot-i18n.ts';
+        
         // 챗봇 언어 업데이트 함수 (페이지 로드 및 언어 변경 시 호출)
         window.addEventListener('load', function() {
             updateChatbotLanguage();
@@ -965,6 +972,9 @@ app.get('/', (c) => {
                 updateChatbotLanguage();
             }, 100);
         };
+        
+        // updateChatbotLanguage를 전역으로 export
+        window.updateChatbotLanguage = updateChatbotLanguage;
         </script>
     </body>
     </html>
