@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALCARE AI - 건강정보 안내</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #A8C4A4 0%, #C8DCC5 100%);
+            min-height: 100vh;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 16px 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .back-btn {
+            background: transparent;
+            border: none;
+            color: #4A7C32;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+        }
+        .db-card {
+            border-left: 4px solid #A8C4A4;
+            transition: all 0.3s;
+        }
+        .db-card:active {
+            transform: scale(0.98);
+        }
+        @media (max-width: 640px) {
+            .header { padding: 12px 16px; }
+            .card { padding: 16px !important; margin-bottom: 12px !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="max-w-4xl mx-auto flex items-center">
+            <button class="back-btn" onclick="window.location.href='/'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-800 ml-4" id="pageTitle">건강정보 안내</h1>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto p-4 sm:p-6">
+        <!-- Intro Section -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3" id="introTitle"></h2>
+            <p class="text-gray-600 text-sm sm:text-base" id="introDesc"></p>
+        </div>
+
+        <!-- Workflow Section -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4" id="workflowTitle"></h2>
+            <div id="workflowSteps" class="space-y-4"></div>
+        </div>
+
+        <!-- Databases Section -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">📊 공개 식품/영양 데이터베이스 목록</h2>
+            <div id="databaseList" class="space-y-4"></div>
+        </div>
+
+        <!-- Disease Warnings Section -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3" id="diseaseTitle"></h2>
+            <p class="text-gray-600 mb-4" id="diseaseDesc"></p>
+            <div id="diseaseList" class="grid sm:grid-cols-2 gap-4"></div>
+        </div>
+
+        <!-- Benefits & Tips -->
+        <div class="grid sm:grid-cols-2 gap-6 mb-6">
+            <div class="card p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-3" id="benefitsTitle"></h3>
+                <ul id="benefitsList" class="space-y-2 text-gray-700 text-sm"></ul>
+            </div>
+            <div class="card p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-3" id="tipsTitle"></h3>
+                <ul id="tipsList" class="space-y-2 text-gray-700 text-sm"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/i18n.js"></script>
+    <script src="/static/health-db-data.js"></script>
+    <script>
+        function renderHealthInfo() {
+            const data = getHealthDBData();
+            
+            // Header
+            document.getElementById('pageTitle').textContent = data.pageTitle;
+            
+            // Intro
+            document.getElementById('introTitle').textContent = data.intro.title;
+            document.getElementById('introDesc').textContent = data.intro.description;
+            
+            // Workflow
+            document.getElementById('workflowTitle').textContent = data.workflow.title;
+            const workflowHTML = data.workflow.steps.map(step => `
+                <div class="flex gap-4 items-start">
+                    <div class="text-3xl flex-shrink-0">${step.icon}</div>
+                    <div>
+                        <h3 class="font-bold text-gray-800 mb-1">${step.title}</h3>
+                        <p class="text-gray-600 text-sm">${step.description}</p>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('workflowSteps').innerHTML = workflowHTML;
+            
+            // Databases
+            const dbHTML = data.databases.map(db => `
+                <div class="db-card card p-4 sm:p-5">
+                    <div class="flex items-start gap-3 mb-3">
+                        <span class="text-3xl">${db.icon}</span>
+                        <div class="flex-1">
+                            <div class="text-xs text-gray-500 mb-1">${db.country}</div>
+                            <h3 class="font-bold text-gray-800 text-base sm:text-lg mb-1">${db.name}</h3>
+                            <div class="text-xs text-gray-600 mb-2">${db.provider}</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 text-sm mb-3">${db.description}</p>
+                    <div class="mb-3">
+                        <h4 class="font-semibold text-gray-800 text-sm mb-2">주요 특징:</h4>
+                        <ul class="space-y-1">
+                            ${db.features.map(f => `<li class="text-xs text-gray-600">• ${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="text-sm">
+                        <strong class="text-gray-800">활용:</strong>
+                        <span class="text-gray-600">${db.usage}</span>
+                    </div>
+                    <div class="mt-3 flex gap-2">
+                        <a href="${db.webUrl}" target="_blank" class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full hover:bg-green-200">
+                            <i class="fas fa-globe mr-1"></i>웹사이트
+                        </a>
+                        <a href="${db.apiUrl}" target="_blank" class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200">
+                            <i class="fas fa-code mr-1"></i>API
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('databaseList').innerHTML = dbHTML;
+            
+            // Disease Warnings
+            document.getElementById('diseaseTitle').textContent = data.diseaseWarnings.title;
+            document.getElementById('diseaseDesc').textContent = data.diseaseWarnings.description;
+            const diseaseHTML = data.diseaseWarnings.diseases.map(d => `
+                <div class="card p-4">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-2xl">${d.icon}</span>
+                        <h4 class="font-bold text-gray-800">${d.name}</h4>
+                    </div>
+                    <p class="text-xs text-gray-600 mb-2">
+                        <strong>분석 요인:</strong> ${d.factors.join(', ')}
+                    </p>
+                    <p class="text-xs text-red-600">
+                        <i class="fas fa-exclamation-circle mr-1"></i>${d.threshold}
+                    </p>
+                </div>
+            `).join('');
+            document.getElementById('diseaseList').innerHTML = diseaseHTML;
+            
+            // Benefits
+            document.getElementById('benefitsTitle').textContent = data.benefits.title;
+            document.getElementById('benefitsList').innerHTML = data.benefits.items.map(item => 
+                `<li>${item}</li>`
+            ).join('');
+            
+            // Tips
+            document.getElementById('tipsTitle').textContent = data.tips.title;
+            document.getElementById('tipsList').innerHTML = data.tips.items.map(item => 
+                `<li>${item}</li>`
+            ).join('');
+        }
+        
+        // Language change detection
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'lang') renderHealthInfo();
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = getCurrentHealthLang();
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+            }
+            renderHealthInfo();
+        });
+    </script>
+</body>
+</html>

@@ -493,10 +493,13 @@ app.get('/', (c) => {
         <!-- Top Navigation -->
         <div class="max-w-6xl mx-auto mb-3 sm:mb-4">
             <div class="flex justify-between items-center gap-2 flex-wrap">
-                <!-- FAQ Button -->
-                <div>
-                    <a href="/faq.html" class="inline-block px-4 py-2 bg-white bg-opacity-30 hover:bg-opacity-40 active:bg-opacity-50 text-white rounded-lg font-semibold transition shadow-md" style="touch-action: manipulation;">
-                        <i class="fas fa-question-circle mr-2"></i><span>FAQ</span>
+                <!-- Navigation Buttons -->
+                <div class="flex gap-2">
+                    <a href="/faq.html" class="inline-block px-3 sm:px-4 py-2 bg-white bg-opacity-30 hover:bg-opacity-40 active:bg-opacity-50 text-white rounded-lg font-semibold transition shadow-md text-sm sm:text-base" style="touch-action: manipulation;">
+                        <i class="fas fa-question-circle mr-1 sm:mr-2"></i><span>FAQ</span>
+                    </a>
+                    <a href="/health-info.html" class="inline-block px-3 sm:px-4 py-2 bg-white bg-opacity-30 hover:bg-opacity-40 active:bg-opacity-50 text-white rounded-lg font-semibold transition shadow-md text-sm sm:text-base" style="touch-action: manipulation;">
+                        <i class="fas fa-heartbeat mr-1 sm:mr-2"></i><span>건강정보</span>
                     </a>
                 </div>
                 
