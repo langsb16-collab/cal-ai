@@ -11,8 +11,11 @@ const app = new Hono<{ Bindings: Bindings }>()
 // CORS 설정
 app.use('/api/*', cors())
 
-// 정적 파일 제공
+// 정적 파일 제공 - /static/* 경로
 app.use('/static/*', serveStatic({ root: './public' }))
+
+// FAQ 및 기타 정적 파일 제공
+app.use('/*', serveStatic({ root: './' }))
 
 // ============================================
 // API Routes
@@ -487,15 +490,25 @@ app.get('/', (c) => {
         </style>
     </head>
     <body class="p-3 sm:p-4 md:p-6 lg:p-8">
-        <!-- Language Selector -->
+        <!-- Top Navigation -->
         <div class="max-w-6xl mx-auto mb-3 sm:mb-4">
-            <div class="flex justify-center sm:justify-end gap-2 flex-wrap">
-                <button class="lang-btn active" data-lang="ko" onclick="setLanguage('ko')">한국어</button>
-                <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">English</button>
-                <button class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
-                <button class="lang-btn" data-lang="ja" onclick="setLanguage('ja')">日本語</button>
-                <button class="lang-btn" data-lang="vi" onclick="setLanguage('vi')">Tiếng Việt</button>
-                <button class="lang-btn" data-lang="ar" onclick="setLanguage('ar')">العربية</button>
+            <div class="flex justify-between items-center gap-2 flex-wrap">
+                <!-- FAQ Button -->
+                <div>
+                    <a href="/faq.html" class="inline-block px-4 py-2 bg-white bg-opacity-30 hover:bg-opacity-40 active:bg-opacity-50 text-white rounded-lg font-semibold transition shadow-md" style="touch-action: manipulation;">
+                        <i class="fas fa-question-circle mr-2"></i><span>FAQ</span>
+                    </a>
+                </div>
+                
+                <!-- Language Selector -->
+                <div class="flex gap-2 flex-wrap justify-end">
+                    <button class="lang-btn active" data-lang="ko" onclick="setLanguage('ko')">한국어</button>
+                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">English</button>
+                    <button class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+                    <button class="lang-btn" data-lang="ja" onclick="setLanguage('ja')">日本語</button>
+                    <button class="lang-btn" data-lang="vi" onclick="setLanguage('vi')">Tiếng Việt</button>
+                    <button class="lang-btn" data-lang="ar" onclick="setLanguage('ar')">العربية</button>
+                </div>
             </div>
         </div>
 
