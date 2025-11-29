@@ -1571,9 +1571,186 @@ app.get('/', (c) => {
         
         <!-- 언어 전환 함수 (인라인) -->
         <script>
+        // 다국어 번역 데이터 (섹션 제목용)
+        const sectionTranslations = {
+            ko: {
+                photoAnalysis: '음식 사진 분석',
+                analysisResult: '분석 결과',
+                dailyNutrition: '오늘의 영양 섭취',
+                foodSearch: '음식 검색',
+                healthRisks: '질병 위험도',
+                uploadPrompt: '사진을 클릭하거나 드래그하여 업로드',
+                startAnalysis: 'AI 분석 시작',
+                searchPlaceholder: '음식 이름을 입력하세요...',
+                resultsPlaceholder: '음식 사진을 업로드하면',
+                resultsPlaceholder2: '영양 분석 결과가 표시됩니다',
+                saveIntake: '섭취 기록 저장',
+                calories: '칼로리',
+                protein: '단백질',
+                carbs: '탄수화물',
+                fat: '지방',
+                obesity: '비만',
+                diabetes: '당뇨',
+                hypertension: '고혈압',
+                hyperlipidemia: '고지혈증',
+                riskLow: '낮음',
+                riskMedium: '보통',
+                riskHigh: '높음'
+            },
+            en: {
+                photoAnalysis: 'Food Photo Analysis',
+                analysisResult: 'Analysis Results',
+                dailyNutrition: 'Today\\'s Nutrition Intake',
+                foodSearch: 'Food Search',
+                healthRisks: 'Health Risks',
+                uploadPrompt: 'Click or drag to upload photo',
+                startAnalysis: 'Start AI Analysis',
+                searchPlaceholder: 'Enter food name...',
+                resultsPlaceholder: 'Upload a food photo',
+                resultsPlaceholder2: 'to see nutrition analysis results',
+                saveIntake: 'Save Intake Record',
+                calories: 'Calories',
+                protein: 'Protein',
+                carbs: 'Carbs',
+                fat: 'Fat',
+                obesity: 'Obesity',
+                diabetes: 'Diabetes',
+                hypertension: 'Hypertension',
+                hyperlipidemia: 'Hyperlipidemia',
+                riskLow: 'Low',
+                riskMedium: 'Medium',
+                riskHigh: 'High'
+            },
+            zh: {
+                photoAnalysis: '食物照片分析',
+                analysisResult: '分析结果',
+                dailyNutrition: '今日营养摄入',
+                foodSearch: '搜索食物',
+                healthRisks: '健康风险',
+                uploadPrompt: '点击或拖动上传照片',
+                startAnalysis: '开始AI分析',
+                searchPlaceholder: '输入食物名称...',
+                resultsPlaceholder: '上传食物照片',
+                resultsPlaceholder2: '查看营养分析结果',
+                saveIntake: '保存摄入记录',
+                calories: '卡路里',
+                protein: '蛋白质',
+                carbs: '碳水化合物',
+                fat: '脂肪',
+                obesity: '肥胖',
+                diabetes: '糖尿病',
+                hypertension: '高血压',
+                hyperlipidemia: '高脂血症',
+                riskLow: '低',
+                riskMedium: '中',
+                riskHigh: '高'
+            },
+            ja: {
+                photoAnalysis: '食品写真分析',
+                analysisResult: '分析結果',
+                dailyNutrition: '今日の栄養摂取',
+                foodSearch: '食品検索',
+                healthRisks: '健康リスク',
+                uploadPrompt: 'クリックまたはドラッグして写真をアップロード',
+                startAnalysis: 'AI分析開始',
+                searchPlaceholder: '食品名を入力...',
+                resultsPlaceholder: '食品写真をアップロードすると',
+                resultsPlaceholder2: '栄養分析結果が表示されます',
+                saveIntake: '摂取記録を保存',
+                calories: 'カロリー',
+                protein: 'タンパク質',
+                carbs: '炭水化物',
+                fat: '脂肪',
+                obesity: '肥満',
+                diabetes: '糖尿病',
+                hypertension: '高血圧',
+                hyperlipidemia: '高脂血症',
+                riskLow: '低',
+                riskMedium: '中',
+                riskHigh: '高'
+            },
+            vi: {
+                photoAnalysis: 'Phân tích ảnh thức ăn',
+                analysisResult: 'Kết quả phân tích',
+                dailyNutrition: 'Dinh dưỡng hôm nay',
+                foodSearch: 'Tìm kiếm thức ăn',
+                healthRisks: 'Rủi ro sức khỏe',
+                uploadPrompt: 'Nhấp hoặc kéo để tải ảnh lên',
+                startAnalysis: 'Bắt đầu phân tích AI',
+                searchPlaceholder: 'Nhập tên món ăn...',
+                resultsPlaceholder: 'Tải ảnh thức ăn lên',
+                resultsPlaceholder2: 'để xem kết quả phân tích dinh dưỡng',
+                saveIntake: 'Lưu bản ghi ăn uống',
+                calories: 'Calo',
+                protein: 'Protein',
+                carbs: 'Carbohydrate',
+                fat: 'Chất béo',
+                obesity: 'Béo phì',
+                diabetes: 'Tiểu đường',
+                hypertension: 'Tăng huyết áp',
+                hyperlipidemia: 'Tăng lipid máu',
+                riskLow: 'Thấp',
+                riskMedium: 'Trung bình',
+                riskHigh: 'Cao'
+            },
+            ar: {
+                photoAnalysis: 'تحليل صور الطعام',
+                analysisResult: 'نتائج التحليل',
+                dailyNutrition: 'التغذية اليومية',
+                foodSearch: 'البحث عن الطعام',
+                healthRisks: 'المخاطر الصحية',
+                uploadPrompt: 'انقر أو اسحب لتحميل الصورة',
+                startAnalysis: 'بدء التحليل بالذكاء الاصطناعي',
+                searchPlaceholder: 'أدخل اسم الطعام...',
+                resultsPlaceholder: 'قم بتحميل صورة الطعام',
+                resultsPlaceholder2: 'لمشاهدة نتائج تحليل التغذية',
+                saveIntake: 'حفظ سجل الأكل',
+                calories: 'السعرات الحرارية',
+                protein: 'البروتين',
+                carbs: 'الكربوهيدرات',
+                fat: 'الدهون',
+                obesity: 'السمنة',
+                diabetes: 'السكري',
+                hypertension: 'ارتفاع ضغط الدم',
+                hyperlipidemia: 'ارتفاع الدهون',
+                riskLow: 'منخفض',
+                riskMedium: 'متوسط',
+                riskHigh: 'مرتفع'
+            }
+        };
+        
+        let currentLanguage = localStorage.getItem('selectedLanguage') || 'ko';
+        
+        // 번역 함수
+        function t(key) {
+            return sectionTranslations[currentLanguage]?.[key] || sectionTranslations['ko'][key] || key;
+        }
+        
+        // 페이지 언어 업데이트
+        function updatePageLanguage() {
+            // data-i18n 속성을 가진 모든 요소 업데이트
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const translation = t(key);
+                if (translation) {
+                    element.textContent = translation;
+                }
+            });
+            
+            // data-i18n-placeholder 속성을 가진 모든 요소 업데이트
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                const translation = t(key);
+                if (translation) {
+                    element.placeholder = translation;
+                }
+            });
+        }
+        
         // 언어 전환 함수
         function setLanguage(lang) {
             console.log('Setting language to:', lang);
+            currentLanguage = lang;
             localStorage.setItem('selectedLanguage', lang);
             
             // 아랍어는 RTL 설정
@@ -1602,9 +1779,10 @@ app.get('/', (c) => {
             }
         }
         
-        // 페이지 로드 시 저장된 언어 복원
+        // 페이지 로드 시 저장된 언어 복원 및 번역 적용
         window.addEventListener('DOMContentLoaded', function() {
             const savedLang = localStorage.getItem('selectedLanguage') || 'ko';
+            currentLanguage = savedLang;
             
             // RTL 설정
             if (savedLang === 'ar') {
@@ -1622,6 +1800,9 @@ app.get('/', (c) => {
                     btn.classList.add('active');
                 }
             });
+            
+            // 번역 적용
+            updatePageLanguage();
         });
         </script>
         
