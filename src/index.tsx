@@ -716,33 +716,33 @@ app.get('/', (c) => {
         <div id="chatbot-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
             <!-- 챗봇 아이콘 버튼 -->
             <button id="chatbot-toggle" onclick="toggleChatbot()" style="
-                width: 70px;
-                height: 70px;
+                width: 140px;
+                height: 140px;
                 border-radius: 50%;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 border: none;
                 cursor: pointer;
-                box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+                box-shadow: 0 8px 32px rgba(102, 126, 234, 0.5);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 transition: all 0.3s;
                 touch-action: manipulation;
-            " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <div style="position: relative;">
-                    <i class="fas fa-robot" style="color: white; font-size: 32px;"></i>
+                    <i class="fas fa-robot" style="color: white; font-size: 64px;"></i>
                     <div style="
                         position: absolute;
-                        top: -5px;
-                        right: -5px;
-                        width: 20px;
-                        height: 20px;
+                        top: -8px;
+                        right: -8px;
+                        width: 36px;
+                        height: 36px;
                         background: #ff4757;
                         border-radius: 50%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        font-size: 10px;
+                        font-size: 16px;
                         font-weight: bold;
                         color: white;
                     ">AI</div>
@@ -753,10 +753,10 @@ app.get('/', (c) => {
             <div id="chatbot-popup" style="
                 display: none;
                 position: absolute;
-                bottom: 90px;
+                bottom: 160px;
                 right: 0;
-                width: 350px;
-                max-height: 500px;
+                width: 420px;
+                max-height: 600px;
                 background: white;
                 border-radius: 20px;
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -792,55 +792,84 @@ app.get('/', (c) => {
                     </div>
                 </div>
 
-                <!-- 메뉴 -->
-                <div style="padding: 20px;">
-                    <div style="margin-bottom: 15px;">
-                        <a href="/faq" style="
-                            display: block;
-                            padding: 15px;
-                            background: linear-gradient(135deg, #A8C4A4 0%, #C8DCC5 100%);
-                            border-radius: 12px;
-                            text-decoration: none;
-                            color: white;
-                            font-weight: 600;
-                            margin-bottom: 10px;
-                            transition: all 0.3s;
-                            box-shadow: 0 2px 10px rgba(168, 196, 164, 0.3);
-                        " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 15px rgba(168, 196, 164, 0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 10px rgba(168, 196, 164, 0.3)'">
-                            <i class="fas fa-question-circle" style="margin-right: 10px;"></i>자주 묻는 질문 (FAQ)
+                <!-- 질문 리스트 -->
+                <div id="question-list" style="padding: 20px; max-height: 480px; overflow-y: auto;">
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 14px; font-weight: 600; color: #667eea; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid #667eea;">
+                            💬 일반 문의
+                        </div>
+                        <div onclick="showAnswer('서비스 소개', 'CALCARE AI는 음식 사진만 찍으면 AI가 자동으로 칼로리·영양소를 분석하고, 비만·당뇨·고혈압·고지혈증 등 질병 위험도를 예측해주는 맞춤형 건강관리 플랫폼입니다. 무료 체험 2회 제공 후 프리미엄 구독으로 무제한 이용이 가능합니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">서비스 소개</span>
+                        </div>
+                        <div onclick="showAnswer('AI 음식 인식은 어떻게 작동하나요?', '사용자가 음식 사진을 업로드하면 딥러닝 기반 이미지 인식 AI가 음식 종류를 자동 분류하고, 데이터베이스(USDA, 식약처)와 매칭하여 칼로리·단백질·탄수화물·지방·당류·나트륨·식이섬유·콜레스테롤 등 8대 영양소를 즉시 분석합니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">AI 음식 인식은 어떻게 작동하나요?</span>
+                        </div>
+                        <div onclick="showAnswer('무료 vs 유료(프리미엄) 차이는?', '무료: 2회 체험 후 종료 / 프리미엄: 무제한 분석 + 주간/월간 통계 + AI 맞춤 식단 추천 + 질병 위험도 추적 + 우선 고객지원. 연간 구독 시 할인 혜택이 제공됩니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">무료 vs 유료(프리미엄) 차이는?</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 14px; font-weight: 600; color: #667eea; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid #667eea;">
+                            📸 사진 인식·분석
+                        </div>
+                        <div onclick="showAnswer('어떤 사진을 찍어야 정확하게 인식되나요?', '음식이 화면 중앙에 크게, 조명이 밝은 환경에서 촬영하세요. 여러 음식이 섞여있어도 개별 인식이 가능하지만, 한 가지씩 찍으면 더 정확합니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">어떤 사진을 찍어야 정확하게 인식되나요?</span>
+                        </div>
+                        <div onclick="showAnswer('인식 실패 시 어떻게 하나요?', '수동 검색 기능을 이용해 음식명을 직접 입력하거나, 사진을 다시 촬영해보세요. 지속적인 오류는 고객센터로 문의 부탁드립니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">인식 실패 시 어떻게 하나요?</span>
+                        </div>
+                        <div onclick="showAnswer('한식·양식·중식 모두 인식되나요?', '네! 한식(비빔밥, 김치찌개 등), 양식(스테이크, 샐러드 등), 중식(짜장면, 탕수육 등), 일식, 디저트까지 40+ 음식 DB 보유, 지속 업데이트 중입니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">한식·양식·중식 모두 인식되나요?</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 14px; font-weight: 600; color: #667eea; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid #667eea;">
+                            🍎 칼로리·영양소 분석
+                        </div>
+                        <div onclick="showAnswer('칼로리 계산은 얼마나 정확한가요?', 'USDA, 식약처 공인 데이터베이스 기준으로 ±5% 이내 정확도를 목표로 합니다. 음식 크기·조리법에 따라 차이가 있을 수 있습니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">칼로리 계산은 얼마나 정확한가요?</span>
+                        </div>
+                        <div onclick="showAnswer('하루 권장 섭취량은 어떻게 계산되나요?', '사용자의 나이·성별·체중·활동량을 기반으로 FDA/WHO 기준 권장 칼로리(약 2,000kcal)와 영양소 비율을 자동 계산합니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">하루 권장 섭취량은 어떻게 계산되나요?</span>
+                        </div>
+                        <div onclick="showAnswer('영양소 항목은 무엇이 있나요?', '칼로리, 단백질, 탄수화물, 지방, 당류, 나트륨, 식이섬유, 콜레스테롤 총 8가지 핵심 영양소를 제공합니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">영양소 항목은 무엇이 있나요?</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 14px; font-weight: 600; color: #667eea; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid #667eea;">
+                            🏥 질병 예측·위험도
+                        </div>
+                        <div onclick="showAnswer('질병 위험도는 어떻게 예측하나요?', 'XGBoost 머신러닝 모델이 사용자의 섭취 데이터(칼로리, 당, 지방, 나트륨 등)와 건강 정보(나이, 체중, 활동량)를 종합 분석하여 비만·당뇨·고혈압·고지혈증 위험도를 3단계(낮음/보통/높음)로 표시합니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">질병 위험도는 어떻게 예측하나요?</span>
+                        </div>
+                        <div onclick="showAnswer('의학적 진단으로 봐도 되나요?', '아니요. 본 서비스는 참고용 정보이며, 정확한 진단은 반드시 의료기관에서 받으시기 바랍니다.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">의학적 진단으로 봐도 되나요?</span>
+                        </div>
+                        <div onclick="showAnswer('위험도가 높음으로 나왔어요', 'AI 맞춤 식단 추천을 확인하고, 나트륨·당류 섭취를 줄이며, 의료기관 방문을 권장합니다. 앱 내 건강 코칭 기능도 활용해보세요.')" class="faq-item" style="padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
+                            <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span style="font-size: 14px; color: #333;">위험도가 높음으로 나왔어요</span>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; padding: 20px;">
+                        <a href="/faq" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 10px; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <i class="fas fa-list-ul" style="margin-right: 8px;"></i>전체 FAQ 보기
                         </a>
                     </div>
-                    <div style="margin-bottom: 15px;">
-                        <a href="/health-info" style="
-                            display: block;
-                            padding: 15px;
-                            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                            border-radius: 12px;
-                            text-decoration: none;
-                            color: white;
-                            font-weight: 600;
-                            margin-bottom: 10px;
-                            transition: all 0.3s;
-                            box-shadow: 0 2px 10px rgba(240, 147, 251, 0.3);
-                        " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 15px rgba(240, 147, 251, 0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 10px rgba(240, 147, 251, 0.3)'">
-                            <i class="fas fa-heartbeat" style="margin-right: 10px;"></i>건강정보 가이드
-                        </a>
+                </div>
+
+                <!-- 답변 화면 -->
+                <div id="answer-view" style="display: none; padding: 20px; max-height: 480px; overflow-y: auto;">
+                    <button onclick="backToList()" style="background: none; border: none; color: #667eea; cursor: pointer; font-size: 14px; margin-bottom: 15px; display: flex; align-items: center; padding: 8px; border-radius: 8px; transition: all 0.2s;" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='none'">
+                        <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>목록으로
+                    </button>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <div style="color: white; font-weight: 600; font-size: 16px;" id="answer-question"></div>
                     </div>
-                    <div>
-                        <a href="/nutrition-info" style="
-                            display: block;
-                            padding: 15px;
-                            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                            border-radius: 12px;
-                            text-decoration: none;
-                            color: white;
-                            font-weight: 600;
-                            transition: all 0.3s;
-                            box-shadow: 0 2px 10px rgba(79, 172, 254, 0.3);
-                        " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 15px rgba(79, 172, 254, 0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 10px rgba(79, 172, 254, 0.3)'">
-                            <i class="fas fa-leaf" style="margin-right: 10px;"></i>영양성분 정보
-                        </a>
-                    </div>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; line-height: 1.8; color: #333; font-size: 14px;" id="answer-content"></div>
                 </div>
             </div>
         </div>
@@ -848,12 +877,51 @@ app.get('/', (c) => {
         <script>
         function toggleChatbot() {
             const popup = document.getElementById('chatbot-popup');
+            const questionList = document.getElementById('question-list');
+            const answerView = document.getElementById('answer-view');
+            
             if (popup.style.display === 'none' || popup.style.display === '') {
                 popup.style.display = 'block';
+                questionList.style.display = 'block';
+                answerView.style.display = 'none';
             } else {
                 popup.style.display = 'none';
             }
         }
+
+        function showAnswer(question, answer) {
+            const questionList = document.getElementById('question-list');
+            const answerView = document.getElementById('answer-view');
+            const answerQuestion = document.getElementById('answer-question');
+            const answerContent = document.getElementById('answer-content');
+            
+            answerQuestion.textContent = question;
+            answerContent.textContent = answer;
+            
+            questionList.style.display = 'none';
+            answerView.style.display = 'block';
+        }
+
+        function backToList() {
+            const questionList = document.getElementById('question-list');
+            const answerView = document.getElementById('answer-view');
+            
+            questionList.style.display = 'block';
+            answerView.style.display = 'none';
+        }
+
+        // FAQ 아이템 호버 효과
+        document.addEventListener('DOMContentLoaded', function() {
+            const style = document.createElement('style');
+            style.textContent = \`
+                .faq-item:hover {
+                    background: #e9ecef !important;
+                    border-left-color: #667eea !important;
+                    transform: translateX(4px);
+                }
+            \`;
+            document.head.appendChild(style);
+        });
 
         // 모바일 최적화
         if (window.innerWidth <= 768) {
@@ -863,7 +931,11 @@ app.get('/', (c) => {
             
             const popup = document.getElementById('chatbot-popup');
             popup.style.width = 'calc(100vw - 30px)';
-            popup.style.maxWidth = '350px';
+            popup.style.maxWidth = '380px';
+            
+            const toggle = document.getElementById('chatbot-toggle');
+            toggle.style.width = '100px';
+            toggle.style.height = '100px';
         }
         </script>
 
