@@ -501,6 +501,9 @@ app.get('/', (c) => {
                     <a href="/health-info.html" class="inline-block px-3 sm:px-4 py-2 bg-white bg-opacity-30 hover:bg-opacity-40 active:bg-opacity-50 text-white rounded-lg font-semibold transition shadow-md text-sm sm:text-base" style="touch-action: manipulation;">
                         <i class="fas fa-heartbeat mr-1 sm:mr-2"></i><span>건강정보</span>
                     </a>
+                    <a href="/nutrition-info.html" class="inline-block px-3 sm:px-4 py-2 bg-white bg-opacity-30 hover:bg-opacity-40 active:bg-opacity-50 text-white rounded-lg font-semibold transition shadow-md text-sm sm:text-base" style="touch-action: manipulation;">
+                        <i class="fas fa-leaf mr-1 sm:mr-2"></i><span>영양성분</span>
+                    </a>
                 </div>
                 
                 <!-- Language Selector -->
