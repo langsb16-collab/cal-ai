@@ -770,6 +770,20 @@ app.get('/', (c) => {
                 }
             }
             
+            /* Info Buttons 공통 스타일 */
+            .info-btn {
+                padding: 10px 18px;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: all 0.3s;
+                color: white;
+                font-weight: 600;
+                font-size: 0.9rem;
+                border: 2px solid transparent;
+                touch-action: manipulation;
+                min-width: 110px;
+            }
+            
             /* 건강정보 버튼 - 핑크/레드 그라데이션 */
             .health-btn {
                 background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
@@ -788,6 +802,38 @@ app.get('/', (c) => {
             .nutrition-btn:hover, .nutrition-btn:active {
                 transform: translateY(-2px);
                 box-shadow: 0 6px 16px rgba(67, 233, 123, 0.4);
+            }
+            
+            /* 로그인 버튼 - 블루/퍼플 그라데이션 */
+            .login-btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                color: white !important;
+                padding: 10px 20px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s;
+                border: none;
+            }
+            
+            .login-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+            }
+            
+            /* 회원가입 버튼 - 오렌지/옐로우 그라데이션 */
+            .register-btn {
+                background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important;
+                color: white !important;
+                padding: 10px 20px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s;
+                border: none;
+            }
+            
+            .register-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(250, 112, 154, 0.4);
             }
             
             /* 언어 버튼 - 각 언어별 다른 색상 */
@@ -988,10 +1034,10 @@ app.get('/', (c) => {
                 <div class="text-right flex-shrink-0">
                     <!-- 로그인 전 -->
                     <div id="auth-buttons" class="space-y-2">
-                        <button onclick="showLoginModal()" class="block bg-white text-green-600 px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-100 transition">
+                        <button onclick="showLoginModal()" class="block login-btn text-sm">
                             <i class="fas fa-sign-in-alt mr-2"></i><span data-i18n="login">로그인</span>
                         </button>
-                        <button onclick="showRegisterModal()" class="block bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-green-700 transition">
+                        <button onclick="showRegisterModal()" class="block register-btn text-sm">
                             <i class="fas fa-user-plus mr-2"></i><span data-i18n="register">회원가입</span>
                         </button>
                     </div>
