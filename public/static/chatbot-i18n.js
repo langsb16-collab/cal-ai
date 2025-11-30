@@ -1,7 +1,7 @@
 // 챗봇 다국어 데이터 (30개 질문 × 6개 언어)
 const chatbotTranslations = {
   ko: {
-    title: 'CALCARE AI 챗봇',
+    title: 'CalAI Scan 챗봇',
     subtitle: '무엇을 도와드릴까요?',
     backToMain: '메인 화면으로 돌아가기',
     backToList: '질문 목록으로 돌아가기',
@@ -54,7 +54,7 @@ const chatbotTranslations = {
   },
   
   en: {
-    title: 'CALCARE AI Chatbot',
+    title: 'CalAI Scan Chatbot',
     subtitle: 'How can I assist you?',
     backToMain: 'Go back to the main screen',
     backToList: 'Go back to the question list',
@@ -107,7 +107,7 @@ const chatbotTranslations = {
   },
   
   zh: {
-    title: 'CALCARE AI 聊天机器人',
+    title: 'CalAI Scan 聊天机器人',
     subtitle: '我能为您做什么？',
     backToMain: '返回主界面',
     backToList: '返回问题列表',
@@ -160,7 +160,7 @@ const chatbotTranslations = {
   },
   
   ja: {
-    title: 'CALCARE AI チャットボット',
+    title: 'CalAI Scan チャットボット',
     subtitle: 'どのようにお手伝いできますか？',
     backToMain: 'メイン画面に戻る',
     backToList: '質問リストに戻る',
@@ -213,7 +213,7 @@ const chatbotTranslations = {
   },
   
   vi: {
-    title: 'CALCARE AI Chatbot',
+    title: 'CalAI Scan Chatbot',
     subtitle: 'Tôi có thể giúp gì cho bạn?',
     backToMain: 'Quay lại màn hình chính',
     backToList: 'Quay lại danh sách câu hỏi',
@@ -266,7 +266,7 @@ const chatbotTranslations = {
   },
   
   ar: {
-    title: 'روبوت CALCARE AI',
+    title: 'روبوت CalAI Scan',
     subtitle: 'كيف يمكنني مساعدتك؟',
     backToMain: 'العودة إلى الشاشة الرئيسية',
     backToList: 'العودة إلى قائمة الأسئلة',

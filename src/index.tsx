@@ -369,7 +369,7 @@ app.get('/admin', (c) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>관리자 페이지 - CALCARE AI</title>
+        <title>관리자 페이지 - CalAI Scan</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
@@ -382,7 +382,7 @@ app.get('/admin', (c) => {
                 <div class="text-center mb-8">
                     <i class="fas fa-shield-alt text-6xl text-blue-600 mb-4"></i>
                     <h1 class="text-3xl font-bold text-gray-800">관리자 로그인</h1>
-                    <p class="text-gray-600 mt-2">CALCARE AI Admin Panel</p>
+                    <p class="text-gray-600 mt-2">CalAI Scan Admin Panel</p>
                 </div>
                 
                 <form id="admin-login-form" class="space-y-6">
@@ -413,7 +413,7 @@ app.get('/admin', (c) => {
                     <div class="flex justify-between items-center">
                         <div>
                             <h1 class="text-3xl font-bold text-gray-800">관리자 대시보드</h1>
-                            <p class="text-gray-600">CALCARE AI Admin Panel</p>
+                            <p class="text-gray-600">CalAI Scan Admin Panel</p>
                         </div>
                         <button onclick="logout()" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">
                             <i class="fas fa-sign-out-alt mr-2"></i>로그아웃
@@ -662,7 +662,7 @@ app.get('/', (c) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CALCARE AI - AI Calorie Analysis</title>
+        <title>CalAI Scan - AI Calorie Analysis</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <style>
@@ -1481,7 +1481,7 @@ app.get('/', (c) => {
                         <div class="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200">
                             <h3 class="font-bold text-purple-800 mb-2">💡 결론: 통합 시스템의 필요성</h3>
                             <p class="text-sm text-gray-700">
-                                <strong>CALCARE AI</strong>는 칼로리 + 영양성분 + 개인 건강정보 + AI 음식 인식을 통합하여 
+                                <strong>CalAI Scan</strong>은 칼로리 + 영양성분 + 개인 건강정보 + AI 음식 인식을 통합하여 
                                 정확한 건강 분석과 질병 위험도 예측을 제공합니다.
                             </p>
                         </div>
@@ -1511,7 +1511,7 @@ app.get('/', (c) => {
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <div class="chatbot-title" style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">
-                                <i class="fas fa-robot" style="margin-right: 8px;"></i>CALCARE AI 챗봇
+                                <i class="fas fa-robot" style="margin-right: 8px;"></i>CalAI Scan 챗봇
                             </div>
                             <div class="chatbot-subtitle" style="font-size: 12px; opacity: 0.9;">무엇을 도와드릴까요?</div>
                         </div>
