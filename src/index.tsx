@@ -681,20 +681,22 @@ app.get('/', (c) => {
                 backdrop-filter: blur(10px);
                 border-radius: 20px;
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+                max-height: 500px; /* 높이 50% 축소 */
             }
             
             /* 모바일 최적화 */
             @media (max-width: 768px) {
                 .card {
                     border-radius: 16px;
+                    max-height: 400px; /* 모바일 높이 조정 */
                 }
             }
             
             .camera-icon {
-                width: 140px;
-                height: 140px;
+                width: 100px;
+                height: 100px;
                 background: #f5f5f5;
-                border-radius: 20px;
+                border-radius: 12px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -705,8 +707,8 @@ app.get('/', (c) => {
             
             @media (max-width: 768px) {
                 .camera-icon {
-                    width: 120px;
-                    height: 120px;
+                    width: 80px;
+                    height: 80px;
                 }
             }
             
@@ -836,18 +838,18 @@ app.get('/', (c) => {
                 box-shadow: 0 6px 16px rgba(250, 112, 154, 0.4);
             }
             
-            /* 언어 버튼 - 각 언어별 다른 색상 */
+            /* 언어 버튼 - 각 언어별 다른 색상 (50% 축소) */
             .lang-btn {
-                padding: 10px 18px;
-                border-radius: 10px;
+                padding: 5px 9px;
+                border-radius: 6px;
                 cursor: pointer;
                 transition: all 0.3s;
                 color: white;
                 font-weight: 600;
-                font-size: 0.9rem;
+                font-size: 0.65rem;
                 border: 2px solid transparent;
                 touch-action: manipulation;
-                min-width: 70px;
+                min-width: 50px;
             }
             
             /* 각 언어별 색상 */
@@ -860,9 +862,9 @@ app.get('/', (c) => {
             
             @media (max-width: 768px) {
                 .lang-btn {
-                    padding: 8px 12px;
-                    font-size: 0.8rem;
-                    min-width: 60px;
+                    padding: 4px 6px;
+                    font-size: 0.6rem;
+                    min-width: 45px;
                 }
             }
             
@@ -885,17 +887,17 @@ app.get('/', (c) => {
             }
             
             .btn-primary {
-                padding: 14px 24px;
-                font-size: 1rem;
-                border-radius: 12px;
+                padding: 10px 18px;
+                font-size: 0.9rem;
+                border-radius: 10px;
                 font-weight: 600;
                 transition: all 0.3s;
             }
             
             @media (max-width: 768px) {
                 .btn-primary {
-                    padding: 12px 20px;
-                    font-size: 0.95rem;
+                    padding: 8px 14px;
+                    font-size: 0.85rem;
                 }
             }
             
@@ -924,14 +926,14 @@ app.get('/', (c) => {
             
             /* 영양소 카드 */
             .nutrition-card {
-                padding: 16px;
-                border-radius: 12px;
+                padding: 10px;
+                border-radius: 8px;
                 transition: transform 0.2s;
             }
             
             @media (max-width: 768px) {
                 .nutrition-card {
-                    padding: 12px;
+                    padding: 8px;
                 }
             }
             
@@ -1065,12 +1067,12 @@ app.get('/', (c) => {
         <!-- Main Content -->
         <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-4 sm:gap-6">
             <!-- Left: Camera Upload -->
-            <div class="card p-4 sm:p-6 md:p-8">
-                <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800">
-                    <i class="fas fa-utensils mr-2 text-green-600"></i><span data-i18n="photoAnalysis">음식 사진 분석</span>
+            <div class="card p-2 sm:p-3 md:p-4">
+                <h2 class="text-base sm:text-lg font-bold mb-2 sm:mb-3 text-gray-800">
+                    <i class="fas fa-utensils mr-1 text-green-600"></i><span data-i18n="photoAnalysis">음식 사진 분석</span>
                 </h2>
                 
-                <div class="text-center mb-4 sm:mb-6">
+                <div class="text-center mb-2 sm:mb-3">
                     <div class="camera-icon mx-auto mb-3 sm:mb-4" onclick="document.getElementById('imageInput').click()">
                         <i class="fas fa-camera text-3xl sm:text-4xl text-gray-400"></i>
                     </div>
@@ -1086,29 +1088,29 @@ app.get('/', (c) => {
                 </div>
 
                 <!-- Food Search -->
-                <div class="mt-4 sm:mt-6">
-                    <h3 class="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-gray-700">
-                        <i class="fas fa-search mr-2"></i><span data-i18n="foodSearch">음식 검색</span>
+                <div class="mt-2 sm:mt-3">
+                    <h3 class="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-gray-700">
+                        <i class="fas fa-search mr-1"></i><span data-i18n="foodSearch">음식 검색</span>
                     </h3>
                     <input 
                         type="text" 
                         id="foodSearch" 
                         data-i18n-placeholder="searchPlaceholder"
                         placeholder="음식 이름을 입력하세요..."
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-base"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm"
                         oninput="searchFood(this.value)"
                     >
-                    <div id="searchResults" class="mt-3 max-h-60 overflow-y-auto rounded-lg"></div>
+                    <div id="searchResults" class="mt-2 max-h-40 overflow-y-auto rounded-lg"></div>
                 </div>
             </div>
 
             <!-- Right: Analysis Results -->
-            <div class="card p-4 sm:p-6 md:p-8">
-                <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800">
-                    <i class="fas fa-chart-line mr-2 text-blue-600"></i><span data-i18n="analysisResult">분석 결과</span>
+            <div class="card p-2 sm:p-3 md:p-4">
+                <h2 class="text-base sm:text-lg font-bold mb-2 sm:mb-3 text-gray-800">
+                    <i class="fas fa-chart-line mr-1 text-blue-600"></i><span data-i18n="analysisResult">분석 결과</span>
                 </h2>
 
-                <div id="resultsPlaceholder" class="text-center py-8 sm:py-12 text-gray-400">
+                <div id="resultsPlaceholder" class="text-center py-4 sm:py-6 text-gray-400">
                     <i class="fas fa-cookie-bite text-5xl sm:text-6xl mb-3 sm:mb-4"></i>
                     <p class="text-sm sm:text-base"><span data-i18n="resultsPlaceholder">음식 사진을 업로드하면</span><br><span data-i18n="resultsPlaceholder2">영양 분석 결과가 표시됩니다</span></p>
                 </div>
@@ -1176,12 +1178,12 @@ app.get('/', (c) => {
 
         <!-- Daily Stats -->
         <div class="max-w-6xl mx-auto mt-4 sm:mt-6">
-            <div class="card p-4 sm:p-6 md:p-8">
-                <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800">
-                    <i class="fas fa-calendar-day mr-2 text-purple-600"></i><span data-i18n="dailyNutrition">오늘의 영양 섭취</span>
+            <div class="card p-2 sm:p-3 md:p-4">
+                <h2 class="text-base sm:text-lg font-bold mb-2 sm:mb-3 text-gray-800">
+                    <i class="fas fa-calendar-day mr-1 text-purple-600"></i><span data-i18n="dailyNutrition">오늘의 영양 섭취</span>
                 </h2>
                 
-                <div id="dailyStatsPlaceholder" class="text-center py-6 sm:py-8 text-gray-400">
+                <div id="dailyStatsPlaceholder" class="text-center py-3 sm:py-4 text-gray-400">
                     <p class="text-sm sm:text-base" data-i18n="noIntakeToday">오늘 섭취한 음식이 없습니다</p>
                 </div>
 
