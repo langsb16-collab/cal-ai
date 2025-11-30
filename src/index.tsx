@@ -2255,7 +2255,7 @@ app.get('/', (c) => {
             }
           },
           ar: {
-            title: 'روبوت CALCARE AI',
+            title: 'روبوت CalAI Scan',
             subtitle: 'كيف يمكنني مساعدتك؟',
             backToList: 'العودة إلى قائمة الأسئلة',
             viewAllFAQ: 'عرض جميع الأسئلة الشائعة',
