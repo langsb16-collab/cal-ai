@@ -2065,7 +2065,7 @@ app.get('/', (c) => {
         // 챗봇 다국어 데이터
         const chatbotTranslations = {
           ko: {
-            title: 'CALCARE AI 챗봇',
+            title: 'CalAI Scan 챗봇',
             subtitle: '무엇을 도와드릴까요?',
             backToList: '질문 목록으로 돌아가기',
             viewAllFAQ: '전체 FAQ 보기',
@@ -2103,7 +2103,7 @@ app.get('/', (c) => {
             }
           },
           en: {
-            title: 'CALCARE AI Chatbot',
+            title: 'CalAI Scan Chatbot',
             subtitle: 'How can I assist you?',
             backToList: 'Go back to the question list',
             viewAllFAQ: 'View All FAQ',
@@ -2141,7 +2141,7 @@ app.get('/', (c) => {
             }
           },
           zh: {
-            title: 'CALCARE AI 聊天机器人',
+            title: 'CalAI Scan 聊天机器人',
             subtitle: '我能为您做什么？',
             backToList: '返回问题列表',
             viewAllFAQ: '查看所有常见问题',
@@ -2179,7 +2179,7 @@ app.get('/', (c) => {
             }
           },
           ja: {
-            title: 'CALCARE AI チャットボット',
+            title: 'CalAI Scan チャットボット',
             subtitle: 'どのようにお手伝いできますか？',
             backToList: '質問リストに戻る',
             viewAllFAQ: 'すべてのFAQを見る',
@@ -2217,7 +2217,7 @@ app.get('/', (c) => {
             }
           },
           vi: {
-            title: 'CALCARE AI Chatbot',
+            title: 'CalAI Scan Chatbot',
             subtitle: 'Tôi có thể giúp gì cho bạn?',
             backToList: 'Quay lại danh sách câu hỏi',
             viewAllFAQ: 'Xem tất cả FAQ',
