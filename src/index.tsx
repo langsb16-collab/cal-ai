@@ -1371,8 +1371,8 @@ app.get('/', (c) => {
                     
                     <div class="text-center mb-6">
                         <i class="fas fa-heartbeat text-6xl text-red-500 mb-4"></i>
-                        <h2 class="text-3xl font-bold text-gray-800 mb-2">건강정보 안내</h2>
-                        <p class="text-gray-600">공개 식품/영양 데이터베이스 목록</p>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2" data-i18n="healthInfoTitle">건강정보 안내</h2>
+                        <p class="text-gray-600" data-i18n="healthInfoSubtitle">공개 식품/영양 데이터베이스 목록</p>
                     </div>
                     
                     <div class="space-y-4">
@@ -1428,8 +1428,8 @@ app.get('/', (c) => {
                     
                     <div class="text-center mb-6">
                         <i class="fas fa-leaf text-6xl text-green-500 mb-4"></i>
-                        <h2 class="text-3xl font-bold text-gray-800 mb-2">영양성분 정보</h2>
-                        <p class="text-gray-600">칼로리 기반 분석 및 한계</p>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2" data-i18n="nutritionInfoTitle">영양성분 정보</h2>
+                        <p class="text-gray-600" data-i18n="nutritionInfoSubtitle">칼로리 기반 분석 및 한계</p>
                     </div>
                     
                     <div class="space-y-4">

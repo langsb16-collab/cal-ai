@@ -616,3 +616,34 @@ document.addEventListener('DOMContentLoaded', () => {
   
   updatePageLanguage();
 });
+
+// 건강정보/영양성분 모달 번역 추가
+translations.ko.healthInfoTitle = '건강정보 안내';
+translations.ko.healthInfoSubtitle = '공개 식품/영양 데이터베이스 목록';
+translations.ko.nutritionInfoTitle = '영양성분 정보';
+translations.ko.nutritionInfoSubtitle = '칼로리 기반 분석 및 한계';
+
+translations.en.healthInfoTitle = 'Health Information Guide';
+translations.en.healthInfoSubtitle = 'Public Food/Nutrition Database List';
+translations.en.nutritionInfoTitle = 'Nutrition Information';
+translations.en.nutritionInfoSubtitle = 'Calorie-based Analysis and Limitations';
+
+translations.zh.healthInfoTitle = '健康信息指南';
+translations.zh.healthInfoSubtitle = '公开食品/营养数据库列表';
+translations.zh.nutritionInfoTitle = '营养成分信息';
+translations.zh.nutritionInfoSubtitle = '基于卡路里的分析及局限性';
+
+translations.ja.healthInfoTitle = '健康情報ガイド';
+translations.ja.healthInfoSubtitle = '公開食品・栄養データベースリスト';
+translations.ja.nutritionInfoTitle = '栄養成分情報';
+translations.ja.nutritionInfoSubtitle = 'カロリーベースの分析と制限';
+
+translations.vi.healthInfoTitle = 'Hướng Dẫn Thông Tin Sức Khỏe';
+translations.vi.healthInfoSubtitle = 'Danh Sách Cơ Sở Dữ Liệu Thực Phẩm/Dinh Dưỡng Công Khai';
+translations.vi.nutritionInfoTitle = 'Thông Tin Dinh Dưỡng';
+translations.vi.nutritionInfoSubtitle = 'Phân Tích Dựa Trên Calo và Giới Hạn';
+
+translations.ar.healthInfoTitle = 'دليل المعلومات الصحية';
+translations.ar.healthInfoSubtitle = 'قائمة قواعد بيانات الأغذية/التغذية العامة';
+translations.ar.nutritionInfoTitle = 'معلومات التغذية';
+translations.ar.nutritionInfoSubtitle = 'التحليل القائم على السعرات الحرارية والقيود';
