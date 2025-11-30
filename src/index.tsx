@@ -1765,6 +1765,8 @@ app.get('/', (c) => {
         // 다국어 번역 데이터 (섹션 제목용)
         const sectionTranslations = {
             ko: {
+                appTitle: 'CalAI Scan',
+                appSubtitle: '사진으로 음식을 인식하고 칼로리를 자동 계산',
                 photoAnalysis: '음식 사진 분석',
                 analysisResult: '분석 결과',
                 dailyNutrition: '오늘의 영양 섭취',
@@ -1799,6 +1801,8 @@ app.get('/', (c) => {
                 nutritionInfo: '영양성분'
             },
             en: {
+                appTitle: 'CalAI Scan',
+                appSubtitle: 'Recognize food and calculate calories automatically from photos',
                 photoAnalysis: 'Food Photo Analysis',
                 analysisResult: 'Analysis Results',
                 dailyNutrition: 'Today\\'s Nutrition Intake',
@@ -1867,6 +1871,8 @@ app.get('/', (c) => {
                 nutritionInfo: '营养成分'
             },
             ja: {
+                appTitle: 'CalAI Scan',
+                appSubtitle: '写真から食品を認識し、カロリーを自動計算',
                 photoAnalysis: '食品写真分析',
                 analysisResult: '分析結果',
                 dailyNutrition: '今日の栄養摂取',
@@ -1901,6 +1907,8 @@ app.get('/', (c) => {
                 nutritionInfo: '栄養成分'
             },
             vi: {
+                appTitle: 'CalAI Scan',
+                appSubtitle: 'Nhận diện thức ăn và tính calo tự động từ ảnh',
                 photoAnalysis: 'Phân tích ảnh thức ăn',
                 analysisResult: 'Kết quả phân tích',
                 dailyNutrition: 'Dinh dưỡng hôm nay',
@@ -1935,6 +1943,8 @@ app.get('/', (c) => {
                 nutritionInfo: 'Thông tin dinh dưỡng'
             },
             ar: {
+                appTitle: 'CalAI Scan',
+                appSubtitle: 'التعرف على الطعام وحساب السعرات الحرارية تلقائيًا من الصور',
                 photoAnalysis: 'تحليل صور الطعام',
                 analysisResult: 'نتائج التحليل',
                 dailyNutrition: 'التغذية اليومية',
@@ -2376,6 +2386,7 @@ app.get('/', (c) => {
         
         // 건강정보 모달 표시/숨김
         function showHealthInfoModal() {
+            updateHealthInfoModalContent();
             document.getElementById('health-info-modal').classList.remove('hidden');
         }
         
@@ -2385,11 +2396,96 @@ app.get('/', (c) => {
         
         // 영양성분 모달 표시/숨김
         function showNutritionInfoModal() {
+            updateNutritionInfoModalContent();
             document.getElementById('nutrition-info-modal').classList.remove('hidden');
         }
         
         function hideNutritionInfoModal() {
             document.getElementById('nutrition-info-modal').classList.add('hidden');
+        }
+        
+        // 건강정보 모달 내용 업데이트 (다국어)
+        function updateHealthInfoModalContent() {
+            const lang = currentLanguage || 'ko';
+            const modal = document.getElementById('health-info-modal');
+            if (!modal) return;
+            
+            const content = {
+                ko: {
+                    title: '건강정보 안내',
+                    subtitle: '공개 식품/영양 데이터베이스 목록',
+                    riskTitle: '질병 위험도 분석 시스템'
+                },
+                en: {
+                    title: 'Health Information Guide',
+                    subtitle: 'Public Food/Nutrition Database List',
+                    riskTitle: 'Disease Risk Analysis System'
+                },
+                zh: {
+                    title: '健康信息指南',
+                    subtitle: '公开食品/营养数据库列表',
+                    riskTitle: '疾病风险分析系统'
+                },
+                ja: {
+                    title: '健康情報ガイド',
+                    subtitle: '公開食品・栄養データベースリスト',
+                    riskTitle: '疾病リスク分析システム'
+                },
+                vi: {
+                    title: 'Hướng Dẫn Thông Tin Sức Khỏe',
+                    subtitle: 'Danh Sách Cơ Sở Dữ Liệu Thực Phẩm/Dinh Dưỡng Công Khai',
+                    riskTitle: 'Hệ Thống Phân Tích Rủi Ro Bệnh Tật'
+                },
+                ar: {
+                    title: 'دليل المعلومات الصحية',
+                    subtitle: 'قائمة قواعد بيانات الأغذية/التغذية العامة',
+                    riskTitle: 'نظام تحليل مخاطر الأمراض'
+                }
+            };
+            
+            const c = content[lang] || content.ko;
+            modal.querySelector('h2').textContent = c.title;
+            modal.querySelectorAll('p.text-gray-600')[0].textContent = c.subtitle;
+            const riskTitleEl = modal.querySelector('.font-bold.text-gray-800.mb-3');
+            if (riskTitleEl) riskTitleEl.textContent = c.riskTitle;
+        }
+        
+        // 영양성분 모달 내용 업데이트 (다국어)
+        function updateNutritionInfoModalContent() {
+            const lang = currentLanguage || 'ko';
+            const modal = document.getElementById('nutrition-info-modal');
+            if (!modal) return;
+            
+            const content = {
+                ko: {
+                    title: '영양성분 정보',
+                    subtitle: '칼로리 기반 분석 및 한계'
+                },
+                en: {
+                    title: 'Nutrition Information',
+                    subtitle: 'Calorie-based Analysis and Limitations'
+                },
+                zh: {
+                    title: '营养成分信息',
+                    subtitle: '基于卡路里的分析及局限性'
+                },
+                ja: {
+                    title: '栄養成分情報',
+                    subtitle: 'カロリーベースの分析と制限'
+                },
+                vi: {
+                    title: 'Thông Tin Dinh Dưỡng',
+                    subtitle: 'Phân Tích Dựa Trên Calo và Giới Hạn'
+                },
+                ar: {
+                    title: 'معلومات التغذية',
+                    subtitle: 'التحليل القائم على السعرات الحرارية والقيود'
+                }
+            };
+            
+            const c = content[lang] || content.ko;
+            modal.querySelector('h2').textContent = c.title;
+            modal.querySelectorAll('p.text-gray-600')[0].textContent = c.subtitle;
         }
         
         // 로그인 처리
