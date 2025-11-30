@@ -2,7 +2,7 @@
 const translations = {
   ko: {
     // Header
-    appTitle: 'CALCARE AI',
+    appTitle: 'CalAI Scan',
     appSubtitle: '사진으로 음식을 인식하고 칼로리를 자동 계산',
     membershipFree: 'Free',
     membershipPremium: 'Premium',
@@ -94,7 +94,7 @@ const translations = {
   
   en: {
     // Header
-    appTitle: 'CALCARE AI',
+    appTitle: 'CalAI Scan',
     appSubtitle: 'Recognize food and calculate calories automatically from photos',
     membershipFree: 'Free',
     membershipPremium: 'Premium',
@@ -186,7 +186,7 @@ const translations = {
   
   zh: {
     // Header
-    appTitle: 'CALCARE AI',
+    appTitle: 'CalAI Scan',
     appSubtitle: '通过照片识别食物并自动计算卡路里',
     membershipFree: '免费',
     membershipPremium: '高级会员',
@@ -278,7 +278,7 @@ const translations = {
   
   ja: {
     // Header
-    appTitle: 'CALCARE AI',
+    appTitle: 'CalAI Scan',
     appSubtitle: '写真から食べ物を認識し、カロリーを自動計算',
     membershipFree: '無料',
     membershipPremium: 'プレミアム',
@@ -370,7 +370,7 @@ const translations = {
   
   vi: {
     // Header
-    appTitle: 'CALCARE AI',
+    appTitle: 'CalAI Scan',
     appSubtitle: 'Nhận diện thức ăn và tự động tính calo từ ảnh',
     membershipFree: 'Miễn phí',
     membershipPremium: 'Cao cấp',
@@ -462,7 +462,7 @@ const translations = {
   
   ar: {
     // Header
-    appTitle: 'CALCARE AI',
+    appTitle: 'CalAI Scan',
     appSubtitle: 'التعرف على الطعام وحساب السعرات الحرارية تلقائياً من الصور',
     membershipFree: 'مجاني',
     membershipPremium: 'بريميوم',
