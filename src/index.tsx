@@ -1377,42 +1377,42 @@ app.get('/', (c) => {
                     
                     <div class="space-y-4">
                         <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold text-blue-800 mb-2">🇰🇷 MFDS 식품영양성분 데이터베이스</h3>
-                            <p class="text-sm text-gray-700 mb-2">식품의약품안전처 공식 영양성분 DB (한국 1순위)</p>
+                            <h3 class="text-lg font-bold text-blue-800 mb-2" data-i18n="db1Title">🇰🇷 MFDS 식품영양성분 데이터베이스</h3>
+                            <p class="text-sm text-gray-700 mb-2" data-i18n="db1Desc">식품의약품안전처 공식 영양성분 DB (한국 1순위)</p>
                             <a href="https://www.foodsafetykorea.go.kr" target="_blank" class="text-blue-600 text-sm hover:underline">www.foodsafetykorea.go.kr</a>
                         </div>
                         
                         <div class="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold text-green-800 mb-2">🇰🇷 농촌진흥청 국가표준식품성분표</h3>
-                            <p class="text-sm text-gray-700 mb-2">3,300종 이상의 식품 영양정보</p>
-                            <a href="https://www.foodsafetykorea.go.kr/portal/healthyfoodlife/foodnutrient/simple.do" target="_blank" class="text-green-600 text-sm hover:underline">국가표준식품성분표</a>
+                            <h3 class="text-lg font-bold text-green-800 mb-2" data-i18n="db2Title">🇰🇷 농촌진흥청 국가표준식품성분표</h3>
+                            <p class="text-sm text-gray-700 mb-2" data-i18n="db2Desc">3,300종 이상의 식품 영양정보</p>
+                            <a href="https://www.foodsafetykorea.go.kr/portal/healthyfoodlife/foodnutrient/simple.do" target="_blank" class="text-green-600 text-sm hover:underline" data-i18n="db2Link">국가표준식품성분표</a>
                         </div>
                         
                         <div class="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold text-purple-800 mb-2">🇺🇸 USDA FoodData Central</h3>
-                            <p class="text-sm text-gray-700 mb-2">미국 농무부 글로벌 식품 데이터베이스</p>
+                            <h3 class="text-lg font-bold text-purple-800 mb-2" data-i18n="db3Title">🇺🇸 USDA FoodData Central</h3>
+                            <p class="text-sm text-gray-700 mb-2" data-i18n="db3Desc">미국 농무부 글로벌 식품 데이터베이스</p>
                             <a href="https://fdc.nal.usda.gov" target="_blank" class="text-purple-600 text-sm hover:underline">fdc.nal.usda.gov</a>
                         </div>
                         
                         <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold text-yellow-800 mb-2">🇨🇦 FooDB</h3>
-                            <p class="text-sm text-gray-700 mb-2">28,000+ 화학성분 데이터</p>
+                            <h3 class="text-lg font-bold text-yellow-800 mb-2" data-i18n="db4Title">🇨🇦 FooDB</h3>
+                            <p class="text-sm text-gray-700 mb-2" data-i18n="db4Desc">28,000+ 화학성분 데이터</p>
                             <a href="https://foodb.ca" target="_blank" class="text-yellow-600 text-sm hover:underline">foodb.ca</a>
                         </div>
                         
                         <div class="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold text-orange-800 mb-2">🌍 Open Food Facts</h3>
-                            <p class="text-sm text-gray-700 mb-2">수백만 제품 바코드 DB</p>
+                            <h3 class="text-lg font-bold text-orange-800 mb-2" data-i18n="db5Title">🌍 Open Food Facts</h3>
+                            <p class="text-sm text-gray-700 mb-2" data-i18n="db5Desc">수백만 제품 바코드 DB</p>
                             <a href="https://world.openfoodfacts.org" target="_blank" class="text-orange-600 text-sm hover:underline">world.openfoodfacts.org</a>
                         </div>
                         
                         <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                            <h3 class="font-bold text-gray-800 mb-3">질병 위험도 분석 시스템</h3>
+                            <h3 class="font-bold text-gray-800 mb-3" data-i18n="diseaseAnalysisTitle">질병 위험도 분석 시스템</h3>
                             <div class="space-y-2 text-sm text-gray-700">
-                                <p>✅ <strong>비만 위험도</strong>: BMI 기반 분석</p>
-                                <p>✅ <strong>당뇨 위험도</strong>: 당류/탄수화물 분석</p>
-                                <p>✅ <strong>고혈압 위험도</strong>: 나트륨/지방 분석</p>
-                                <p>✅ <strong>고지혈증 위험도</strong>: 지방/콜레스테롤 분석</p>
+                                <p><span data-i18n="disease1">✅ <strong>비만 위험도</strong>: BMI 기반 분석</span></p>
+                                <p><span data-i18n="disease2">✅ <strong>당뇨 위험도</strong>: 당류/탄수화물 분석</span></p>
+                                <p><span data-i18n="disease3">✅ <strong>고혈압 위험도</strong>: 나트륨/지방 분석</span></p>
+                                <p><span data-i18n="disease4">✅ <strong>고지혈증 위험도</strong>: 지방/콜레스테롤 분석</span></p>
                             </div>
                         </div>
                     </div>
@@ -1436,51 +1436,51 @@ app.get('/', (c) => {
                         <div class="bg-blue-50 p-4 rounded-lg">
                             <h3 class="text-lg font-bold text-blue-800 mb-3" data-i18n="section1Title">📊 칼로리로 확인 가능한 정보</h3>
                             <ul class="space-y-2 text-sm text-gray-700">
-                                <li>✅ 총 열량 (kcal per serving, 100g, 실제 섭취량)</li>
-                                <li>✅ 1일 권장 섭취량 대비 비율</li>
-                                <li>✅ 다이어트/감량 목표와의 차이</li>
-                                <li>✅ 칼로리 소모 운동량 환산</li>
-                                <li>✅ 다른 음식과 칼로리 비교</li>
+                                <li data-i18n="section1Item1">✅ 총 열량 (kcal per serving, 100g, 실제 섭취량)</li>
+                                <li data-i18n="section1Item2">✅ 1일 권장 섭취량 대비 비율</li>
+                                <li data-i18n="section1Item3">✅ 다이어트/감량 목표와의 차이</li>
+                                <li data-i18n="section1Item4">✅ 칼로리 소모 운동량 환산</li>
+                                <li data-i18n="section1Item5">✅ 다른 음식과 칼로리 비교</li>
                             </ul>
                         </div>
                         
                         <div class="bg-green-50 p-4 rounded-lg">
                             <h3 class="text-lg font-bold text-green-800 mb-3" data-i18n="section2Title">🧮 칼로리로 계산 가능한 정보</h3>
                             <ul class="space-y-2 text-sm text-gray-700">
-                                <li>✅ 체중 변화 예측 (7,700kcal = 1kg 지방)</li>
-                                <li>✅ 기초대사량(BMR) 대비 비교</li>
-                                <li>✅ 총 에너지 소비량(TDEE) 균형</li>
-                                <li>✅ 식습관 패턴 분석</li>
+                                <li data-i18n="section2Item1">✅ 체중 변화 예측 (7,700kcal = 1kg 지방)</li>
+                                <li data-i18n="section2Item2">✅ 기초대사량(BMR) 대비 비교</li>
+                                <li data-i18n="section2Item3">✅ 총 에너지 소비량(TDEE) 균형</li>
+                                <li data-i18n="section2Item4">✅ 식습관 패턴 분석</li>
                             </ul>
                         </div>
                         
                         <div class="bg-yellow-50 p-4 rounded-lg">
                             <h3 class="text-lg font-bold text-yellow-800 mb-3" data-i18n="section3Title">⚠️ 칼로리 데이터로 가능한 위험 신호</h3>
                             <ul class="space-y-2 text-sm text-gray-700">
-                                <li>🔴 비만 위험도</li>
-                                <li>🔴 지방간 위험</li>
-                                <li>🔴 심혈관 질환 위험</li>
-                                <li>🔴 당뇨 위험 (간접적)</li>
-                                <li>🔴 야식/폭식 패턴</li>
-                                <li>🔴 급격한 체중 증가 건강 위험</li>
+                                <li data-i18n="section3Item1">🔴 비만 위험도</li>
+                                <li data-i18n="section3Item2">🔴 지방간 위험</li>
+                                <li data-i18n="section3Item3">🔴 심혈관 질환 위험</li>
+                                <li data-i18n="section3Item4">🔴 당뇨 위험 (간접적)</li>
+                                <li data-i18n="section3Item5">🔴 야식/폭식 패턴</li>
+                                <li data-i18n="section3Item6">🔴 급격한 체중 증가 건강 위험</li>
                             </ul>
                         </div>
                         
                         <div class="bg-red-50 p-4 rounded-lg">
                             <h3 class="text-lg font-bold text-red-800 mb-3" data-i18n="section4Title">❌ 칼로리만으로는 불가능한 정보</h3>
                             <ul class="space-y-2 text-sm text-gray-700">
-                                <li>❌ 정확한 당뇨/고혈압 위험도</li>
-                                <li>❌ 영양 불균형 분석</li>
-                                <li>❌ 알레르기 정보</li>
-                                <li>❌ 특정 지방 위험</li>
-                                <li>❌ 비타민/미네랄 결핍</li>
-                                <li>❌ 식이섬유/콜레스테롤 정보</li>
+                                <li data-i18n="section4Item1">❌ 정확한 당뇨/고혈압 위험도</li>
+                                <li data-i18n="section4Item2">❌ 영양 불균형 분석</li>
+                                <li data-i18n="section4Item3">❌ 알레르기 정보</li>
+                                <li data-i18n="section4Item4">❌ 특정 지방 위험</li>
+                                <li data-i18n="section4Item5">❌ 비타민/미네랄 결핍</li>
+                                <li data-i18n="section4Item6">❌ 식이섬유/콜레스테롤 정보</li>
                             </ul>
                         </div>
                         
                         <div class="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200">
                             <h3 class="font-bold text-purple-800 mb-2" data-i18n="section5Title">💡 결론: 통합 시스템의 필요성</h3>
-                            <p class="text-sm text-gray-700">
+                            <p class="text-sm text-gray-700" data-i18n="section5Content">
                                 <strong>CalAI Scan</strong>은 칼로리 + 영양성분 + 개인 건강정보 + AI 음식 인식을 통합하여 
                                 정확한 건강 분석과 질병 위험도 예측을 제공합니다.
                             </p>
