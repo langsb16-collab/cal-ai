@@ -1493,7 +1493,7 @@ app.get('/', (c) => {
             <div id="chatbot-popup" style="
                 display: none;
                 position: absolute;
-                bottom: 160px;
+                bottom: 80px;
                 right: 0;
                 width: 420px;
                 max-height: 600px;
@@ -1536,9 +1536,6 @@ app.get('/', (c) => {
                 <div id="question-list" style="padding: 20px; max-height: 480px; overflow-y: auto;">
                     <!-- 1-3: 서비스 소개 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            01-03) 서비스 소개
-                        </div>
                         <div id="chatbot-q1" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">이 앱은 어떤 기능을 제공하나요?</span>
                         </div>
@@ -1552,9 +1549,6 @@ app.get('/', (c) => {
 
                     <!-- 4-6: 사진 인식 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            04-06) 사진 인식
-                        </div>
                         <div id="chatbot-q4" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">음식이 정확하게 인식되지 않습니다.</span>
                         </div>
@@ -1568,9 +1562,6 @@ app.get('/', (c) => {
 
                     <!-- 7-9: 칼로리·영양 분석 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            07-09) 칼로리·영양 분석
-                        </div>
                         <div id="chatbot-q7" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">칼로리 계산 방식이 궁금합니다.</span>
                         </div>
@@ -1584,9 +1575,6 @@ app.get('/', (c) => {
 
                     <!-- 10-12: 질병 예측 기능 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            10-12) 질병 예측 기능
-                        </div>
                         <div id="chatbot-q10" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">어떤 질병을 예측하나요?</span>
                         </div>
@@ -1600,9 +1588,6 @@ app.get('/', (c) => {
 
                     <!-- 13-15: 계정/프로필 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            13-15) 계정/프로필
-                        </div>
                         <div id="chatbot-q13" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">회원가입은 어떻게 하나요?</span>
                         </div>
@@ -1616,9 +1601,6 @@ app.get('/', (c) => {
 
                     <!-- 16-18: 프리미엄/결제 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            16-18) 프리미엄/결제
-                        </div>
                         <div id="chatbot-q16" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">프리미엄 기능은 무엇인가요?</span>
                         </div>
@@ -1632,9 +1614,6 @@ app.get('/', (c) => {
 
                     <!-- 19-20: 포인트/충전 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            19-20) 포인트/충전
-                        </div>
                         <div id="chatbot-q19" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">포인트는 어디에 사용하나요?</span>
                         </div>
@@ -1645,9 +1624,6 @@ app.get('/', (c) => {
 
                     <!-- 21-23: 앱 사용 방법 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            21-23) 앱 사용 방법
-                        </div>
                         <div id="chatbot-q21" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">오늘 먹은 칼로리를 어떻게 확인하나요?</span>
                         </div>
@@ -1661,9 +1637,6 @@ app.get('/', (c) => {
 
                     <!-- 24-26: 오류/문제 해결 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            24-26) 오류/문제 해결
-                        </div>
                         <div id="chatbot-q24" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">앱이 켜지지 않습니다.</span>
                         </div>
@@ -1677,9 +1650,6 @@ app.get('/', (c) => {
 
                     <!-- 27-28: 보안·데이터 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            27-28) 보안·데이터
-                        </div>
                         <div id="chatbot-q27" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">내 사진이 서버에 저장되나요?</span>
                         </div>
@@ -1690,9 +1660,6 @@ app.get('/', (c) => {
 
                     <!-- 29-30: 인증·고급 기능 -->
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #667eea; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #667eea;">
-                            29-30) 인증·고급 기능
-                        </div>
                         <div id="chatbot-q29" class="chatbot-q-item" data-answer="" onclick="showAnswer(this.querySelector('.chatbot-q-text').textContent, this.getAttribute('data-answer'))" style="padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;">
                             <i class="fas fa-comment-dots" style="color: #667eea; margin-right: 8px; font-size: 12px;"></i><span class="chatbot-q-text" style="font-size: 13px; color: #333;">VIP 인증은 어떻게 하나요?</span>
                         </div>
