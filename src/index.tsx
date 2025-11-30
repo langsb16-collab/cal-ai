@@ -1434,7 +1434,7 @@ app.get('/', (c) => {
                     
                     <div class="space-y-4">
                         <div class="bg-blue-50 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold text-blue-800 mb-3">📊 칼로리로 확인 가능한 정보</h3>
+                            <h3 class="text-lg font-bold text-blue-800 mb-3" data-i18n="section1Title">📊 칼로리로 확인 가능한 정보</h3>
                             <ul class="space-y-2 text-sm text-gray-700">
                                 <li>✅ 총 열량 (kcal per serving, 100g, 실제 섭취량)</li>
                                 <li>✅ 1일 권장 섭취량 대비 비율</li>
@@ -1445,7 +1445,7 @@ app.get('/', (c) => {
                         </div>
                         
                         <div class="bg-green-50 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold text-green-800 mb-3">🧮 칼로리로 계산 가능한 정보</h3>
+                            <h3 class="text-lg font-bold text-green-800 mb-3" data-i18n="section2Title">🧮 칼로리로 계산 가능한 정보</h3>
                             <ul class="space-y-2 text-sm text-gray-700">
                                 <li>✅ 체중 변화 예측 (7,700kcal = 1kg 지방)</li>
                                 <li>✅ 기초대사량(BMR) 대비 비교</li>
@@ -1455,7 +1455,7 @@ app.get('/', (c) => {
                         </div>
                         
                         <div class="bg-yellow-50 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold text-yellow-800 mb-3">⚠️ 칼로리 데이터로 가능한 위험 신호</h3>
+                            <h3 class="text-lg font-bold text-yellow-800 mb-3" data-i18n="section3Title">⚠️ 칼로리 데이터로 가능한 위험 신호</h3>
                             <ul class="space-y-2 text-sm text-gray-700">
                                 <li>🔴 비만 위험도</li>
                                 <li>🔴 지방간 위험</li>
@@ -1467,7 +1467,7 @@ app.get('/', (c) => {
                         </div>
                         
                         <div class="bg-red-50 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold text-red-800 mb-3">❌ 칼로리만으로는 불가능한 정보</h3>
+                            <h3 class="text-lg font-bold text-red-800 mb-3" data-i18n="section4Title">❌ 칼로리만으로는 불가능한 정보</h3>
                             <ul class="space-y-2 text-sm text-gray-700">
                                 <li>❌ 정확한 당뇨/고혈압 위험도</li>
                                 <li>❌ 영양 불균형 분석</li>
@@ -1479,7 +1479,7 @@ app.get('/', (c) => {
                         </div>
                         
                         <div class="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200">
-                            <h3 class="font-bold text-purple-800 mb-2">💡 결론: 통합 시스템의 필요성</h3>
+                            <h3 class="font-bold text-purple-800 mb-2" data-i18n="section5Title">💡 결론: 통합 시스템의 필요성</h3>
                             <p class="text-sm text-gray-700">
                                 <strong>CalAI Scan</strong>은 칼로리 + 영양성분 + 개인 건강정보 + AI 음식 인식을 통합하여 
                                 정확한 건강 분석과 질병 위험도 예측을 제공합니다.

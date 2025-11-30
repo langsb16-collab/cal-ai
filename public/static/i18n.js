@@ -647,3 +647,53 @@ translations.ar.healthInfoTitle = 'دليل المعلومات الصحية';
 translations.ar.healthInfoSubtitle = 'قائمة قواعد بيانات الأغذية/التغذية العامة';
 translations.ar.nutritionInfoTitle = 'معلومات التغذية';
 translations.ar.nutritionInfoSubtitle = 'التحليل القائم على السعرات الحرارية والقيود';
+// 영양정보 모달 번역
+const nutritionTranslations = {
+  ko: {
+    section1Title: '📊 칼로리로 확인 가능한 정보',
+    section2Title: '🧮 칼로리로 계산 가능한 정보',
+    section3Title: '⚠️ 칼로리 데이터로 가능한 위험 신호',
+    section4Title: '❌ 칼로리만으로는 불가능한 정보',
+    section5Title: '💡 결론: 통합 시스템의 필요성'
+  },
+  en: {
+    section1Title: '📊 Information Available from Calories',
+    section2Title: '🧮 Calculable Information from Calories',
+    section3Title: '⚠️ Risk Signals from Calorie Data',
+    section4Title: '❌ Information Not Available from Calories Alone',
+    section5Title: '💡 Conclusion: Need for Integrated System'
+  },
+  zh: {
+    section1Title: '📊 卡路里可确认信息',
+    section2Title: '🧮 卡路里可计算信息',
+    section3Title: '⚠️ 卡路里数据的风险信号',
+    section4Title: '❌ 仅靠卡路里无法获得的信息',
+    section5Title: '💡 结论：综合系统的必要性'
+  },
+  ja: {
+    section1Title: '📊 カロリーで確認できる情報',
+    section2Title: '🧮 カロリーで計算できる情報',
+    section3Title: '⚠️ カロリーデータで可能なリスクシグナル',
+    section4Title: '❌ カロリーだけでは不可能な情報',
+    section5Title: '💡 結論：統合システムの必要性'
+  },
+  vi: {
+    section1Title: '📊 Thông Tin Có Thể Xác Nhận Từ Calo',
+    section2Title: '🧮 Thông Tin Có Thể Tính Toán Từ Calo',
+    section3Title: '⚠️ Tín Hiệu Rủi Ro Từ Dữ Liệu Calo',
+    section4Title: '❌ Thông Tin Không Thể Có Chỉ Từ Calo',
+    section5Title: '💡 Kết Luận: Sự Cần Thiết Của Hệ Thống Tích Hợp'
+  },
+  ar: {
+    section1Title: '📊 المعلومات المتاحة من السعرات الحرارية',
+    section2Title: '🧮 المعلومات القابلة للحساب من السعرات الحرارية',
+    section3Title: '⚠️ إشارات الخطر من بيانات السعرات الحرارية',
+    section4Title: '❌ المعلومات غير المتاحة من السعرات الحرارية وحدها',
+    section5Title: '💡 الخلاصة: الحاجة إلى نظام متكامل'
+  }
+};
+
+// translations 객체에 추가
+Object.keys(nutritionTranslations).forEach(lang => {
+  Object.assign(translations[lang], nutritionTranslations[lang]);
+});
