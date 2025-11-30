@@ -747,13 +747,55 @@ app.get('/', (c) => {
                 }
             }
             
-            /* 언어 버튼 */
+            /* 정보 버튼 스타일 */
+            .info-btn {
+                padding: 8px 16px;
+                border-radius: 12px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                border: none;
+                cursor: pointer;
+                transition: all 0.3s;
+                color: white;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                touch-action: manipulation;
+                min-height: 40px;
+            }
+            
+            @media (max-width: 768px) {
+                .info-btn {
+                    padding: 7px 14px;
+                    font-size: 0.8rem;
+                    min-height: 38px;
+                }
+            }
+            
+            /* 건강정보 버튼 - 핑크/레드 그라데이션 */
+            .health-btn {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            }
+            
+            .health-btn:hover, .health-btn:active {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(245, 87, 108, 0.4);
+            }
+            
+            /* 영양성분 버튼 - 그린/민트 그라데이션 */
+            .nutrition-btn {
+                background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            }
+            
+            .nutrition-btn:hover, .nutrition-btn:active {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(67, 233, 123, 0.4);
+            }
+            
+            /* 언어 버튼 - 각 언어별 다른 색상 */
             .lang-btn {
                 padding: 10px 18px;
                 border-radius: 10px;
                 cursor: pointer;
                 transition: all 0.3s;
-                background: rgba(255, 255, 255, 0.2);
                 color: white;
                 font-weight: 600;
                 font-size: 0.9rem;
@@ -761,6 +803,14 @@ app.get('/', (c) => {
                 touch-action: manipulation;
                 min-width: 70px;
             }
+            
+            /* 각 언어별 색상 */
+            .lang-btn[data-lang="ko"] { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); } /* 보라색 */
+            .lang-btn[data-lang="en"] { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); } /* 핑크색 */
+            .lang-btn[data-lang="zh"] { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); } /* 파란색 */
+            .lang-btn[data-lang="ja"] { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); } /* 민트색 */
+            .lang-btn[data-lang="vi"] { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); } /* 오렌지색 */
+            .lang-btn[data-lang="ar"] { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); } /* 청록색 */
             
             @media (max-width: 768px) {
                 .lang-btn {
@@ -771,13 +821,14 @@ app.get('/', (c) => {
             }
             
             .lang-btn:hover, .lang-btn:active {
-                background: rgba(255, 255, 255, 0.3);
+                transform: scale(1.05);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             }
             
             .lang-btn.active {
-                background: white;
-                color: #A8C4A4;
-                border-color: #A8C4A4;
+                border-color: white;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+                transform: scale(1.08);
             }
             
             /* 버튼 공통 스타일 */
@@ -905,10 +956,10 @@ app.get('/', (c) => {
                 <!-- Info Buttons & Language Selector -->
                 <div class="flex gap-2 flex-wrap justify-end items-center">
                     <!-- Info Buttons -->
-                    <button onclick="showHealthInfoModal()" class="px-3 py-1.5 bg-white bg-opacity-30 hover:bg-opacity-40 text-white rounded-lg text-sm font-semibold transition">
+                    <button onclick="showHealthInfoModal()" class="info-btn health-btn">
                         <i class="fas fa-heartbeat mr-1"></i><span data-i18n="healthInfo">건강정보</span>
                     </button>
-                    <button onclick="showNutritionInfoModal()" class="px-3 py-1.5 bg-white bg-opacity-30 hover:bg-opacity-40 text-white rounded-lg text-sm font-semibold transition">
+                    <button onclick="showNutritionInfoModal()" class="info-btn nutrition-btn">
                         <i class="fas fa-leaf mr-1"></i><span data-i18n="nutritionInfo">영양성분</span>
                     </button>
                     
@@ -930,7 +981,7 @@ app.get('/', (c) => {
             <div class="flex items-center justify-between mobile-header">
                 <div class="flex-1">
                     <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">
-                        <i class="fas fa-camera-retro mr-2 sm:mr-3"></i><span data-i18n="appTitle">CALCARE AI</span>
+                        <i class="fas fa-camera-retro mr-2 sm:mr-3"></i><span data-i18n="appTitle">CalAI Scan</span>
                     </h1>
                     <p class="text-white text-xs sm:text-sm md:text-base opacity-90" data-i18n="appSubtitle">사진으로 음식을 인식하고 칼로리를 자동 계산</p>
                 </div>
