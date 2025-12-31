@@ -9,8 +9,8 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-// 정적 파일 서빙
-app.use('/static/*', serveStatic({ root: './' }))
+// 정적 파일은 Cloudflare Pages가 자동으로 제공하므로 serveStatic 불필요
+// _routes.json에서 /static/* 경로를 exclude에 추가해야 함
 
 // CORS 설정
 app.use('/api/*', cors())
