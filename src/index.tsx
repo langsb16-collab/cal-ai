@@ -10,7 +10,7 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 // 정적 파일 서빙
-app.use('/static/*', serveStatic())
+app.use('/static/*', serveStatic({ root: './' }))
 
 // CORS 설정
 app.use('/api/*', cors())
