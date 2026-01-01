@@ -367,3 +367,486 @@ function updateChatbotLanguage() {
     console.error('Error updating chatbot language:', error);
   }
 }
+
+// ========================================
+// 자동응답 챗봇 로직 (언어별 자동 전환)
+// ========================================
+
+// 키워드 매칭을 통한 자동응답
+function getAutoResponse(message, lang = 'ko') {
+  const t = chatbotTranslations[lang] || chatbotTranslations['ko'];
+  const lowerMsg = message.toLowerCase().trim();
+  
+  // 한국어 키워드 매칭
+  if (lang === 'ko') {
+    if (lowerMsg.includes('기능') || lowerMsg.includes('뭐') || lowerMsg.includes('무엇')) {
+      return t.questions.q1.a;
+    }
+    if (lowerMsg.includes('음식') && lowerMsg.includes('인식')) {
+      return t.questions.q2.a;
+    }
+    if (lowerMsg.includes('질병') || lowerMsg.includes('위험도')) {
+      return t.questions.q3.a;
+    }
+    if (lowerMsg.includes('인식') && lowerMsg.includes('안')) {
+      return t.questions.q4.a;
+    }
+    if (lowerMsg.includes('여러') || lowerMsg.includes('여러개') || lowerMsg.includes('다중')) {
+      return t.questions.q5.a;
+    }
+    if (lowerMsg.includes('배달') || lowerMsg.includes('편의점') || lowerMsg.includes('도시락')) {
+      return t.questions.q6.a;
+    }
+    if (lowerMsg.includes('칼로리') && (lowerMsg.includes('계산') || lowerMsg.includes('방식'))) {
+      return t.questions.q7.a;
+    }
+    if (lowerMsg.includes('수정') || lowerMsg.includes('조정')) {
+      return t.questions.q8.a;
+    }
+    if (lowerMsg.includes('그램') || lowerMsg.includes('양') || lowerMsg.includes('입력')) {
+      return t.questions.q9.a;
+    }
+    if (lowerMsg.includes('예측') || lowerMsg.includes('질병')) {
+      return t.questions.q10.a;
+    }
+    if (lowerMsg.includes('회원가입') || lowerMsg.includes('가입')) {
+      return t.questions.q13.a;
+    }
+    if (lowerMsg.includes('프리미엄') || lowerMsg.includes('유료')) {
+      return t.questions.q16.a;
+    }
+    if (lowerMsg.includes('결제') || lowerMsg.includes('payment')) {
+      return t.questions.q17.a;
+    }
+    if (lowerMsg.includes('환불') || lowerMsg.includes('refund')) {
+      return t.questions.q18.a;
+    }
+    if (lowerMsg.includes('포인트')) {
+      return t.questions.q19.a;
+    }
+    if (lowerMsg.includes('오늘') || lowerMsg.includes('today')) {
+      return t.questions.q21.a;
+    }
+    if (lowerMsg.includes('운동')) {
+      return t.questions.q22.a;
+    }
+    if (lowerMsg.includes('추천') || lowerMsg.includes('식단')) {
+      return t.questions.q23.a;
+    }
+    if (lowerMsg.includes('앱') && (lowerMsg.includes('안') || lowerMsg.includes('켜지'))) {
+      return t.questions.q24.a;
+    }
+    if (lowerMsg.includes('사진') && (lowerMsg.includes('실패') || lowerMsg.includes('안'))) {
+      return t.questions.q25.a;
+    }
+    if (lowerMsg.includes('느림') || lowerMsg.includes('slow')) {
+      return t.questions.q26.a;
+    }
+    if (lowerMsg.includes('저장') || lowerMsg.includes('서버')) {
+      return t.questions.q27.a;
+    }
+    if (lowerMsg.includes('삭제') || lowerMsg.includes('개인정보')) {
+      return t.questions.q28.a;
+    }
+    if (lowerMsg.includes('인증') || lowerMsg.includes('vip')) {
+      return t.questions.q29.a;
+    }
+  }
+  
+  // 영어 키워드 매칭
+  else if (lang === 'en') {
+    if (lowerMsg.includes('feature') || lowerMsg.includes('what') || lowerMsg.includes('provide')) {
+      return t.questions.q1.a;
+    }
+    if (lowerMsg.includes('food') && lowerMsg.includes('recogni')) {
+      return t.questions.q2.a;
+    }
+    if (lowerMsg.includes('disease') || lowerMsg.includes('risk')) {
+      return t.questions.q3.a;
+    }
+    if (lowerMsg.includes('not') && lowerMsg.includes('recogni')) {
+      return t.questions.q4.a;
+    }
+    if (lowerMsg.includes('multiple') || lowerMsg.includes('several')) {
+      return t.questions.q5.a;
+    }
+    if (lowerMsg.includes('delivery') || lowerMsg.includes('convenience')) {
+      return t.questions.q6.a;
+    }
+    if (lowerMsg.includes('calorie') && (lowerMsg.includes('calculat') || lowerMsg.includes('how'))) {
+      return t.questions.q7.a;
+    }
+    if (lowerMsg.includes('edit') || lowerMsg.includes('adjust')) {
+      return t.questions.q8.a;
+    }
+    if (lowerMsg.includes('gram') || lowerMsg.includes('amount') || lowerMsg.includes('manual')) {
+      return t.questions.q9.a;
+    }
+    if (lowerMsg.includes('predict') || lowerMsg.includes('disease')) {
+      return t.questions.q10.a;
+    }
+    if (lowerMsg.includes('sign up') || lowerMsg.includes('register')) {
+      return t.questions.q13.a;
+    }
+    if (lowerMsg.includes('premium') || lowerMsg.includes('paid')) {
+      return t.questions.q16.a;
+    }
+    if (lowerMsg.includes('payment') || lowerMsg.includes('pay')) {
+      return t.questions.q17.a;
+    }
+    if (lowerMsg.includes('refund')) {
+      return t.questions.q18.a;
+    }
+    if (lowerMsg.includes('point')) {
+      return t.questions.q19.a;
+    }
+    if (lowerMsg.includes('today') || lowerMsg.includes('daily')) {
+      return t.questions.q21.a;
+    }
+    if (lowerMsg.includes('exercise') || lowerMsg.includes('workout')) {
+      return t.questions.q22.a;
+    }
+    if (lowerMsg.includes('recommend') || lowerMsg.includes('meal')) {
+      return t.questions.q23.a;
+    }
+    if (lowerMsg.includes('app') && (lowerMsg.includes('not') || lowerMsg.includes('won\'t'))) {
+      return t.questions.q24.a;
+    }
+    if (lowerMsg.includes('photo') && lowerMsg.includes('fail')) {
+      return t.questions.q25.a;
+    }
+    if (lowerMsg.includes('slow')) {
+      return t.questions.q26.a;
+    }
+    if (lowerMsg.includes('stor') || lowerMsg.includes('server')) {
+      return t.questions.q27.a;
+    }
+    if (lowerMsg.includes('delete') || lowerMsg.includes('data')) {
+      return t.questions.q28.a;
+    }
+    if (lowerMsg.includes('verif') || lowerMsg.includes('vip')) {
+      return t.questions.q29.a;
+    }
+  }
+  
+  // 중국어 키워드 매칭
+  else if (lang === 'zh') {
+    if (lowerMsg.includes('功能') || lowerMsg.includes('什么')) {
+      return t.questions.q1.a;
+    }
+    if (lowerMsg.includes('食物') || lowerMsg.includes('识别')) {
+      return t.questions.q2.a;
+    }
+    if (lowerMsg.includes('疾病') || lowerMsg.includes('风险')) {
+      return t.questions.q3.a;
+    }
+    if (lowerMsg.includes('不准') || lowerMsg.includes('不对')) {
+      return t.questions.q4.a;
+    }
+    if (lowerMsg.includes('多种') || lowerMsg.includes('多个')) {
+      return t.questions.q5.a;
+    }
+    if (lowerMsg.includes('外卖') || lowerMsg.includes('便利店')) {
+      return t.questions.q6.a;
+    }
+    if (lowerMsg.includes('卡路里') && lowerMsg.includes('计算')) {
+      return t.questions.q7.a;
+    }
+    if (lowerMsg.includes('修改') || lowerMsg.includes('调整')) {
+      return t.questions.q8.a;
+    }
+    if (lowerMsg.includes('克') || lowerMsg.includes('重量')) {
+      return t.questions.q9.a;
+    }
+    if (lowerMsg.includes('预测')) {
+      return t.questions.q10.a;
+    }
+    if (lowerMsg.includes('注册') || lowerMsg.includes('账号')) {
+      return t.questions.q13.a;
+    }
+    if (lowerMsg.includes('高级') || lowerMsg.includes('付费')) {
+      return t.questions.q16.a;
+    }
+    if (lowerMsg.includes('支付') || lowerMsg.includes('付款')) {
+      return t.questions.q17.a;
+    }
+    if (lowerMsg.includes('退款')) {
+      return t.questions.q18.a;
+    }
+    if (lowerMsg.includes('积分')) {
+      return t.questions.q19.a;
+    }
+    if (lowerMsg.includes('今天') || lowerMsg.includes('今日')) {
+      return t.questions.q21.a;
+    }
+    if (lowerMsg.includes('运动')) {
+      return t.questions.q22.a;
+    }
+    if (lowerMsg.includes('推荐') || lowerMsg.includes('饮食')) {
+      return t.questions.q23.a;
+    }
+    if (lowerMsg.includes('应用') && lowerMsg.includes('不')) {
+      return t.questions.q24.a;
+    }
+    if (lowerMsg.includes('照片') && lowerMsg.includes('失败')) {
+      return t.questions.q25.a;
+    }
+    if (lowerMsg.includes('慢')) {
+      return t.questions.q26.a;
+    }
+    if (lowerMsg.includes('保存') || lowerMsg.includes('服务器')) {
+      return t.questions.q27.a;
+    }
+    if (lowerMsg.includes('删除')) {
+      return t.questions.q28.a;
+    }
+    if (lowerMsg.includes('认证') || lowerMsg.includes('vip')) {
+      return t.questions.q29.a;
+    }
+  }
+  
+  // 일본어 키워드 매칭
+  else if (lang === 'ja') {
+    if (lowerMsg.includes('機能') || lowerMsg.includes('何')) {
+      return t.questions.q1.a;
+    }
+    if (lowerMsg.includes('料理') || lowerMsg.includes('認識')) {
+      return t.questions.q2.a;
+    }
+    if (lowerMsg.includes('疾病') || lowerMsg.includes('リスク')) {
+      return t.questions.q3.a;
+    }
+    if (lowerMsg.includes('正しく') && lowerMsg.includes('ない')) {
+      return t.questions.q4.a;
+    }
+    if (lowerMsg.includes('複数')) {
+      return t.questions.q5.a;
+    }
+    if (lowerMsg.includes('デリバリー') || lowerMsg.includes('コンビニ')) {
+      return t.questions.q6.a;
+    }
+    if (lowerMsg.includes('カロリー') && lowerMsg.includes('計算')) {
+      return t.questions.q7.a;
+    }
+    if (lowerMsg.includes('修正') || lowerMsg.includes('調整')) {
+      return t.questions.q8.a;
+    }
+    if (lowerMsg.includes('グラム') || lowerMsg.includes('量')) {
+      return t.questions.q9.a;
+    }
+    if (lowerMsg.includes('予測')) {
+      return t.questions.q10.a;
+    }
+    if (lowerMsg.includes('登録') || lowerMsg.includes('アカウント')) {
+      return t.questions.q13.a;
+    }
+    if (lowerMsg.includes('プレミアム')) {
+      return t.questions.q16.a;
+    }
+    if (lowerMsg.includes('決済') || lowerMsg.includes('支払')) {
+      return t.questions.q17.a;
+    }
+    if (lowerMsg.includes('返金')) {
+      return t.questions.q18.a;
+    }
+    if (lowerMsg.includes('ポイント')) {
+      return t.questions.q19.a;
+    }
+    if (lowerMsg.includes('今日')) {
+      return t.questions.q21.a;
+    }
+    if (lowerMsg.includes('運動')) {
+      return t.questions.q22.a;
+    }
+    if (lowerMsg.includes('推奨') || lowerMsg.includes('食事')) {
+      return t.questions.q23.a;
+    }
+    if (lowerMsg.includes('アプリ') && lowerMsg.includes('ない')) {
+      return t.questions.q24.a;
+    }
+    if (lowerMsg.includes('写真') && lowerMsg.includes('失敗')) {
+      return t.questions.q25.a;
+    }
+    if (lowerMsg.includes('遅い')) {
+      return t.questions.q26.a;
+    }
+    if (lowerMsg.includes('保存') || lowerMsg.includes('サーバー')) {
+      return t.questions.q27.a;
+    }
+    if (lowerMsg.includes('削除')) {
+      return t.questions.q28.a;
+    }
+    if (lowerMsg.includes('認証') || lowerMsg.includes('vip')) {
+      return t.questions.q29.a;
+    }
+  }
+  
+  // 베트남어 키워드 매칭
+  else if (lang === 'vi') {
+    if (lowerMsg.includes('tính năng') || lowerMsg.includes('gì')) {
+      return t.questions.q1.a;
+    }
+    if (lowerMsg.includes('món') || lowerMsg.includes('nhận dạng')) {
+      return t.questions.q2.a;
+    }
+    if (lowerMsg.includes('bệnh') || lowerMsg.includes('nguy cơ')) {
+      return t.questions.q3.a;
+    }
+    if (lowerMsg.includes('không') && lowerMsg.includes('chính xác')) {
+      return t.questions.q4.a;
+    }
+    if (lowerMsg.includes('nhiều')) {
+      return t.questions.q5.a;
+    }
+    if (lowerMsg.includes('giao') || lowerMsg.includes('tiện lợi')) {
+      return t.questions.q6.a;
+    }
+    if (lowerMsg.includes('calo') && lowerMsg.includes('tính')) {
+      return t.questions.q7.a;
+    }
+    if (lowerMsg.includes('chỉnh sửa') || lowerMsg.includes('điều chỉnh')) {
+      return t.questions.q8.a;
+    }
+    if (lowerMsg.includes('gram') || lowerMsg.includes('khẩu phần')) {
+      return t.questions.q9.a;
+    }
+    if (lowerMsg.includes('dự đoán')) {
+      return t.questions.q10.a;
+    }
+    if (lowerMsg.includes('đăng ký')) {
+      return t.questions.q13.a;
+    }
+    if (lowerMsg.includes('premium')) {
+      return t.questions.q16.a;
+    }
+    if (lowerMsg.includes('thanh toán')) {
+      return t.questions.q17.a;
+    }
+    if (lowerMsg.includes('hoàn tiền')) {
+      return t.questions.q18.a;
+    }
+    if (lowerMsg.includes('điểm')) {
+      return t.questions.q19.a;
+    }
+    if (lowerMsg.includes('hôm nay')) {
+      return t.questions.q21.a;
+    }
+    if (lowerMsg.includes('vận động')) {
+      return t.questions.q22.a;
+    }
+    if (lowerMsg.includes('gợi ý') || lowerMsg.includes('thực đơn')) {
+      return t.questions.q23.a;
+    }
+    if (lowerMsg.includes('ứng dụng') && lowerMsg.includes('không')) {
+      return t.questions.q24.a;
+    }
+    if (lowerMsg.includes('ảnh') && lowerMsg.includes('thất bại')) {
+      return t.questions.q25.a;
+    }
+    if (lowerMsg.includes('chậm')) {
+      return t.questions.q26.a;
+    }
+    if (lowerMsg.includes('lưu') || lowerMsg.includes('máy chủ')) {
+      return t.questions.q27.a;
+    }
+    if (lowerMsg.includes('xóa')) {
+      return t.questions.q28.a;
+    }
+    if (lowerMsg.includes('xác thực') || lowerMsg.includes('vip')) {
+      return t.questions.q29.a;
+    }
+  }
+  
+  // 아랍어 키워드 매칭
+  else if (lang === 'ar') {
+    if (lowerMsg.includes('ميزات') || lowerMsg.includes('ما')) {
+      return t.questions.q1.a;
+    }
+    if (lowerMsg.includes('طعام') || lowerMsg.includes('التعرف')) {
+      return t.questions.q2.a;
+    }
+    if (lowerMsg.includes('مرض') || lowerMsg.includes('خطر')) {
+      return t.questions.q3.a;
+    }
+    if (lowerMsg.includes('غير') && lowerMsg.includes('دقيق')) {
+      return t.questions.q4.a;
+    }
+    if (lowerMsg.includes('عدة') || lowerMsg.includes('متعدد')) {
+      return t.questions.q5.a;
+    }
+    if (lowerMsg.includes('توصيل') || lowerMsg.includes('متجر')) {
+      return t.questions.q6.a;
+    }
+    if (lowerMsg.includes('سعرات') && lowerMsg.includes('حساب')) {
+      return t.questions.q7.a;
+    }
+    if (lowerMsg.includes('تعديل')) {
+      return t.questions.q8.a;
+    }
+    if (lowerMsg.includes('غرام') || lowerMsg.includes('كمية')) {
+      return t.questions.q9.a;
+    }
+    if (lowerMsg.includes('تنبؤ')) {
+      return t.questions.q10.a;
+    }
+    if (lowerMsg.includes('تسجيل')) {
+      return t.questions.q13.a;
+    }
+    if (lowerMsg.includes('بريميوم')) {
+      return t.questions.q16.a;
+    }
+    if (lowerMsg.includes('دفع')) {
+      return t.questions.q17.a;
+    }
+    if (lowerMsg.includes('استرداد')) {
+      return t.questions.q18.a;
+    }
+    if (lowerMsg.includes('نقاط')) {
+      return t.questions.q19.a;
+    }
+    if (lowerMsg.includes('اليوم')) {
+      return t.questions.q21.a;
+    }
+    if (lowerMsg.includes('تمرين') || lowerMsg.includes('رياضة')) {
+      return t.questions.q22.a;
+    }
+    if (lowerMsg.includes('توصيات') || lowerMsg.includes('وجبات')) {
+      return t.questions.q23.a;
+    }
+    if (lowerMsg.includes('التطبيق') && lowerMsg.includes('لا')) {
+      return t.questions.q24.a;
+    }
+    if (lowerMsg.includes('صورة') && lowerMsg.includes('فشل')) {
+      return t.questions.q25.a;
+    }
+    if (lowerMsg.includes('بطيء')) {
+      return t.questions.q26.a;
+    }
+    if (lowerMsg.includes('حفظ') || lowerMsg.includes('خادم')) {
+      return t.questions.q27.a;
+    }
+    if (lowerMsg.includes('حذف')) {
+      return t.questions.q28.a;
+    }
+    if (lowerMsg.includes('تحقق') || lowerMsg.includes('vip')) {
+      return t.questions.q29.a;
+    }
+  }
+  
+  // 기본 응답 (매칭 실패 시)
+  const defaultResponses = {
+    ko: '죄송합니다. 질문을 이해하지 못했습니다. FAQ 버튼을 눌러 질문 목록을 확인해주세요.',
+    en: 'Sorry, I didn\'t understand your question. Please check the FAQ button for a list of questions.',
+    zh: '抱歉，我没有理解您的问题。请点击FAQ按钮查看问题列表。',
+    ja: '申し訳ございません。質問が理解できませんでした。FAQボタンを押して質問リストをご確認ください。',
+    vi: 'Xin lỗi, tôi không hiểu câu hỏi của bạn. Vui lòng nhấn nút FAQ để xem danh sách câu hỏi.',
+    ar: 'عذرًا، لم أفهم سؤالك. يرجى الضغط على زر الأسئلة الشائعة لعرض قائمة الأسئلة.'
+  };
+  
+  return defaultResponses[lang] || defaultResponses['ko'];
+}
+
+// 챗봇에서 자동응답 사용
+if (typeof window !== 'undefined') {
+  window.getAutoResponse = getAutoResponse;
+}
