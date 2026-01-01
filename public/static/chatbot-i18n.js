@@ -335,10 +335,17 @@ function updateChatbotLanguage() {
     // 헤더 업데이트
     const titleElem = document.querySelector('.chatbot-title');
     const subtitleElem = document.querySelector('.chatbot-subtitle');
-    if (titleElem) titleElem.innerHTML = '<i class="fas fa-robot" style="margin-right: 8px;"></i>' + t.title;
-    if (subtitleElem) subtitleElem.textContent = t.subtitle;
+    if (titleElem) {
+      titleElem.innerHTML = '<i class="fas fa-robot" style="margin-right: 8px;"></i>' + t.title;
+      console.log('Updated chatbot title to:', t.title);
+    }
+    if (subtitleElem) {
+      subtitleElem.textContent = t.subtitle;
+      console.log('Updated chatbot subtitle to:', t.subtitle);
+    }
     
     // 질문 목록 제목 업데이트 (30개)
+    let updatedCount = 0;
     for (let i = 1; i <= 30; i++) {
       const q = t.questions[`q${i}`];
       const elem = document.querySelector(`#chatbot-q${i}`);
@@ -346,10 +353,18 @@ function updateChatbotLanguage() {
         const textElem = elem.querySelector('.chatbot-q-text');
         if (textElem) {
           textElem.textContent = q.q;
+          updatedCount++;
         }
+        // data-answer 속성 업데이트 (중요!)
         elem.setAttribute('data-answer', q.a);
+        
+        // onclick 이벤트도 다시 설정하여 올바른 답변 전달
+        elem.onclick = function() {
+          showAnswer(q.q, q.a);
+        };
       }
     }
+    console.log(`Updated ${updatedCount} chatbot questions`);
     
     // 버튼 텍스트 업데이트
     const backBtn = document.querySelector('#chatbot-back-btn');
@@ -362,7 +377,7 @@ function updateChatbotLanguage() {
       viewAllBtn.innerHTML = '<i class="fas fa-list-ul" style="margin-right: 8px;"></i>' + t.viewAllFAQ;
     }
     
-    console.log('Chatbot language updated successfully');
+    console.log('Chatbot language updated successfully to:', lang);
   } catch (error) {
     console.error('Error updating chatbot language:', error);
   }
