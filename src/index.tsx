@@ -9,11 +9,24 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-// 정적 파일 서빙 (Cloudflare Pages ASSETS 사용)
+// 정적 파일 서빙
+// 프로덕션(Cloudflare Pages): ASSETS 바인딩 사용
+// 로컬 개발: serveStatic 사용
 app.get('/static/*', async (c) => {
-  const url = new URL(c.req.url)
-  const asset = await c.env.ASSETS.fetch(url)
-  return asset
+  try {
+    if (c.env.ASSETS) {
+      // 프로덕션 환경: Cloudflare Pages ASSETS 사용
+      const url = new URL(c.req.url)
+      const asset = await c.env.ASSETS.fetch(url)
+      return asset
+    } else {
+      // 로컬 개발 환경: serveStatic 폴백
+      return await serveStatic({ root: './' })(c, async () => c.notFound())
+    }
+  } catch (error) {
+    console.error('Static file error:', error)
+    return c.notFound()
+  }
 })
 
 // CORS 설정
