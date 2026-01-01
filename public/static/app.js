@@ -1,5 +1,5 @@
 // Global state
-let currentUser = null;
+// let currentUser = null; // HTML 인라인 스크립트에서 선언됨
 let currentAnalysis = null;
 let nutritionChart = null;
 
