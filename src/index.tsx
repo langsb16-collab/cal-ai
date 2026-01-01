@@ -1843,16 +1843,24 @@ app.get('/', (c) => {
                 }
             });
             
-            // 챗봇 언어 업데이트
-            if (typeof updateChatbotLanguage === 'function') {
-                updateChatbotLanguage();
-            }
+            // 강제로 챗봇 언어 업데이트 (중요!)
+            setTimeout(() => {
+                if (typeof updateChatbotLanguage === 'function') {
+                    updateChatbotLanguage();
+                    console.log('Chatbot language updated to:', lang);
+                } else {
+                    console.error('updateChatbotLanguage function not found');
+                }
+            }, 100);
             
             // 메인 페이지 언어도 동기화
             if (typeof setLanguage === 'function') {
                 setLanguage(lang);
             }
         }
+        
+        // 전역으로 노출
+        window.setChatbotLanguage = setChatbotLanguage;
 
         function showAnswer(question, answer) {
             const questionList = document.getElementById('question-list');
