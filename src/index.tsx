@@ -1532,20 +1532,121 @@ app.get('/', (c) => {
                             </div>
                             <div class="chatbot-subtitle" style="font-size: 12px; opacity: 0.9;">무엇을 도와드릴까요?</div>
                         </div>
-                        <button onclick="toggleChatbot()" style="
-                            background: rgba(255,255,255,0.2);
-                            border: none;
-                            color: white;
-                            width: 30px;
-                            height: 30px;
-                            border-radius: 50%;
-                            cursor: pointer;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                        ">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <!-- 챗봇 언어 버튼 -->
+                            <div style="display: flex; gap: 4px;">
+                                <button onclick="setChatbotLanguage('ko')" data-chatbot-lang="ko" class="chatbot-lang-btn active" style="
+                                    background: rgba(255,255,255,0.3);
+                                    border: none;
+                                    color: white;
+                                    width: 28px;
+                                    height: 28px;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 14px;
+                                    transition: all 0.2s;
+                                " title="한국어">
+                                    🇰🇷
+                                </button>
+                                <button onclick="setChatbotLanguage('en')" data-chatbot-lang="en" class="chatbot-lang-btn" style="
+                                    background: rgba(255,255,255,0.1);
+                                    border: none;
+                                    color: white;
+                                    width: 28px;
+                                    height: 28px;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 14px;
+                                    transition: all 0.2s;
+                                " title="English">
+                                    🇺🇸
+                                </button>
+                                <button onclick="setChatbotLanguage('zh')" data-chatbot-lang="zh" class="chatbot-lang-btn" style="
+                                    background: rgba(255,255,255,0.1);
+                                    border: none;
+                                    color: white;
+                                    width: 28px;
+                                    height: 28px;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 14px;
+                                    transition: all 0.2s;
+                                " title="中文">
+                                    🇨🇳
+                                </button>
+                                <button onclick="setChatbotLanguage('ja')" data-chatbot-lang="ja" class="chatbot-lang-btn" style="
+                                    background: rgba(255,255,255,0.1);
+                                    border: none;
+                                    color: white;
+                                    width: 28px;
+                                    height: 28px;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 14px;
+                                    transition: all 0.2s;
+                                " title="日本語">
+                                    🇯🇵
+                                </button>
+                                <button onclick="setChatbotLanguage('vi')" data-chatbot-lang="vi" class="chatbot-lang-btn" style="
+                                    background: rgba(255,255,255,0.1);
+                                    border: none;
+                                    color: white;
+                                    width: 28px;
+                                    height: 28px;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 14px;
+                                    transition: all 0.2s;
+                                " title="Tiếng Việt">
+                                    🇻🇳
+                                </button>
+                                <button onclick="setChatbotLanguage('ar')" data-chatbot-lang="ar" class="chatbot-lang-btn" style="
+                                    background: rgba(255,255,255,0.1);
+                                    border: none;
+                                    color: white;
+                                    width: 28px;
+                                    height: 28px;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 14px;
+                                    transition: all 0.2s;
+                                " title="العربية">
+                                    🇸🇦
+                                </button>
+                            </div>
+                            <button onclick="toggleChatbot()" style="
+                                background: rgba(255,255,255,0.2);
+                                border: none;
+                                color: white;
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 50%;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1721,6 +1822,35 @@ app.get('/', (c) => {
                 }
             } else {
                 popup.style.display = 'none';
+            }
+        }
+
+        // 챗봇 언어 전환 함수
+        function setChatbotLanguage(lang) {
+            console.log('Setting chatbot language to:', lang);
+            
+            // localStorage에 저장
+            localStorage.setItem('selectedLanguage', lang);
+            
+            // 챗봇 언어 버튼 활성화 표시
+            document.querySelectorAll('.chatbot-lang-btn').forEach(btn => {
+                if (btn.getAttribute('data-chatbot-lang') === lang) {
+                    btn.style.background = 'rgba(255,255,255,0.3)';
+                    btn.classList.add('active');
+                } else {
+                    btn.style.background = 'rgba(255,255,255,0.1)';
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // 챗봇 언어 업데이트
+            if (typeof updateChatbotLanguage === 'function') {
+                updateChatbotLanguage();
+            }
+            
+            // 메인 페이지 언어도 동기화
+            if (typeof setLanguage === 'function') {
+                setLanguage(lang);
             }
         }
 
